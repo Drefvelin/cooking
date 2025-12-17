@@ -1,0 +1,17 @@
+frying_pan: frying_pan
+
+butter: "m.ingredients.butter"
+
+dictionary:
+  red_meat: "#c4564fRed Meat"
+  poultry: "#f1c232Poultry"
+  fish: "#6fa8dcFish"
+  vegetable: "#93c47dVegetable"
+  fruit: "#e06666Fruit"
+  grain: "#f6b26bGrain"
+  dairy: "#ffd966Dairy"
+  spice: "#cc4125Spice"
+  herb: "#38761dHerb"
+  sauce: "#674ea7Sauce"
+  garnish: "#0b5394Garnish"
+  liquid: "#3d85c6Liquid"

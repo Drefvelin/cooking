@@ -1,0 +1,30 @@
+steak_default:
+  states:
+    raw:
+      weight: 1
+      tags:
+        - raw
+      gui:
+        item: "tropical_fish"
+        model-data: 111
+      display:
+        item: "tropical_fish"
+        model-data: 111
+    cooked:
+      weight: 1
+      tags:
+        - cooked
+      gui:
+        item: "tropical_fish"
+        model-data: 112
+      display:
+        item: "tropical_fish"
+        model-data: 112
+    burnt:
+      weight: 1
+      tags:
+        - burnt
+      gui:
+        item: "coal"
+      display:
+        item: "coal"

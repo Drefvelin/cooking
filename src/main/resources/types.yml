@@ -1,0 +1,15 @@
+meat_1:
+  name: "Steak"
+  overrides:
+    COW:
+      name: "Beef"
+    PIG:
+      name: "Porkchop"
+      model: steak_pig
+  model: steak_default
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 15
+      burn: 30
+      

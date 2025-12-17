@@ -1,0 +1,11 @@
+cutting-board:
+  furniture: cutting-board
+  single-origin: true
+  max-slots: 4
+  tool: v.stick
+  recipes:
+    cut_vegetables:
+      ratio: 4
+      inputs:
+        - c.vegetable
+      output: vegetable(type=vegetable_1;origin=Carrot;quality=1-5;tags=cut.0)

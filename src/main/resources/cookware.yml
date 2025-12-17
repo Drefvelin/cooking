@@ -1,0 +1,5 @@
+frying-pan:
+  furniture: if(frying_pan)
+  requires-heat: true
+  manual-add: false
+  manual-take: true

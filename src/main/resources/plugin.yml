@@ -1,0 +1,12 @@
+main: net.tfminecraft.cooking.Cooking
+api-version: 1.21
+name: Cooking
+version: 1.0
+author: Drefvelin
+
+depend: [TLibs, InteractibleFurniture]
+
+commands:
+  cooking:
+    description: Cooking system command
+    usage: /cooking builditem <string>

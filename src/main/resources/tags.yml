@@ -1,0 +1,36 @@
+
+#########Do not change these unless you know
+freshness:
+  fresh:
+    name: "Fresh"
+    value: 0
+  stale:
+    name: "Stale"
+    value: 10
+  rotten:
+    name: "Rotten"
+    value: 20
+warmth:
+  hot:
+    name: "Hot"
+    value: 0
+  warm:
+    name: "Warm"
+    value: 10
+  cold:
+    name: "Cold"
+    value: 20
+processed:
+  processed:
+    name: "Processed"
+    value: 1
+cooked:
+  raw:
+    name: "Raw"
+    value: 0
+  cooked:
+    name: "Cooked"
+    value: 1
+  burnt:
+    name: "Burnt"
+    value: 2
