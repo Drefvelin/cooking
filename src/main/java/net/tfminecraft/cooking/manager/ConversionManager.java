@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import me.Plugins.TLibs.Events.ItemPulseEvent;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.loader.ConversionLoader;
 import net.tfminecraft.cooking.utils.FoodParser;
@@ -42,19 +41,6 @@ public class ConversionManager implements Listener{
             } else {
                 p.getWorld().dropItemNaturally(p.getLocation(), leftover);
             }
-        }
-    }
-
-
-    @EventHandler
-    public void pulse(ItemPulseEvent e){
-        ItemStack item = e.getItem();
-        if(FoodItem.fromItem(item) != null) return;
-        String result = ConversionLoader.getByItem(item);
-        if(result!=null){
-            ItemStack stack = ItemBuilder.buildSingleString(result, item);
-            stack.setAmount(item.getAmount());
-            e.setItem(stack);
         }
     }
 
