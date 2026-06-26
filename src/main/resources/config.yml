@@ -1,6 +1,39 @@
 frying_pan: frying_pan
+saucepan: saucepan
+plate: plate
+pot: pot
+bowl: bowl
 
-butter: "m.ingredients.butter"
+butter: ia.tfmc_cooking:butter
+butter-model: ia.tfmc_cooking:butter_pan
+butter-piece-model: ia.tfmc_cooking:butter_piece
+butter-churn: butter_churn
+butter-plate: butter_plate
+fire-pit: fire_pit
+fire-pit-turner: ia.tfmc_cooking:fire_pit_turner
+fire-pit-visual-y: 0
+fire-pit-pivot-y: -0.25
+fire-pit-spin-axis: x
+
+water: ia.tfmc_cooking:water
+liquid-fallback: ia.tfmc_cooking:water
+
+ladle: ia.tfmc_cooking:ladle
+masher: ia.tfmc_cooking:masher
+
+grain-item: ia.tfmc_cooking:grain
+flour-item: ia.tfmc_cooking:flour
+bag: ia.tfmc_cooking:bag
+
+liquids:
+    - default ia.tfmc_cooking:water
+    - v.potion ia.tfmc_cooking:water
+    - v.milk_bucket ia.tfmc_cooking:milk
+colours:
+    - v.milk_bucket ffffff
+    - origin.carrot f0801f
+    - origin.basil 30ba2b
+
 
 dictionary:
   red_meat: "#c4564fRed Meat"
@@ -12,6 +45,14 @@ dictionary:
   dairy: "#ffd966Dairy"
   spice: "#cc4125Spice"
   herb: "#38761dHerb"
-  sauce: "#674ea7Sauce"
+  sauce: "#997950Sauce"
   garnish: "#0b5394Garnish"
   liquid: "#3d85c6Liquid"
+
+sauce-dict:
+    - ffffff ia.tfmc_cooking:milk.ia.tfmc_cooking:milk
+    - 80352e ia.tfmc_cooking:red_dark.ia.tfmc_cooking:red_dark_plated
+    - a8552e ia.tfmc_cooking:red_light.ia.tfmc_cooking:red_light_plated
+    - a86c2e ia.tfmc_cooking:brown_light.ia.tfmc_cooking:brown_light_plated
+    - d5c6be ia.tfmc_cooking:gray.ia.tfmc_cooking:gray_plated
+    - 53350a ia.tfmc_cooking:brown_dark.ia.tfmc_cooking:brown_dark_plated

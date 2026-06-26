@@ -49,11 +49,14 @@ public class InventoryAdder {
     public static boolean equalsFood(FoodItem a, FoodItem b) {
         if (!a.getCategory().equals(b.getCategory())) return false;
         if (!a.getId().equals(b.getId())) return false;
+        // Don't stack different origins (Carrot vs Potato, etc.)
+        String originA = a.getOrigin();
+        String originB = b.getOrigin();
+        if (originA == null ? originB != null : !originA.equalsIgnoreCase(originB)) return false;
         if (a.getQualityMin() != b.getQualityMin()) return false;
         if (a.getTagTracks().size() != b.getTagTracks().size()) return false;
         if (!a.sameTags(b)) return false;
-        if(a.hasSauce() || b.hasSauce()) return false;
-
+        if (a.hasSauce() || b.hasSauce()) return false;
         return true;
     }
 }

@@ -11,12 +11,20 @@ public class ItemCache {
     public static String butter;
     public static String butterModel;
     public static String butterPieceModel;
+    public static String firePitTurner;
+    public static float firePitVisualY;
+    public static float firePitPivotY;
+    public static String firePitSpinAxis;
 
     public static String water;
 
+    public static String grain;
+    public static String flour;
+    public static String bag;
+
     public static HashMap<String, String> liquidModels = new HashMap<>();
     public static HashMap<String, String> colourMap = new HashMap<>();
-    public static int liquidFallback;
+    public static String liquidFallback;
 
     //TOOLS
     public static String ladle;
@@ -31,6 +39,18 @@ public class ItemCache {
 
     public static boolean isButter(ItemStack i) {
         return TLibs.getItemAPI().getChecker().checkItemWithPath(i, butter);
+    }
+
+    public static boolean isGrain(ItemStack i) {
+        return TLibs.getItemAPI().getChecker().checkItemWithPath(i, grain);
+    }
+
+    public static boolean isFlour(ItemStack i) {
+        return TLibs.getItemAPI().getChecker().checkItemWithPath(i, flour);
+    }
+
+    public static boolean isBag(ItemStack i) {
+        return TLibs.getItemAPI().getChecker().checkItemWithPath(i, bag);
     }
 
     public static boolean isWater(ItemStack i) {

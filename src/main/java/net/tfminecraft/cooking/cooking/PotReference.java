@@ -358,14 +358,10 @@ public class PotReference extends CookingReference {
     
     public void updateModel() {
         if(!isSoup()) return;
-        int newModel = getModel();
+        String path = getLiquidItemPath();
         FurnitureSlot slot = f.getType().getSlot("liquid");
         if(slot == null) return;
-        ItemStack item = slot.getCurrentItem();
-        ItemMeta meta = item.getItemMeta();
-        meta.setCustomModelData(newModel);
-        item.setItemMeta(meta);
-        slot.forceModel(item);
+        slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
     }
     
     @Override

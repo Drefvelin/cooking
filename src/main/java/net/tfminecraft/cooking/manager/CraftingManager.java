@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import me.Plugins.TLibs.TLibs;
@@ -36,6 +39,7 @@ public class CraftingManager implements Listener {
 
     public Map<UUID, CraftingStation> stations = new HashMap<>();
     private final Map<UUID, Long> churnCooldown = new HashMap<>();
+    private final Map<UUID, Long> firePitCooldown = new HashMap<>();
 
     private boolean isOnCooldown(Furniture f) {
         Long until = churnCooldown.get(f.getEntityId());
@@ -43,8 +47,22 @@ public class CraftingManager implements Listener {
         return System.currentTimeMillis() < until;
     }
 
+    private boolean isOnFirePitCooldown(Furniture f) {
+        Long until = firePitCooldown.get(f.getEntityId());
+        if (until == null) return false;
+        return System.currentTimeMillis() < until;
+    }
+
     private void startCooldown(Furniture f, long millis) {
         churnCooldown.put(f.getEntityId(), System.currentTimeMillis() + millis);
+    }
+
+    private void startFirePitCooldown(Furniture f, long millis) {
+        firePitCooldown.put(f.getEntityId(), System.currentTimeMillis() + millis);
+    }
+
+    private boolean hasMeatOnSpit(Furniture f) {
+        return f.hasActiveSlot("content");
     }
 
 
@@ -76,11 +94,15 @@ public class CraftingManager implements Listener {
     }
 
     @EventHandler
-    public void furnitureInteract(FurnitureSlotItemTakeEvent e) {
+    public void furnitureTakeInteract(FurnitureSlotItemTakeEvent e) {
 
         Furniture f = e.getFurniture();
         if(FurnitureCache.isButterChurn(f)) {
             e.setCancelled(true);
+            return;
+        }
+        if(FurnitureCache.isButterPlate(f)) {
+            e.setItem(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.butter));
             return;
         }
         if (stations.containsKey(f.getEntityId())) {
@@ -91,9 +113,28 @@ public class CraftingManager implements Listener {
     }
 
     @EventHandler
+    public void furnitureAddInteract(FurnitureSlotItemAddEvent e) {
+
+        Furniture f = e.getFurniture();
+        if(FurnitureCache.isButterPlate(f)) {
+            e.setItem(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.butterPieceModel));
+            return;
+        }
+        if (FurnitureCache.isFirePit(f) && e.getSlot().getId().equals("content")) {
+            Bukkit.getScheduler().runTask(Cooking.plugin, () -> {
+                ItemDisplay display = getActiveSlotDisplay(f, "content");
+                applyFirePitTransformOffset(display);
+            });
+        }
+    }
+
+    @EventHandler
     public void furnitureInteract(FurnitureInteractEvent e) {
         Player p = e.getPlayer();
         Furniture f = e.getFurniture();
+        if (FurnitureCache.isFirePit(f)) {
+            handleFirePitInteract(e);
+        }
         if(FurnitureCache.isButterChurn(f)) {
             if(f.getActiveSlots().size() == 1 && e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                 FurnitureSlot slot = f.getType().getSlot("stick");
@@ -146,6 +187,12 @@ public class CraftingManager implements Listener {
                 slot.clearModel();
             }
         }
+        if (FurnitureCache.isFirePit(f)) {
+            firePitCooldown.remove(f.getEntityId());
+            for (FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
+                slot.clearModel();
+            }
+        }
         if (stations.containsKey(f.getEntityId())) {
             CraftingStation station = stations.get(f.getEntityId());
             station.remove(e);
@@ -163,6 +210,164 @@ public class CraftingManager implements Listener {
             slot.forceModel(new ItemStack(Material.STICK, 1));
             f.addActiveSlot(slot);
         }
+        if (FurnitureCache.isFirePit(f)) {
+            FurnitureSlot slot = f.getType().getSlot("turner");
+            if (slot == null) return;
+            slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.firePitTurner));
+            f.addActiveSlot(slot);
+            applyFirePitTransformOffset(getActiveSlotDisplay(f, "turner"));
+        }
+    }
+
+    private void handleFirePitInteract(FurnitureInteractEvent e) {
+        Furniture f = e.getFurniture();
+        FurnitureSlot hitSlot = e.getHitSlot();
+        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
+        boolean emptyHand = hand == null || hand.getType().equals(Material.AIR);
+
+        if (hitSlot != null && hitSlot.getId().equals("turner")) {
+            if (emptyHand && hasMeatOnSpit(f)) {
+                e.setCancelled(true);
+                if (isOnFirePitCooldown(f)) return;
+                playFirePitTurnAnimation(f);
+                startFirePitCooldown(f, 40 * 50L);
+                f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_FIRE_AMBIENT, 1f, 1f);
+            } else if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
+                FurnitureSlot turner = f.getType().getSlot("turner");
+                if (turner != null) turner.clearModel();
+            } else if (!emptyHand) {
+                e.setCancelled(true);
+            }
+            return;
+        }
+
+        if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
+            FurnitureSlot turner = f.getType().getSlot("turner");
+            if (turner != null) turner.clearModel();
+        }
+    }
+
+    private ItemDisplay getActiveSlotDisplay(Furniture f, String slotId) {
+        return f.getActiveSlot(slotId)
+                .map(slot -> {
+                    if (slot.getDisplayStandId() == null) return null;
+                    Entity ent = Bukkit.getEntity(slot.getDisplayStandId());
+                    return ent instanceof ItemDisplay id ? id : null;
+                })
+                .orElse(null);
+    }
+
+    private void applyFirePitTransformOffset(ItemDisplay display) {
+        if (display == null) return;
+        Transformation t = display.getTransformation();
+        Vector3f trans = t.getTranslation();
+        float visualY = ItemCache.firePitVisualY;
+        if (trans.y() > 0.01f) return;
+        display.setTransformation(new Transformation(
+                new Vector3f(trans.x(), trans.y() + visualY, trans.z()),
+                t.getLeftRotation(),
+                t.getScale(),
+                t.getRightRotation()
+        ));
+    }
+
+    private Vector3f computeSpitCenter(ItemDisplay contentDisp, ItemDisplay parent) {
+        Vector3f localOffset = new Vector3f(0f, ItemCache.firePitPivotY, 0f);
+        new Quaternionf(parent.getTransformation().getLeftRotation()).transform(localOffset);
+        return contentDisp.getLocation().toVector().toVector3f().add(localOffset);
+    }
+
+    private Vector3f computeSpinAxis(ItemDisplay parent) {
+        Vector3f axis = switch (ItemCache.firePitSpinAxis) {
+            case "y" -> new Vector3f(0f, 1f, 0f);
+            case "z" -> new Vector3f(0f, 0f, 1f);
+            default -> new Vector3f(1f, 0f, 0f);
+        };
+        new Quaternionf(parent.getTransformation().getLeftRotation()).transform(axis);
+        return axis.normalize();
+    }
+
+    private record FirePitSpinState(
+            Location startLoc,
+            Vector3f startTrans,
+            Quaternionf startRot,
+            Vector3f scale,
+            Quaternionf rightRot,
+            Vector3f deltaFromSpit) {}
+
+    private FirePitSpinState captureSpinState(ItemDisplay display, Vector3f spitCenter) {
+        Transformation t = display.getTransformation();
+        Location startLoc = display.getLocation().clone();
+        Vector3f delta = startLoc.toVector().toVector3f().sub(spitCenter);
+        return new FirePitSpinState(
+                startLoc,
+                new Vector3f(t.getTranslation()),
+                new Quaternionf(t.getLeftRotation()),
+                new Vector3f(t.getScale()),
+                new Quaternionf(t.getRightRotation()),
+                delta
+        );
+    }
+
+    private void restoreSpinState(ItemDisplay display, FirePitSpinState state) {
+        display.teleport(state.startLoc());
+        display.setTransformation(new Transformation(
+                state.startTrans(), state.startRot(), state.scale(), state.rightRot()));
+    }
+
+    private void applyRigidSpinFrame(ItemDisplay display, Vector3f spitCenter, Vector3f spinAxis,
+            float angle, FirePitSpinState state) {
+        Quaternionf spin = new Quaternionf().rotateAxis(angle, spinAxis.x, spinAxis.y, spinAxis.z);
+        Vector3f newPos = new Vector3f(spitCenter).add(new Vector3f(state.deltaFromSpit()).rotate(spin));
+        Location loc = state.startLoc().clone();
+        loc.setX(newPos.x);
+        loc.setY(newPos.y);
+        loc.setZ(newPos.z);
+        display.teleport(loc);
+        Quaternionf newRot = new Quaternionf(spin).mul(state.startRot());
+        display.setTransformation(new Transformation(
+                state.startTrans(), newRot, state.scale(), state.rightRot()));
+    }
+
+    private void playFirePitTurnAnimation(Furniture f) {
+        ItemDisplay contentDisp = getActiveSlotDisplay(f, "content");
+        ItemDisplay turnerDisp = getActiveSlotDisplay(f, "turner");
+        ItemDisplay parent = (ItemDisplay) Bukkit.getEntity(f.getEntityId());
+        if (contentDisp == null || turnerDisp == null || parent == null) return;
+
+        applyFirePitTransformOffset(contentDisp);
+        applyFirePitTransformOffset(turnerDisp);
+
+        Vector3f spitCenter = computeSpitCenter(contentDisp, parent);
+        Vector3f spinAxis = computeSpinAxis(parent);
+        FirePitSpinState contentState = captureSpinState(contentDisp, spitCenter);
+        FirePitSpinState turnerState = captureSpinState(turnerDisp, spitCenter);
+
+        new BukkitRunnable() {
+            int tick = 0;
+            final int duration = 40;
+
+            @Override
+            public void run() {
+                if (contentDisp.isDead() || turnerDisp.isDead()) {
+                    cancel();
+                    return;
+                }
+
+                if (tick > duration) {
+                    restoreSpinState(contentDisp, contentState);
+                    restoreSpinState(turnerDisp, turnerState);
+                    cancel();
+                    return;
+                }
+
+                float angle = (tick / (float) duration) * (float) (2 * Math.PI);
+                applyRigidSpinFrame(contentDisp, spitCenter, spinAxis, angle, contentState);
+                applyRigidSpinFrame(turnerDisp, spitCenter, spinAxis, angle, turnerState);
+
+                tick++;
+            }
+        }.runTaskTimer(Cooking.plugin, 0L, 1L);
     }
 
     private void playStickChurnAnimation(ItemDisplay display) {

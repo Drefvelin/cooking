@@ -1,30 +1,2258 @@
-steak_default:
-  states:
-    raw:
-      weight: 1
-      tags:
-        - raw
-      gui:
-        item: "tropical_fish"
-        model-data: 111
-      display:
-        item: "tropical_fish"
-        model-data: 111
-    cooked:
-      weight: 1
-      tags:
-        - cooked
-      gui:
-        item: "tropical_fish"
-        model-data: 112
-      display:
-        item: "tropical_fish"
-        model-data: 112
-    burnt:
-      weight: 1
-      tags:
-        - burnt
-      gui:
-        item: "coal"
-      display:
-        item: "coal"
+carrot:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: v.carrot
+    display:
+      item: v.carrot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: v.carrot
+    display:
+      item: v.carrot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: v.carrot
+    display:
+      item: v.carrot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+potato:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: v.potato
+    display:
+      item: v.potato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: v.potato
+    display:
+      item: v.potato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: v.potato
+    display:
+      item: v.potato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+beetroot:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: v.beetroot
+    display:
+      item: v.beetroot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: v.beetroot
+    display:
+      item: v.beetroot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: v.beetroot
+    display:
+      item: v.beetroot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+pumpkin:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: v.pumpkin
+    display:
+      item: v.pumpkin
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: v.pumpkin
+    display:
+      item: v.pumpkin
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: v.pumpkin
+    display:
+      item: v.pumpkin
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+tomato:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:tomato
+    display:
+      item: ia.tfmc_cooking:tomato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:tomato
+    display:
+      item: ia.tfmc_cooking:tomato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:tomato_rotten
+    display:
+      item: ia.tfmc_cooking:tomato_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+onion:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:onion
+    display:
+      item: ia.tfmc_cooking:onion
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:onion
+    display:
+      item: ia.tfmc_cooking:onion
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:onion_rotten
+    display:
+      item: ia.tfmc_cooking:onion_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+lettuce:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:lettuce
+    display:
+      item: ia.tfmc_cooking:lettuce
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:lettuce
+    display:
+      item: ia.tfmc_cooking:lettuce
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:lettuce_rotten
+    display:
+      item: ia.tfmc_cooking:lettuce_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+cucumber:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:cucumber
+    display:
+      item: ia.tfmc_cooking:cucumber
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:cucumber
+    display:
+      item: ia.tfmc_cooking:cucumber
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cucumber_rotten
+    display:
+      item: ia.tfmc_cooking:cucumber_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+corn:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:corn
+    display:
+      item: ia.tfmc_cooking:corn
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:corn
+    display:
+      item: ia.tfmc_cooking:corn
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:corn_rotten
+    display:
+      item: ia.tfmc_cooking:corn_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+basil:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:basil
+    display:
+      item: ia.tfmc_cooking:basil
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:basil
+    display:
+      item: ia.tfmc_cooking:basil
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:basil_rotten
+    display:
+      item: ia.tfmc_cooking:basil_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+black_pepper:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:black_pepper
+    display:
+      item: ia.tfmc_cooking:black_pepper
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:black_pepper
+    display:
+      item: ia.tfmc_cooking:black_pepper
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:black_pepper_rotten
+    display:
+      item: ia.tfmc_cooking:black_pepper_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+cinnamon:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:cinnamon
+    display:
+      item: ia.tfmc_cooking:cinnamon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:cinnamon
+    display:
+      item: ia.tfmc_cooking:cinnamon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cinnamon_rotten
+    display:
+      item: ia.tfmc_cooking:cinnamon_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+vanilla:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:vanilla
+    display:
+      item: ia.tfmc_cooking:vanilla
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:vanilla
+    display:
+      item: ia.tfmc_cooking:vanilla
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:vanilla_rotten
+    display:
+      item: ia.tfmc_cooking:vanilla_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+nutmeg:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:nutmeg
+    display:
+      item: ia.tfmc_cooking:nutmeg
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:nutmeg
+    display:
+      item: ia.tfmc_cooking:nutmeg
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:nutmeg_rotten
+    display:
+      item: ia.tfmc_cooking:nutmeg_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+spice_leaf:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:spice_leaf
+    display:
+      item: ia.tfmc_cooking:spice_leaf
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:spice_leaf
+    display:
+      item: ia.tfmc_cooking:spice_leaf
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:spice_leaf_rotten
+    display:
+      item: ia.tfmc_cooking:spice_leaf_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+olive:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:olive
+    display:
+      item: ia.tfmc_cooking:olive
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:olive
+    display:
+      item: ia.tfmc_cooking:olive
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:olive_rotten
+    display:
+      item: ia.tfmc_cooking:olive_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+pistachio:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:pistachio
+    display:
+      item: ia.tfmc_cooking:pistachio
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:pistachio
+    display:
+      item: ia.tfmc_cooking:pistachio
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:pistachio_rotten
+    display:
+      item: ia.tfmc_cooking:pistachio_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+rhubarb:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:rhubarb
+    display:
+      item: ia.tfmc_cooking:rhubarb
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:rhubarb
+    display:
+      item: ia.tfmc_cooking:rhubarb
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:rhubarb_rotten
+    display:
+      item: ia.tfmc_cooking:rhubarb_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+garlic:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:garlic
+    display:
+      item: ia.tfmc_cooking:garlic
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:garlic
+    display:
+      item: ia.tfmc_cooking:garlic
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:garlic_rotten
+    display:
+      item: ia.tfmc_cooking:garlic_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+strawberry:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:strawberry
+    display:
+      item: ia.tfmc_cooking:strawberry
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:strawberry
+    display:
+      item: ia.tfmc_cooking:strawberry
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:strawberry_rotten
+    display:
+      item: ia.tfmc_cooking:strawberry_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+orange:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:orange
+    display:
+      item: ia.tfmc_cooking:orange
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:orange
+    display:
+      item: ia.tfmc_cooking:orange
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:orange_rotten
+    display:
+      item: ia.tfmc_cooking:orange_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+plum:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:plum
+    display:
+      item: ia.tfmc_cooking:plum
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:plum
+    display:
+      item: ia.tfmc_cooking:plum
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:plum_rotten
+    display:
+      item: ia.tfmc_cooking:plum_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+banana:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:banana
+    display:
+      item: ia.tfmc_cooking:banana
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:banana
+    display:
+      item: ia.tfmc_cooking:banana
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:banana_rotten
+    display:
+      item: ia.tfmc_cooking:banana_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+grape:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:grape
+    display:
+      item: ia.tfmc_cooking:grape
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:grape
+    display:
+      item: ia.tfmc_cooking:grape
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:grape_rotten
+    display:
+      item: ia.tfmc_cooking:grape_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+lemon:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:lemon
+    display:
+      item: ia.tfmc_cooking:lemon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:lemon
+    display:
+      item: ia.tfmc_cooking:lemon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:lemon_rotten
+    display:
+      item: ia.tfmc_cooking:lemon_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+lime:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:lime
+    display:
+      item: ia.tfmc_cooking:lime
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:lime
+    display:
+      item: ia.tfmc_cooking:lime
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:lime_rotten
+    display:
+      item: ia.tfmc_cooking:lime_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+peach:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:peach
+    display:
+      item: ia.tfmc_cooking:peach
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:peach
+    display:
+      item: ia.tfmc_cooking:peach
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:peach_rotten
+    display:
+      item: ia.tfmc_cooking:peach_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+pineapple:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:pineapple
+    display:
+      item: ia.tfmc_cooking:pineapple
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:pineapple
+    display:
+      item: ia.tfmc_cooking:pineapple
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:pineapple_rotten
+    display:
+      item: ia.tfmc_cooking:pineapple_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+cherry:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: ia.tfmc_cooking:cherry
+    display:
+      item: ia.tfmc_cooking:cherry
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:cherry
+    display:
+      item: ia.tfmc_cooking:cherry
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cherry_rotten
+    display:
+      item: ia.tfmc_cooking:cherry_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+carrot_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_carrot
+    display:
+      item: ia.tfmc_cooking:cut_carrot
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_carrot_cooked
+    display:
+      item: ia.tfmc_cooking:cut_carrot_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_carrot_boiled
+    display:
+      item: ia.tfmc_cooking:cut_carrot_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_carrot_burnt
+    display:
+      item: ia.tfmc_cooking:cut_carrot_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_carrot_rotten
+    display:
+      item: ia.tfmc_cooking:cut_carrot_rotten
+
+carrot_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_carrot
+    display:
+      item: ia.tfmc_cooking:chopped_carrot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_carrot_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_carrot_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+potato_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_potato
+    display:
+      item: ia.tfmc_cooking:cut_potato
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_potato_cooked
+    display:
+      item: ia.tfmc_cooking:cut_potato_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_potato_boiled
+    display:
+      item: ia.tfmc_cooking:cut_potato_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_potato_burnt
+    display:
+      item: ia.tfmc_cooking:cut_potato_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_potato_rotten
+    display:
+      item: ia.tfmc_cooking:cut_potato_rotten
+
+potato_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_potato
+    display:
+      item: ia.tfmc_cooking:chopped_potato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_potato_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_potato_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+tomato_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_tomato
+    display:
+      item: ia.tfmc_cooking:cut_tomato
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_tomato_cooked
+    display:
+      item: ia.tfmc_cooking:cut_tomato_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_tomato_boiled
+    display:
+      item: ia.tfmc_cooking:cut_tomato_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_tomato_burnt
+    display:
+      item: ia.tfmc_cooking:cut_tomato_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_tomato_rotten
+    display:
+      item: ia.tfmc_cooking:cut_tomato_rotten
+
+tomato_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_tomato
+    display:
+      item: ia.tfmc_cooking:chopped_tomato
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_tomato_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_tomato_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+onion_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_onion
+    display:
+      item: ia.tfmc_cooking:cut_onion
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_onion_cooked
+    display:
+      item: ia.tfmc_cooking:cut_onion_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_onion_boiled
+    display:
+      item: ia.tfmc_cooking:cut_onion_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_onion_burnt
+    display:
+      item: ia.tfmc_cooking:cut_onion_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_onion_rotten
+    display:
+      item: ia.tfmc_cooking:cut_onion_rotten
+
+onion_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_onion
+    display:
+      item: ia.tfmc_cooking:chopped_onion
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_onion_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_onion_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+lettuce_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_lettuce
+    display:
+      item: ia.tfmc_cooking:cut_lettuce
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_lettuce_cooked
+    display:
+      item: ia.tfmc_cooking:cut_lettuce_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_lettuce_boiled
+    display:
+      item: ia.tfmc_cooking:cut_lettuce_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_lettuce_burnt
+    display:
+      item: ia.tfmc_cooking:cut_lettuce_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_lettuce_rotten
+    display:
+      item: ia.tfmc_cooking:cut_lettuce_rotten
+
+lettuce_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_lettuce
+    display:
+      item: ia.tfmc_cooking:chopped_lettuce
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_lettuce_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_lettuce_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+cucumber_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_cucumber
+    display:
+      item: ia.tfmc_cooking:cut_cucumber
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_cucumber_cooked
+    display:
+      item: ia.tfmc_cooking:cut_cucumber_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_cucumber_boiled
+    display:
+      item: ia.tfmc_cooking:cut_cucumber_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_cucumber_burnt
+    display:
+      item: ia.tfmc_cooking:cut_cucumber_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_cucumber_rotten
+    display:
+      item: ia.tfmc_cooking:cut_cucumber_rotten
+
+cucumber_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_cucumber
+    display:
+      item: ia.tfmc_cooking:chopped_cucumber
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_cucumber_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_cucumber_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+corn_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_corn
+    display:
+      item: ia.tfmc_cooking:cut_corn
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_corn_cooked
+    display:
+      item: ia.tfmc_cooking:cut_corn_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_corn_boiled
+    display:
+      item: ia.tfmc_cooking:cut_corn_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_corn_burnt
+    display:
+      item: ia.tfmc_cooking:cut_corn_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_corn_rotten
+    display:
+      item: ia.tfmc_cooking:cut_corn_rotten
+
+corn_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_corn
+    display:
+      item: ia.tfmc_cooking:chopped_corn
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_corn_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_corn_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+beetroot_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_beetroot
+    display:
+      item: ia.tfmc_cooking:cut_beetroot
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_beetroot_cooked
+    display:
+      item: ia.tfmc_cooking:cut_beetroot_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_beetroot_boiled
+    display:
+      item: ia.tfmc_cooking:cut_beetroot_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_beetroot_burnt
+    display:
+      item: ia.tfmc_cooking:cut_beetroot_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_beetroot_rotten
+    display:
+      item: ia.tfmc_cooking:cut_beetroot_rotten
+
+beetroot_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_beetroot
+    display:
+      item: ia.tfmc_cooking:chopped_beetroot
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_beetroot_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_beetroot_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+pumpkin_cut:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:cut_pumpkin
+    display:
+      item: ia.tfmc_cooking:cut_pumpkin
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:cut_pumpkin_cooked
+    display:
+      item: ia.tfmc_cooking:cut_pumpkin_cooked
+  boiled:
+    weight: 1
+    tags:
+      - boiled
+    gui:
+      item: ia.tfmc_cooking:cut_pumpkin_boiled
+    display:
+      item: ia.tfmc_cooking:cut_pumpkin_boiled
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:cut_pumpkin_burnt
+    display:
+      item: ia.tfmc_cooking:cut_pumpkin_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:cut_pumpkin_rotten
+    display:
+      item: ia.tfmc_cooking:cut_pumpkin_rotten
+
+pumpkin_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_pumpkin
+    display:
+      item: ia.tfmc_cooking:chopped_pumpkin
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_pumpkin_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_pumpkin_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+olive_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_olive
+    display:
+      item: ia.tfmc_cooking:chopped_olive
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_olive_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_olive_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+pistachio_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_pistachio
+    display:
+      item: ia.tfmc_cooking:chopped_pistachio
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_pistachio_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_pistachio_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+rhubarb_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_rhubarb
+    display:
+      item: ia.tfmc_cooking:chopped_rhubarb
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_rhubarb_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_rhubarb_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+garlic_chopped:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chopped_garlic
+    display:
+      item: ia.tfmc_cooking:chopped_garlic
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chopped_garlic_rotten
+    display:
+      item: ia.tfmc_cooking:chopped_garlic_rotten
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+beef_steak:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:beef_steak_raw
+    display:
+      item: ia.tfmc_cooking:beef_steak_raw
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:beef_steak_cooked
+    display:
+      item: ia.tfmc_cooking:beef_steak_cooked
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:beef_steak_burnt
+    display:
+      item: ia.tfmc_cooking:beef_steak_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:beef_steak_rotten
+    display:
+      item: ia.tfmc_cooking:beef_steak_rotten
+
+pork_steak:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:pork_steak_raw
+    display:
+      item: ia.tfmc_cooking:pork_steak_raw
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:pork_steak_cooked
+    display:
+      item: ia.tfmc_cooking:pork_steak_cooked
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:pork_steak_burnt
+    display:
+      item: ia.tfmc_cooking:pork_steak_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:pork_steak_rotten
+    display:
+      item: ia.tfmc_cooking:pork_steak_rotten
+
+venison_steak:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:venison_steak_raw
+    display:
+      item: ia.tfmc_cooking:venison_steak_raw
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:venison_steak_cooked
+    display:
+      item: ia.tfmc_cooking:venison_steak_cooked
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:venison_steak_burnt
+    display:
+      item: ia.tfmc_cooking:venison_steak_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:venison_steak_rotten
+    display:
+      item: ia.tfmc_cooking:venison_steak_rotten

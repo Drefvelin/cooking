@@ -27,16 +27,25 @@ public class ConfigLoader {
 
         FurnitureCache.butterChurn = config.getString("butter-churn", "none");
         FurnitureCache.butterPlate = config.getString("butter-plate", "none");
+        FurnitureCache.firePit = config.getString("fire-pit", "none");
 
         ItemCache.butter = config.getString("butter", "none");
         ItemCache.butterModel = config.getString("butter-model", "v.magma_cream");
         ItemCache.butterPieceModel = config.getString("butter-piece-model", "v.magma_cream");
-        ItemCache.liquidFallback = config.getInt("liquid_fallback_model", 114);
+        ItemCache.firePitTurner = config.getString("fire-pit-turner", "ia.tfmc_cooking:fire_pit_turner");
+        ItemCache.firePitVisualY = (float) config.getDouble("fire-pit-visual-y", 0.5);
+        ItemCache.firePitPivotY = (float) config.getDouble("fire-pit-pivot-y", 0.5);
+        ItemCache.firePitSpinAxis = config.getString("fire-pit-spin-axis", "x").toLowerCase();
+        ItemCache.liquidFallback = config.getString("liquid-fallback", "ia.tfmc_cooking:water");
 
         ItemCache.water = config.getString("water", "v.water_bucket");
 
         ItemCache.ladle = config.getString("ladle", "none");
         ItemCache.masher = config.getString("masher", "none");
+
+        ItemCache.grain = config.getString("grain-item", "none");
+        ItemCache.flour = config.getString("flour-item", "none");
+        ItemCache.bag = config.getString("bag", "none");
 
         if(config.contains("liquids")) {
             for (String key : config.getStringList("liquids")) {

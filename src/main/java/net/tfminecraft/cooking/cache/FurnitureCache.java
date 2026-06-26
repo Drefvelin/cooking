@@ -10,6 +10,7 @@ public class FurnitureCache {
 
     public static String butterChurn;
     public static String butterPlate;
+    public static String firePit;
 
     public static String plate;
     public static String bowl;
@@ -27,6 +28,10 @@ public class FurnitureCache {
 
     public static boolean isButterPlate(Furniture f) {
         return f.getId().equalsIgnoreCase(butterPlate);
+    }
+
+    public static boolean isFirePit(Furniture f) {
+        return f.getId().equalsIgnoreCase(firePit);
     }
 
     public static boolean isPlate(Furniture f) {

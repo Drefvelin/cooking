@@ -209,8 +209,8 @@ public class CookingReference {
         return colours;
     }
 
-    public int getModel() {
-        return CategoryDictionary.getSauceColour(DisplayUtils.getMergedColour(colours), 0);
+    public String getLiquidItemPath() {
+        return CategoryDictionary.getSauceItemPath(DisplayUtils.getMergedColour(colours), 0);
     }
 
     public void addColour(String hex) {

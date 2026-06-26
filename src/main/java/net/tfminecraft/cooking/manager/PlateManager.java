@@ -128,11 +128,9 @@ public class PlateManager implements Listener{
         FurnitureSlot sauceSlot = f.getType().getSlot("sauce");
         if(sauceSlot == null) return;
         if(f.hasActiveSlot("sauce")) return;
-        ItemStack sauceItem = TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.getLiquidModel("default"));
-        ItemMeta sauceMeta = sauceItem.getItemMeta();
-        sauceMeta.setCustomModelData(CategoryDictionary.getSauceColour(StringFormatter.extractHexColor(base.getItemMeta().getDisplayName()), 1));
-        sauceItem.setItemMeta(sauceMeta);
-        sauceSlot.forceModel(sauceItem);
+        String saucePath = CategoryDictionary.getSauceItemPath(
+            StringFormatter.extractHexColor(base.getItemMeta().getDisplayName()), 1);
+        sauceSlot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(saucePath));
         f.addActiveSlot(sauceSlot);
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
     }

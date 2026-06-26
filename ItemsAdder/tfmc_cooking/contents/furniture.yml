@@ -1,0 +1,69 @@
+info:
+  namespace: tfmc_cooking
+items:
+  tool_shelf:
+    display_name: "Tool Shelf"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/tool_shelf
+  frying_pan:
+    display_name: "Frying Pan"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/frying_pan
+  saucepan:
+    display_name: "Saucepan"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/saucepan
+  cutting_board:
+    display_name: "Cutting Board"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/cutting_board
+  plate:
+    display_name: "Plate"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/plate
+  pot:
+    display_name: "Pot"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/pot
+  bowl:
+    display_name: "Bowl"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/bowl
+  butter_churn:
+    display_name: "Butter Churn"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/butter_churn
+  butter_plate:
+    display_name: "Butter Plate"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/butter_plate
+  fire_pit:
+    display_name: "Fire Pit"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/fire_pit
+  fire_pit_turner:
+    display_name: "Fire Pit Turner"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/fire_pit_turner

@@ -1,0 +1,913 @@
+info:
+  namespace: tfmc_cooking
+items:
+  tomato_rotten:
+    display_name: "Tomato Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/tomato_rotten
+
+  onion_rotten:
+    display_name: "Onion Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/onion_rotten
+
+  lettuce_rotten:
+    display_name: "Lettuce Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/lettuce_rotten
+
+  cucumber_rotten:
+    display_name: "Cucumber Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cucumber_rotten
+
+  corn_rotten:
+    display_name: "Corn Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/corn_rotten
+
+  basil_rotten:
+    display_name: "Basil Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/basil/basil_rotten
+
+  black_pepper_rotten:
+    display_name: "Black Pepper Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/black_pepper/black_pepper_rotten
+
+  cinnamon_rotten:
+    display_name: "Cinnamon Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cinnamon/cinnamon_rotten
+
+  vanilla_rotten:
+    display_name: "Vanilla Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/vanilla/vanilla_rotten
+
+  nutmeg_rotten:
+    display_name: "Nutmeg Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/nutmeg/nutmeg_rotten
+
+  spice_leaf_rotten:
+    display_name: "Spice Leaf Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/spice_leaf/spice_leaf_rotten
+
+  olive_rotten:
+    display_name: "Olive Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/olive/olive_rotten
+
+  pistachio_rotten:
+    display_name: "Pistachio Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pistachio/pistachio_rotten
+
+  rhubarb_rotten:
+    display_name: "Rhubarb Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/rhubarb/rhubarb_rotten
+
+  garlic_rotten:
+    display_name: "Garlic Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/garlic/garlic_rotten
+
+  strawberry_rotten:
+    display_name: "Strawberry Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/strawberry/strawberry_rotten
+
+  orange_rotten:
+    display_name: "Orange Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/orange/orange_rotten
+
+  plum_rotten:
+    display_name: "Plum Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/plum/plum_rotten
+
+  banana_rotten:
+    display_name: "Banana Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/banana/banana_rotten
+
+  grape_rotten:
+    display_name: "Grape Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/grape/grape_rotten
+
+  lemon_rotten:
+    display_name: "Lemon Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lemon/lemon_rotten
+
+  lime_rotten:
+    display_name: "Lime Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lime/lime_rotten
+
+  peach_rotten:
+    display_name: "Peach Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/peach/peach_rotten
+
+  pineapple_rotten:
+    display_name: "Pineapple Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pineapple/pineapple_rotten
+
+  cherry_rotten:
+    display_name: "Cherry Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cherry/cherry_rotten
+
+  cut_carrot:
+    display_name: "Cut Carrot"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/cut_carrot
+
+  cut_carrot_cooked:
+    display_name: "Cut Carrot Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/cut_carrot_cooked
+
+  cut_carrot_boiled:
+    display_name: "Cut Carrot Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/cut_carrot_boiled
+
+  cut_carrot_burnt:
+    display_name: "Cut Carrot Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/cut_carrot_burnt
+
+  cut_carrot_rotten:
+    display_name: "Cut Carrot Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/cut_carrot_rotten
+
+  chopped_carrot:
+    display_name: "Chopped Carrot"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/chopped_carrot
+
+  chopped_carrot_rotten:
+    display_name: "Chopped Carrot Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/carrot/chopped_carrot_rotten
+
+  cut_potato:
+    display_name: "Cut Potato"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/cut_potato
+
+  cut_potato_cooked:
+    display_name: "Cut Potato Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/cut_potato_cooked
+
+  cut_potato_boiled:
+    display_name: "Cut Potato Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/cut_potato_boiled
+
+  cut_potato_burnt:
+    display_name: "Cut Potato Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/cut_potato_burnt
+
+  cut_potato_rotten:
+    display_name: "Cut Potato Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/cut_potato_rotten
+
+  chopped_potato:
+    display_name: "Chopped Potato"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/chopped_potato
+
+  chopped_potato_rotten:
+    display_name: "Chopped Potato Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/potato/chopped_potato_rotten
+
+  cut_beetroot:
+    display_name: "Cut Beetroot"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/cut_beetroot
+
+  cut_beetroot_cooked:
+    display_name: "Cut Beetroot Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/cut_beetroot_cooked
+
+  cut_beetroot_boiled:
+    display_name: "Cut Beetroot Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/cut_beetroot_boiled
+
+  cut_beetroot_burnt:
+    display_name: "Cut Beetroot Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/cut_beetroot_burnt
+
+  cut_beetroot_rotten:
+    display_name: "Cut Beetroot Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/cut_beetroot_rotten
+
+  chopped_beetroot:
+    display_name: "Chopped Beetroot"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/chopped_beetroot
+
+  chopped_beetroot_rotten:
+    display_name: "Chopped Beetroot Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/chopped_beetroot_rotten
+
+  cut_pumpkin:
+    display_name: "Cut Pumpkin"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/cut_pumpkin
+
+  cut_pumpkin_cooked:
+    display_name: "Cut Pumpkin Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/cut_pumpkin_cooked
+
+  cut_pumpkin_boiled:
+    display_name: "Cut Pumpkin Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/cut_pumpkin_boiled
+
+  cut_pumpkin_burnt:
+    display_name: "Cut Pumpkin Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/cut_pumpkin_burnt
+
+  cut_pumpkin_rotten:
+    display_name: "Cut Pumpkin Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/cut_pumpkin_rotten
+
+  chopped_pumpkin:
+    display_name: "Chopped Pumpkin"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/chopped_pumpkin
+
+  chopped_pumpkin_rotten:
+    display_name: "Chopped Pumpkin Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pumpkin/chopped_pumpkin_rotten
+
+  cut_tomato:
+    display_name: "Cut Tomato"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/cut_tomato
+
+  cut_tomato_cooked:
+    display_name: "Cut Tomato Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/cut_tomato_cooked
+
+  cut_tomato_boiled:
+    display_name: "Cut Tomato Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/cut_tomato_boiled
+
+  cut_tomato_burnt:
+    display_name: "Cut Tomato Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/cut_tomato_burnt
+
+  cut_tomato_rotten:
+    display_name: "Cut Tomato Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/cut_tomato_rotten
+
+  chopped_tomato:
+    display_name: "Chopped Tomato"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/chopped_tomato
+
+  chopped_tomato_rotten:
+    display_name: "Chopped Tomato Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/chopped_tomato_rotten
+
+  cut_onion:
+    display_name: "Cut Onion"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/cut_onion
+
+  cut_onion_cooked:
+    display_name: "Cut Onion Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/cut_onion_cooked
+
+  cut_onion_boiled:
+    display_name: "Cut Onion Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/cut_onion_boiled
+
+  cut_onion_burnt:
+    display_name: "Cut Onion Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/cut_onion_burnt
+
+  cut_onion_rotten:
+    display_name: "Cut Onion Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/cut_onion_rotten
+
+  chopped_onion:
+    display_name: "Chopped Onion"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/chopped_onion
+
+  chopped_onion_rotten:
+    display_name: "Chopped Onion Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/chopped_onion_rotten
+
+  cut_lettuce:
+    display_name: "Cut Lettuce"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/cut_lettuce
+
+  cut_lettuce_cooked:
+    display_name: "Cut Lettuce Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/cut_lettuce_cooked
+
+  cut_lettuce_boiled:
+    display_name: "Cut Lettuce Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/cut_lettuce_boiled
+
+  cut_lettuce_burnt:
+    display_name: "Cut Lettuce Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/cut_lettuce_burnt
+
+  cut_lettuce_rotten:
+    display_name: "Cut Lettuce Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/cut_lettuce_rotten
+
+  chopped_lettuce:
+    display_name: "Chopped Lettuce"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/chopped_lettuce
+
+  chopped_lettuce_rotten:
+    display_name: "Chopped Lettuce Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/chopped_lettuce_rotten
+
+  cut_cucumber:
+    display_name: "Cut Cucumber"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cut_cucumber
+
+  cut_cucumber_cooked:
+    display_name: "Cut Cucumber Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cut_cucumber_cooked
+
+  cut_cucumber_boiled:
+    display_name: "Cut Cucumber Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cut_cucumber_boiled
+
+  cut_cucumber_burnt:
+    display_name: "Cut Cucumber Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cut_cucumber_burnt
+
+  cut_cucumber_rotten:
+    display_name: "Cut Cucumber Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cut_cucumber_rotten
+
+  chopped_cucumber:
+    display_name: "Chopped Cucumber"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/chopped_cucumber
+
+  chopped_cucumber_rotten:
+    display_name: "Chopped Cucumber Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/chopped_cucumber_rotten
+
+  cut_corn:
+    display_name: "Cut Corn"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/cut_corn
+
+  cut_corn_cooked:
+    display_name: "Cut Corn Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/cut_corn_cooked
+
+  cut_corn_boiled:
+    display_name: "Cut Corn Boiled"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/cut_corn_boiled
+
+  cut_corn_burnt:
+    display_name: "Cut Corn Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/cut_corn_burnt
+
+  cut_corn_rotten:
+    display_name: "Cut Corn Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/cut_corn_rotten
+
+  chopped_corn:
+    display_name: "Chopped Corn"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/chopped_corn
+
+  chopped_corn_rotten:
+    display_name: "Chopped Corn Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/chopped_corn_rotten
+
+  chopped_olive:
+    display_name: "Chopped Olive"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/olive/chopped_olive
+
+  chopped_olive_rotten:
+    display_name: "Chopped Olive Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/olive/chopped_olive_rotten
+
+  chopped_pistachio:
+    display_name: "Chopped Pistachio"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pistachio/chopped_pistachio
+
+  chopped_pistachio_rotten:
+    display_name: "Chopped Pistachio Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pistachio/chopped_pistachio_rotten
+
+  chopped_rhubarb:
+    display_name: "Chopped Rhubarb"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/rhubarb/chopped_rhubarb
+
+  chopped_rhubarb_rotten:
+    display_name: "Chopped Rhubarb Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/rhubarb/chopped_rhubarb_rotten
+
+  chopped_garlic:
+    display_name: "Chopped Garlic"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/garlic/chopped_garlic
+
+  chopped_garlic_rotten:
+    display_name: "Chopped Garlic Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/garlic/chopped_garlic_rotten
+
+  beef_steak_raw:
+    display_name: "Beef Steak Raw"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beef/beef_steak_raw
+
+  beef_steak_cooked:
+    display_name: "Beef Steak Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beef/beef_steak_cooked
+
+  beef_steak_burnt:
+    display_name: "Beef Steak Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beef/beef_steak_burnt
+
+  beef_steak_rotten:
+    display_name: "Beef Steak Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beef/beef_steak_rotten
+
+  pork_steak_raw:
+    display_name: "Pork Steak Raw"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pork/pork_steak_raw
+
+  pork_steak_cooked:
+    display_name: "Pork Steak Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pork/pork_steak_cooked
+
+  pork_steak_burnt:
+    display_name: "Pork Steak Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pork/pork_steak_burnt
+
+  pork_steak_rotten:
+    display_name: "Pork Steak Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pork/pork_steak_rotten
+
+  venison_steak_raw:
+    display_name: "Venison Steak Raw"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/venison/venison_steak_raw
+
+  venison_steak_cooked:
+    display_name: "Venison Steak Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/venison/venison_steak_cooked
+
+  venison_steak_burnt:
+    display_name: "Venison Steak Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/venison/venison_steak_burnt
+
+  venison_steak_rotten:
+    display_name: "Venison Steak Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/venison/venison_steak_rotten
+
+  butter:
+    display_name: "Butter"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/butter/butter
+
+  butter_pan:
+    display_name: "Butter (Pan)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/butter/butter_pan
+
+  butter_piece:
+    display_name: "Butter Piece"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/butter/butter_piece
+
+  water:
+    display_name: "Water"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/water
+
+  milk:
+    display_name: "Milk"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/milk
+
+  gray:
+    display_name: "Gray"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/gray
+
+  brown_light:
+    display_name: "Brown Light"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/brown_light
+
+  brown_dark:
+    display_name: "Brown Dark"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/brown_dark
+
+  red_light:
+    display_name: "Red Light"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/red_light
+
+  red_dark:
+    display_name: "Red Dark"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/red_dark
+
+  gray_plated:
+    display_name: "Gray Plated"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/gray_plated
+
+  brown_light_plated:
+    display_name: "Brown Light Plated"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/brown_light_plated
+
+  brown_dark_plated:
+    display_name: "Brown Dark Plated"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/brown_dark_plated
+
+  red_light_plated:
+    display_name: "Red Light Plated"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/red_light_plated
+
+  red_dark_plated:
+    display_name: "Red Dark Plated"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/liquid/red_dark_plated
+
+  ladle:
+    display_name: "Ladle"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/tools/ladle
+
+  masher:
+    display_name: "Masher"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/tools/masher
+
+  cutting_knife:
+    display_name: "Cutting Knife"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/tools/cutting_knife
+
+  flour:
+    display_name: "Flour"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/flour
+
+  grain:
+    display_name: "Grain"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/grain
+
+  bag:
+    display_name: "Bag"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/container/bag
+
+  bag_on_stand:
+    display_name: "Bag On Stand"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/container/bag_on_stand
+

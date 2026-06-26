@@ -1,7 +1,6 @@
 package net.tfminecraft.cooking.cache;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
@@ -21,11 +20,11 @@ public class CategoryDictionary {
     public static String getName(String key) {
         return StringFormatter.formatHex(dictionary.getOrDefault(key, "#8f8f8f" + WordUtils.capitalize(new String(key).replace("_", " "))));
     }
-    public static int getSauceColour(String colour, int index) {
+
+    public static String getSauceItemPath(String colour, int index) {
         int rTotal = 0, gTotal = 0, bTotal = 0, count = 0;
         String hex = colour.replace("#", "");
-        if (hex == null) return ItemCache.liquidFallback;
-        if (hex.equalsIgnoreCase("000000")) return ItemCache.liquidFallback;  // no-effect
+        if (hex.equalsIgnoreCase("000000")) return ItemCache.liquidFallback;
 
         try {
             int r = Integer.parseInt(hex.substring(0, 2), 16);
@@ -38,7 +37,6 @@ public class CategoryDictionary {
             count++;
         } catch (Exception ignored) {}
 
-        // No valid colours? → return first entry model ID
         if (count == 0)
             return ItemCache.liquidFallback;
 
@@ -49,10 +47,9 @@ public class CategoryDictionary {
         double bestDistance = Double.MAX_VALUE;
         String bestKey = null;
 
-        // Compare merged colour to every sauce colour
         for (String key : sauceDict.keySet()) {
 
-            if (key.equalsIgnoreCase("000000")) continue; // ignore no-effect entries
+            if (key.equalsIgnoreCase("000000")) continue;
 
             try {
                 int r = Integer.parseInt(key.substring(0, 2), 16);
@@ -74,7 +71,7 @@ public class CategoryDictionary {
         }
 
         if (bestKey != null)
-            return Integer.parseInt(sauceDict.get(bestKey).split("\\.")[index]);
+            return sauceDict.get(bestKey).split("\\.", 2)[index];
 
         return ItemCache.liquidFallback;
     }

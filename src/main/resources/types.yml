@@ -1,15 +1,180 @@
+####Meats
 meat_1:
-  name: "Steak"
+  name: "#d9baa5Steak"
   overrides:
-    COW:
-      name: "Beef"
-    PIG:
-      name: "Porkchop"
-      model: steak_pig
-  model: steak_default
+    BEEF:
+      name: "#d9baa5Beef"
+      model: beef_steak
+    PORK:
+      name: "#d9baa5Pork"
+      model: pork_steak
+    VENISON:
+      name: "#d9baa5Venison"
+      model: venison_steak
+  model: beef_steak
   cooking-options:
     frying_pan:
       tag: 1
       time: 15
       burn: 30
-      
+
+###Veggies — raw (full pipeline: cut → chop)
+vegetable_1:
+  name: "#5dad58{inherit}"
+  overrides:
+    CARROT:
+      model: carrot
+    POTATO:
+      model: potato
+    TOMATO:
+      model: tomato
+    ONION:
+      model: onion
+    LETTUCE:
+      model: lettuce
+    CUCUMBER:
+      model: cucumber
+    CORN:
+      model: corn
+    BEETROOT:
+      model: beetroot
+    PUMPKIN:
+      model: pumpkin
+  model: tomato
+
+###Veggies — raw (chop only, no cut step; excludes from cut_vegetables recipe)
+vegetable_chop_only:
+  name: "#5dad58{inherit}"
+  overrides:
+    OLIVE:
+      model: olive
+    PISTACHIO:
+      model: pistachio
+    RHUBARB:
+      model: rhubarb
+    GARLIC:
+      model: garlic
+  model: olive
+
+###Veggies — cut (pan + pot)
+vegetable_cut:
+  name: "#5dad58{inherit} (Cut)"
+  overrides:
+    CARROT:
+      model: carrot_cut
+    POTATO:
+      model: potato_cut
+    TOMATO:
+      model: tomato_cut
+    ONION:
+      model: onion_cut
+    LETTUCE:
+      model: lettuce_cut
+    CUCUMBER:
+      model: cucumber_cut
+    CORN:
+      model: corn_cut
+    BEETROOT:
+      model: beetroot_cut
+    PUMPKIN:
+      model: pumpkin_cut
+  model: carrot_cut
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 15
+      burn: 30
+    pot:
+      tag: 3
+      time: 15
+      burn: 30
+
+###Veggies — chopped garnish (no cooking; cook on cut stage)
+vegetable_chopped:
+  name: "#5dad58{inherit} (Chopped)"
+  overrides:
+    CARROT:
+      model: carrot_chopped
+    POTATO:
+      model: potato_chopped
+    TOMATO:
+      model: tomato_chopped
+    ONION:
+      model: onion_chopped
+    LETTUCE:
+      model: lettuce_chopped
+    CUCUMBER:
+      model: cucumber_chopped
+    CORN:
+      model: corn_chopped
+    BEETROOT:
+      model: beetroot_chopped
+    PUMPKIN:
+      model: pumpkin_chopped
+  model: carrot_chopped
+
+###Spices — raw
+spice_1:
+  name: "#5dad58{inherit}"
+  overrides:
+    BASIL:
+      model: basil
+    BLACK PEPPER:
+      model: black_pepper
+    CINNAMON:
+      model: cinnamon
+    VANILLA:
+      model: vanilla
+    NUTMEG:
+      model: nutmeg
+    SPICE LEAF:
+      model: spice_leaf
+  model: basil
+
+###Garnish — chopped (no cooking yet)
+garnish_chopped:
+  name: "#0b5394{inherit} (Chopped)"
+  overrides:
+    OLIVE:
+      model: olive_chopped
+    PISTACHIO:
+      model: pistachio_chopped
+    RHUBARB:
+      model: rhubarb_chopped
+    GARLIC:
+      model: garlic_chopped
+  model: olive_chopped
+
+###Fruits — raw (no cut step)
+fruit_1:
+  name: "#e06666{inherit}"
+  overrides:
+    STRAWBERRY:
+      model: strawberry
+    ORANGE:
+      model: orange
+    PLUM:
+      model: plum
+    BANANA:
+      model: banana
+    GRAPE:
+      model: grape
+    LEMON:
+      model: lemon
+    LIME:
+      model: lime
+    PEACH:
+      model: peach
+    PINEAPPLE:
+      model: pineapple
+    CHERRY:
+      model: cherry
+  model: strawberry
+
+##SAUCE
+sauce:
+  name: "{colour}{ingredients}"
+
+##SOUP
+soup:
+  name: "{colour}{ingredients}"

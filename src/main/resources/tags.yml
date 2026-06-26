@@ -1,36 +1,133 @@
 
 #########Do not change these unless you know
 freshness:
+  ageable: true
   fresh:
-    name: "Fresh"
+    name: "#72ed9fFresh"
     value: 0
+    nutrition-mult: 1.5
   stale:
-    name: "Stale"
-    value: 10
+    name: "#c3db81Stale"
+    value: 1600
+    nutrition-mult: 0.8
   rotten:
-    name: "Rotten"
-    value: 20
+    name: "#0a6935Rotten"
+    value: 3200
+    nutrition-mult: 0.05
+    food-mult: 0.6
 warmth:
+  ageable: true
   hot:
-    name: "Hot"
+    name: "#d95f4aHot"
     value: 0
+    nutrition-mult: 1.5
+    food-mult: 1.5
   warm:
-    name: "Warm"
+    name: "#dea254Warm"
     value: 10
+    nutrition-mult: 1.2
+    food-mult: 1.5
   cold:
-    name: "Cold"
+    name: "#2765a3Cold"
     value: 20
 processed:
   processed:
-    name: "Processed"
-    value: 1
+    name: "#d4d656Processed"
+    value: 0
+mashed:
+  mashed:
+    name: "#d4d656Mashed"
+    value: 0
 cooked:
   raw:
-    name: "Raw"
+    name: "#de7864Raw"
     value: 0
+    nutrition-mult: 0.5
   cooked:
-    name: "Cooked"
+    name: "#ba5b23Cooked"
     value: 1
+    nutrition-mult: 1.5
+    food-mult: 1.5
   burnt:
-    name: "Burnt"
+    name: "#423b36Burnt"
     value: 2
+    nutrition-mult: 0.1
+    food-mult: 0.2
+  boiled:
+    name: "#d69a72Boiled"
+    value: 3
+    nutrition-mult: 1.5
+    food-mult: 1.5
+cut:
+  cut:
+    name: "#a3b09dCut"
+    value: 0
+  chopped:
+    name: "#b8d4abChopped"
+    value: 1
+seasoning:
+  seasoned:
+    name: "#ba906cSeasoned"
+    value: 0
+    nutrition-mult: 1.1
+  well_seasoned:
+    name: "#b8641cWell Seasoned"
+    value: 1
+    nutrition-mult: 1.2
+    food-mult: 1.1
+##SAUCES
+sauce_cooked:
+  unreduced:
+    name: "#b59d7fUnreduced"
+    value: 0
+    nutrition-mult: 0.5
+    food-mult: 0.5
+  simmered:
+    name: "#a3835aSimmered"
+    value: 1
+    nutrition-mult: 1.5
+    food-mult: 1.5
+  over-reduced:
+    name: "#755b39Overcooked"
+    value: 2
+    nutrition-mult: 0.1
+    food-mult: 0.2
+sauce_creamy:
+  creamy:
+    name: "#e6e6e6Creamy"
+    value: 0
+    nutrition-mult: 1.1
+    food-mult: 1.05
+sauce_thickness:
+  thin:
+    name: "#bfb999Thin"
+    value: 0
+  thick:
+    name: "#a6a18aThick"
+    value: 1
+    nutrition-mult: 1.05
+    food-mult: 1.05
+soup_thickness:
+  thin:
+    name: "#bfb999Thin"
+    value: 0
+  light:
+    name: "#9c95cfLight"
+    value: 300
+    nutrition-mult: 1.2
+    food-mult: 1.2
+  creamy:
+    name: "#dbb886Creamy"
+    value: 900
+    nutrition-mult: 1.4
+    food-mult: 1.4
+  velvety:
+    name: "#eb844dVelvety"
+    value: 1800
+    nutrition-mult: 1.75
+    food-mult: 1.75
+  thick:
+    name: "#a6a18aThick"
+    value: 3600
+    nutrition-mult: 2.0
+    food-mult: 2.0

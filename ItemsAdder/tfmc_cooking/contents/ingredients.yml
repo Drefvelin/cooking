@@ -1,0 +1,178 @@
+info:
+  namespace: tfmc_cooking
+items:
+  tomato:
+    display_name: "Tomato"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/tomato/tomato
+
+  onion:
+    display_name: "Onion"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/onion/onion
+
+  lettuce:
+    display_name: "Lettuce"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lettuce/lettuce
+
+  cucumber:
+    display_name: "Cucumber"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cucumber/cucumber
+
+  corn:
+    display_name: "Corn"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/corn/corn
+
+  basil:
+    display_name: "Basil"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/basil/basil
+
+  black_pepper:
+    display_name: "Black Pepper"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/black_pepper/black_pepper
+
+  cinnamon:
+    display_name: "Cinnamon"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cinnamon/cinnamon
+
+  vanilla:
+    display_name: "Vanilla"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/vanilla/vanilla
+
+  nutmeg:
+    display_name: "Nutmeg"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/nutmeg/nutmeg
+
+  spice_leaf:
+    display_name: "Spice Leaf"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/spice_leaf/spice_leaf
+
+  olive:
+    display_name: "Olive"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/olive/olive
+
+  pistachio:
+    display_name: "Pistachio"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pistachio/pistachio
+
+  rhubarb:
+    display_name: "Rhubarb"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/rhubarb/rhubarb
+
+  garlic:
+    display_name: "Garlic"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/garlic/garlic
+
+  strawberry:
+    display_name: "Strawberry"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/strawberry/strawberry
+
+  orange:
+    display_name: "Orange"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/orange/orange
+
+  plum:
+    display_name: "Plum"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/plum/plum
+
+  banana:
+    display_name: "Banana"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/banana/banana
+
+  grape:
+    display_name: "Grape"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/grape/grape
+
+  lemon:
+    display_name: "Lemon"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lemon/lemon
+
+  lime:
+    display_name: "Lime"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/lime/lime
+
+  peach:
+    display_name: "Peach"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/peach/peach
+
+  pineapple:
+    display_name: "Pineapple"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/pineapple/pineapple
+
+  cherry:
+    display_name: "Cherry"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cherry/cherry
+

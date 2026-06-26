@@ -1,11 +1,36 @@
-cutting-board:
-  furniture: cutting-board
+cutting_board:
+  furniture: cutting_board
   single-origin: true
   max-slots: 4
-  tool: v.stick
+  tool: ia.tfmc_cooking:cutting_knife
   recipes:
     cut_vegetables:
-      ratio: 4
+      ratio: 2
       inputs:
-        - c.vegetable
-      output: vegetable(type=vegetable_1;origin=Carrot;quality=1-5;tags=cut.0)
+        - c.vegetable(type=vegetable_1)
+      output: vegetable(type=vegetable_cut;origin={origin};quality=1-5;tags=cut.0)
+    chop_vegetables:
+      ratio: 1
+      inputs:
+        - c.vegetable(type=vegetable_cut)
+      output: garnish(type=vegetable_chopped;origin={origin};quality=1-5;tags=cut.1)
+    chop_olive:
+      ratio: 1
+      inputs:
+        - c.vegetable(type=vegetable_chop_only;origin=Olive)
+      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+    chop_pistachio:
+      ratio: 1
+      inputs:
+        - c.vegetable(type=vegetable_chop_only;origin=Pistachio)
+      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+    chop_rhubarb:
+      ratio: 1
+      inputs:
+        - c.vegetable(type=vegetable_chop_only;origin=Rhubarb)
+      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+    chop_garlic:
+      ratio: 1
+      inputs:
+        - c.vegetable(type=vegetable_chop_only;origin=Garlic)
+      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
