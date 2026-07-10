@@ -1,0 +1,21 @@
+chicken:
+  start-remaining: 6
+  cuts:
+    - output: "meat(type=roast_leg;origin=Chicken;quality=1-5)"
+      food: 2.0
+      nutrition: 1.5
+    - output: "meat(type=roast_leg;origin=Chicken;quality=1-5)"
+      food: 2.0
+      nutrition: 1.5
+    - output: "meat(type=roast_filet;origin=Chicken;quality=1-5)"
+      food: 1.0
+      nutrition: 1.0
+    - output: "meat(type=roast_filet;origin=Chicken;quality=1-5)"
+      food: 1.0
+      nutrition: 1.0
+    - output: "meat(type=roast_filet;origin=Chicken;quality=1-5)"
+      food: 1.0
+      nutrition: 1.0
+    - output: "meat(type=roast_filet;origin=Chicken;quality=1-5)"
+      food: 1.0
+      nutrition: 1.0

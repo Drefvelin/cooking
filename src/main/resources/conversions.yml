@@ -5,6 +5,7 @@ conversions:
   - v.pumpkin vegetable(type=vegetable_1;origin=Pumpkin;quality=2;tags=freshness.0)
   - v.beef meat(type=meat_1;origin=Beef;quality=2;tags=freshness.0,cooked.0)
   - v.porkchop meat(type=meat_1;origin=Pork;quality=2;tags=freshness.0,cooked.0)
+  - v.chicken meat(type=roast;origin=Chicken;quality=2;tags=freshness.0,cooked.0)
   - ia.tfmc_cooking:tomato vegetable(type=vegetable_1;origin=Tomato;quality=2;tags=freshness.0)
   - ia.tfmc_cooking:onion vegetable(type=vegetable_1;origin=Onion;quality=2;tags=freshness.0)
   - ia.tfmc_cooking:lettuce vegetable(type=vegetable_1;origin=Lettuce;quality=2;tags=freshness.0)

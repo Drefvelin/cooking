@@ -33,6 +33,12 @@ public class Keys {
             new NamespacedKey(Cooking.plugin, "sauce");
     public static final NamespacedKey SAUCE_NAME =
             new NamespacedKey(Cooking.plugin, "sauce_name");
+    public static final NamespacedKey CARVE_SEQUENCE =
+            new NamespacedKey(Cooking.plugin, "carve_sequence");
+    public static final NamespacedKey CARVE_NEXT_INDEX =
+            new NamespacedKey(Cooking.plugin, "carve_next_index");
+    public static final NamespacedKey CARVE_REMAINING =
+            new NamespacedKey(Cooking.plugin, "carve_remaining");
     public static final NamespacedKey SLOT_DATA =
             new NamespacedKey(Cooking.plugin, "slot_data");
 }

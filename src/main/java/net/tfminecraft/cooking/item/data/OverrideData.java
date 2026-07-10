@@ -5,10 +5,12 @@ import me.Plugins.TLibs.Objects.API.SubAPI.StringFormatter;
 public class OverrideData {
     private String name;
     private String model;
+    private String carveSequence;
 
-    public OverrideData(String name, String model) {
+    public OverrideData(String name, String model, String carveSequence) {
         if(name != null) this.name = StringFormatter.formatHex(name);
         this.model = model;
+        this.carveSequence = carveSequence;
     }
 
     public String getName() {
@@ -17,5 +19,7 @@ public class OverrideData {
     public String getModel() {
         return model;
     }
+    public String getCarveSequence() {
+        return carveSequence;
+    }
 }
-

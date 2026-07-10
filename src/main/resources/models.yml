@@ -2256,3 +2256,287 @@ venison_steak:
       item: ia.tfmc_cooking:venison_steak_rotten
     display:
       item: ia.tfmc_cooking:venison_steak_rotten
+
+roast:
+  raw_6:
+    weight: 16
+    stage: 6
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_6
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_6
+  raw_5:
+    weight: 15
+    stage: 5
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_5
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_5
+  raw_4:
+    weight: 14
+    stage: 4
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_4
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_4
+  raw_3:
+    weight: 13
+    stage: 3
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_3
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_3
+  raw_2:
+    weight: 12
+    stage: 2
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_2
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_2
+  raw_1:
+    weight: 11
+    stage: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_1
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_raw_1
+  cooked_6:
+    weight: 16
+    stage: 6
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_6
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_6
+  cooked_5:
+    weight: 15
+    stage: 5
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_5
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_5
+  cooked_4:
+    weight: 14
+    stage: 4
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_4
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_4
+  cooked_3:
+    weight: 13
+    stage: 3
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_3
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_3
+  cooked_2:
+    weight: 12
+    stage: 2
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_2
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_2
+  cooked_1:
+    weight: 11
+    stage: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_1
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_cooked_1
+  burnt_6:
+    weight: 16
+    stage: 6
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_6
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_6
+  burnt_5:
+    weight: 15
+    stage: 5
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_5
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_5
+  burnt_4:
+    weight: 14
+    stage: 4
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_4
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_4
+  burnt_3:
+    weight: 13
+    stage: 3
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_3
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_3
+  burnt_2:
+    weight: 12
+    stage: 2
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_2
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_2
+  burnt_1:
+    weight: 11
+    stage: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_1
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_burnt_1
+  rotten_6:
+    weight: 16
+    stage: 6
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_6
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_6
+  rotten_5:
+    weight: 15
+    stage: 5
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_5
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_5
+  rotten_4:
+    weight: 14
+    stage: 4
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_4
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_4
+  rotten_3:
+    weight: 13
+    stage: 3
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_3
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_3
+  rotten_2:
+    weight: 12
+    stage: 2
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_2
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_2
+  rotten_1:
+    weight: 11
+    stage: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_1
+    display:
+      item: ia.tfmc_cooking:chicken_spitroast_rotten_1
+roast_leg:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_leg_raw
+    display:
+      item: ia.tfmc_cooking:chicken_leg_raw
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_leg_cooked
+    display:
+      item: ia.tfmc_cooking:chicken_leg_cooked
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_leg_burnt
+    display:
+      item: ia.tfmc_cooking:chicken_leg_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_leg_rotten
+    display:
+      item: ia.tfmc_cooking:chicken_leg_rotten
+roast_filet:
+  raw:
+    weight: 1
+    tags:
+      - raw
+    gui:
+      item: ia.tfmc_cooking:chicken_filet_raw
+    display:
+      item: ia.tfmc_cooking:chicken_filet_raw
+  cooked:
+    weight: 1
+    tags:
+      - cooked
+    gui:
+      item: ia.tfmc_cooking:chicken_filet_cooked
+    display:
+      item: ia.tfmc_cooking:chicken_filet_cooked
+  burnt:
+    weight: 1
+    tags:
+      - burnt
+    gui:
+      item: ia.tfmc_cooking:chicken_filet_burnt
+    display:
+      item: ia.tfmc_cooking:chicken_filet_burnt
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:chicken_filet_rotten
+    display:
+      item: ia.tfmc_cooking:chicken_filet_rotten

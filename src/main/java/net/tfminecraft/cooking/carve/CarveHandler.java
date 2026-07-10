@@ -1,0 +1,84 @@
+package net.tfminecraft.cooking.carve;
+
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
+import me.Plugins.TLibs.TLibs;
+import net.tfminecraft.cooking.cache.ItemCache;
+import net.tfminecraft.cooking.item.FoodItem;
+import net.tfminecraft.cooking.utils.FoodParser;
+import net.tfminecraft.cooking.utils.InventoryAdder;
+import net.tfminecraft.cooking.utils.ItemBuilder;
+import net.tfminecraft.cooking.utils.ItemUpdater;
+import net.tfminecraft.furniture.Furniture;
+import net.tfminecraft.furniture.FurnitureSlot;
+
+public final class CarveHandler {
+
+    private CarveHandler() {}
+
+    public static boolean tryCarve(Player player, Furniture furniture, FurnitureSlot slot, ItemStack tool) {
+        if (player == null || furniture == null || slot == null || tool == null) return false;
+        if (ItemCache.carveTool == null || !TLibs.getItemAPI().getChecker().checkItemWithPath(tool, ItemCache.carveTool)) {
+            return false;
+        }
+
+        ItemStack stack = slot.getCurrentItem();
+        if (stack == null) return false;
+
+        FoodItem roast = FoodItem.fromItem(stack);
+        if (roast == null) return false;
+        CarvableRoastUtils.readCarveState(roast, stack);
+        if (!CarvableRoastUtils.isCarvable(roast)) return false;
+
+        CarveSequence sequence = CarvableRoastUtils.getSequence(roast);
+        CarveCut cut = sequence.getCut(roast.getCarveNextIndex());
+        if (cut == null) return false;
+
+        FoodParser.Result parsed = FoodParser.parse(cut.getOutput());
+        if (parsed == null || parsed.template == null) return false;
+
+        FoodItem partTemplate = new FoodItem(parsed.template);
+        partTemplate.setQualityRange(roast.getQualityMin(), roast.getQualityMax());
+        CarvableRoastUtils.copyInheritedTracks(roast, partTemplate);
+
+        ItemStack partStack = ItemBuilder.buildSingle(partTemplate, stack);
+        Location dropLoc = furniture.getLoc();
+
+        ItemStack leftover = InventoryAdder.addItem(player, partStack);
+        if (leftover == null) {
+            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
+        } else {
+            dropLoc.getWorld().dropItemNaturally(dropLoc, leftover)
+                    .setVelocity(new Vector(Math.random() * 0.2 - 0.1, 0.1, Math.random() * 0.2 - 0.1));
+        }
+
+        CarvableRoastUtils.advanceAfterCarve(roast);
+        dropLoc.getWorld().playSound(dropLoc, Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1f);
+
+        if (roast.getCarveRemaining() <= 0) {
+            slot.clearModel();
+            furniture.removeActiveSlot(slot.getId());
+            return true;
+        }
+
+        ItemStack updated = ItemUpdater.applyItemUpdate(stack, roast, furniture.getId());
+        if (updated == null) return true;
+        CarvableRoastUtils.writeCarveState(updated, roast);
+        slot.setCurrentItem(updated);
+        slot.applyDisplayData(CarvableRoastUtils.getStageModelData(roast).getDisplayData());
+        return true;
+    }
+
+    public static boolean tryCarveFirstCarvableSlot(Player player, Furniture furniture, ItemStack tool) {
+        for (FurnitureSlot active : furniture.getActiveSlots().values()) {
+            if (tryCarve(player, furniture, active, tool)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

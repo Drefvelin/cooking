@@ -4,5 +4,6 @@ public enum Method {
     FRYING_PAN,
     SAUCEPAN,
     POT,
+    FIRE_PIT,
     NONE
 }

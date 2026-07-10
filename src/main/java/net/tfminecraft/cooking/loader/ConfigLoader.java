@@ -36,6 +36,7 @@ public class ConfigLoader {
         ItemCache.firePitVisualY = (float) config.getDouble("fire-pit-visual-y", 0.5);
         ItemCache.firePitPivotY = (float) config.getDouble("fire-pit-pivot-y", 0.5);
         ItemCache.firePitSpinAxis = config.getString("fire-pit-spin-axis", "x").toLowerCase();
+        ItemCache.carveTool = config.getString("carve-tool", "ia.tfmc_cooking:cutting_knife");
         ItemCache.liquidFallback = config.getString("liquid-fallback", "ia.tfmc_cooking:water");
 
         ItemCache.water = config.getString("water", "v.water_bucket");

@@ -1,4 +1,44 @@
 ####Meats
+roast:
+  name: "#d9baa5{inherit}"
+  overrides:
+    CHICKEN:
+      name: "#d9baa5Whole Chicken"
+      model: roast
+      carve-sequence: chicken
+  model: roast
+  cooking-options:
+    fire_pit:
+      tag: 1
+      time: 20
+      burn: 40
+
+roast_leg:
+  name: "#d9baa5{inherit} Leg"
+  overrides:
+    CHICKEN:
+      name: "#d9baa5Chicken Leg"
+      model: roast_leg
+  model: roast_leg
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 15
+      burn: 30
+
+roast_filet:
+  name: "#d9baa5{inherit} Filet"
+  overrides:
+    CHICKEN:
+      name: "#d9baa5Chicken Filet"
+      model: roast_filet
+  model: roast_filet
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 12
+      burn: 25
+
 meat_1:
   name: "#d9baa5Steak"
   overrides:

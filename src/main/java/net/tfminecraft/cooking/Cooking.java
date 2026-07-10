@@ -10,6 +10,7 @@ import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.loader.TrackLoader;
 import net.tfminecraft.cooking.loader.ConfigLoader;
 import net.tfminecraft.cooking.loader.ConversionLoader;
+import net.tfminecraft.cooking.loader.CarveSequenceLoader;
 import net.tfminecraft.cooking.loader.CraftingStationLoader;
 import net.tfminecraft.cooking.manager.CommandManager;
 import net.tfminecraft.cooking.manager.ConversionManager;
@@ -30,6 +31,7 @@ public class Cooking extends JavaPlugin {
     private final TrackLoader trackLoader = new TrackLoader();
     private final ConfigLoader configLoader = new ConfigLoader();
     private final ConversionLoader conversionLoader = new ConversionLoader();
+    private final CarveSequenceLoader carveSequenceLoader = new CarveSequenceLoader();
 
     private final TagManager tagManager = new TagManager();
     private final CookingManager cookingManager = new CookingManager();
@@ -67,6 +69,7 @@ public class Cooking extends JavaPlugin {
         stationLoader.load(new File(getDataFolder(), "crafting-stations.yml"));
         trackLoader.load(new File(getDataFolder(), "tags.yml"));
         conversionLoader.load(new File(getDataFolder(), "conversions.yml"));
+        carveSequenceLoader.load(new File(getDataFolder(), "carve-sequences.yml"));
     }
 
     // ----------------------------------------------------------------------
@@ -103,7 +106,8 @@ public class Cooking extends JavaPlugin {
                 "cookware.yml",
                 "tags.yml",
                 "config.yml",
-                "conversions.yml"
+                "conversions.yml",
+                "carve-sequences.yml"
         };
 
         for (String s : files) {

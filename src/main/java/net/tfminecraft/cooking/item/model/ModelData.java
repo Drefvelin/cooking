@@ -22,12 +22,14 @@ public class ModelData {
     private DisplayData displayData;
 
     private final ItemStack directItem;
+    private final int stage;
 
     /** Load from YAML state section */
     public ModelData(ConfigurationSection stateConfig) {
         ConfigurationSection gui = stateConfig.getConfigurationSection("gui");
         ConfigurationSection display = stateConfig.getConfigurationSection("display");
         weight = stateConfig.getInt("weight", 0);
+        stage = stateConfig.getInt("stage", -1);
         directItem = null;
         if (stateConfig.contains("tags")) tags = stateConfig.getStringList("tags");
         if (gui != null) {
@@ -63,6 +65,7 @@ public class ModelData {
         this.displayData = other.displayData;
         this.overrides = new HashMap<>(other.overrides);
         this.tags.addAll(other.tags);
+        this.stage = other.stage;
         this.directItem = other.directItem != null ? other.directItem.clone() : null;
     }
 
@@ -71,6 +74,7 @@ public class ModelData {
         this.displayRef = null;
         this.weight = 0;
         this.directItem = item.clone();
+        this.stage = -1;
         this.displayData = new DisplayData();
         displayData.setxRot(90f);
         displayData.setzRot(90f);
@@ -95,6 +99,7 @@ public class ModelData {
     }
 
     public int getWeight() { return weight; }
+    public int getStage() { return stage; }
     public List<String> getTags() { return tags; }
 
     public DisplayData getDisplayData() {

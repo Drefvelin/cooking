@@ -25,7 +25,13 @@ import net.tfminecraft.InteractibleFurniture;
 import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.cache.FurnitureCache;
 import net.tfminecraft.cooking.cache.ItemCache;
+import net.tfminecraft.cooking.carve.CarveHandler;
+import net.tfminecraft.cooking.carve.CarvableRoastUtils;
 import net.tfminecraft.cooking.crafting.CraftingStation;
+import net.tfminecraft.cooking.enums.Method;
+import net.tfminecraft.cooking.item.FoodItem;
+import net.tfminecraft.cooking.item.data.CookData;
+import net.tfminecraft.cooking.utils.ItemUpdater;
 import net.tfminecraft.cooking.loader.CraftingStationLoader;
 import net.tfminecraft.events.FurnitureBreakEvent;
 import net.tfminecraft.events.FurnitureInteractEvent;
@@ -122,8 +128,16 @@ public class CraftingManager implements Listener {
         }
         if (FurnitureCache.isFirePit(f) && e.getSlot().getId().equals("content")) {
             Bukkit.getScheduler().runTask(Cooking.plugin, () -> {
-                ItemDisplay display = getActiveSlotDisplay(f, "content");
-                applyFirePitTransformOffset(display);
+                f.getActiveSlot("content").ifPresent(slot -> {
+                    ItemStack stack = slot.getCurrentItem();
+                    if (stack == null) return;
+                    FoodItem fi = FoodItem.fromItem(stack);
+                    if (fi == null) return;
+                    CarvableRoastUtils.readCarveState(fi, stack);
+                    ItemDisplay display = getActiveSlotDisplay(f, "content");
+                    applyFirePitTransformOffset(display);
+                    slot.applyDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData());
+                });
             });
         }
     }
@@ -189,8 +203,19 @@ public class CraftingManager implements Listener {
         }
         if (FurnitureCache.isFirePit(f)) {
             firePitCooldown.remove(f.getEntityId());
-            for (FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
-                slot.clearModel();
+            if (e.hasPlayer()) {
+                Player p = e.getPlayer();
+                ItemStack hand = p.getInventory().getItemInMainHand();
+                var contentSlot = f.getActiveSlot("content");
+                if (contentSlot.isPresent() && CarveHandler.tryCarve(p, f, contentSlot.get(), hand)) {
+                    e.setCancelled(true);
+                    return;
+                }
+            }
+            if (!e.isCancelled()) {
+                for (FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
+                    slot.clearModel();
+                }
             }
         }
         if (stations.containsKey(f.getEntityId())) {
@@ -230,6 +255,7 @@ public class CraftingManager implements Listener {
                 e.setCancelled(true);
                 if (isOnFirePitCooldown(f)) return;
                 playFirePitTurnAnimation(f);
+                advanceFirePitCooking(f);
                 startFirePitCooldown(f, 40 * 50L);
                 f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_FIRE_AMBIENT, 1f, 1f);
             } else if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
@@ -245,6 +271,25 @@ public class CraftingManager implements Listener {
             FurnitureSlot turner = f.getType().getSlot("turner");
             if (turner != null) turner.clearModel();
         }
+    }
+
+    private void advanceFirePitCooking(Furniture f) {
+        f.getActiveSlot("content").ifPresent(slot -> {
+            ItemStack stack = slot.getCurrentItem();
+            if (stack == null) return;
+            FoodItem fi = FoodItem.fromItem(stack);
+            if (fi == null) return;
+            CarvableRoastUtils.readCarveState(fi, stack);
+            CookData cd = fi.getCookData();
+            if (!cd.hasMethod(Method.FIRE_PIT)) return;
+            if (!cd.isBeingCooked()) cd.start(Method.FIRE_PIT);
+            cd.setCurrentTime(cd.getCurrentTime() + 1);
+            ItemStack updated = ItemUpdater.applyItemUpdate(stack, fi, f.getId());
+            if (updated == null) return;
+            CarvableRoastUtils.writeCarveState(updated, fi);
+            slot.setCurrentItem(updated);
+            slot.applyDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData());
+        });
     }
 
     private ItemDisplay getActiveSlotDisplay(Furniture f, String slotId) {

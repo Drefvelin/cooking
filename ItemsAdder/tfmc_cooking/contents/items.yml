@@ -911,3 +911,196 @@ items:
       generate: false
       model_path: item/container/bag_on_stand
 
+
+  chicken_spitroast_raw_6:
+    display_name: "Chicken Spitroast raw 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_raw_6
+  chicken_spitroast_raw_5:
+    display_name: "Chicken Spitroast raw 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_raw_5
+  chicken_spitroast_raw_4:
+    display_name: "Chicken Spitroast raw 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_raw_4
+  chicken_spitroast_raw_3:
+    display_name: "Chicken Spitroast raw 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_raw_3
+  chicken_spitroast_raw_2:
+    display_name: "Chicken Spitroast raw 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_raw_2
+  chicken_spitroast_raw_1:
+    display_name: "Chicken Spitroast raw 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_raw_1
+  chicken_spitroast_cooked_6:
+    display_name: "Chicken Spitroast cooked 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_cooked_6
+  chicken_spitroast_cooked_5:
+    display_name: "Chicken Spitroast cooked 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_cooked_5
+  chicken_spitroast_cooked_4:
+    display_name: "Chicken Spitroast cooked 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_cooked_4
+  chicken_spitroast_cooked_3:
+    display_name: "Chicken Spitroast cooked 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_cooked_3
+  chicken_spitroast_cooked_2:
+    display_name: "Chicken Spitroast cooked 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_cooked_2
+  chicken_spitroast_cooked_1:
+    display_name: "Chicken Spitroast cooked 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_cooked_1
+  chicken_spitroast_burnt_6:
+    display_name: "Chicken Spitroast burnt 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_burnt_6
+  chicken_spitroast_burnt_5:
+    display_name: "Chicken Spitroast burnt 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_burnt_5
+  chicken_spitroast_burnt_4:
+    display_name: "Chicken Spitroast burnt 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_burnt_4
+  chicken_spitroast_burnt_3:
+    display_name: "Chicken Spitroast burnt 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_burnt_3
+  chicken_spitroast_burnt_2:
+    display_name: "Chicken Spitroast burnt 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_burnt_2
+  chicken_spitroast_burnt_1:
+    display_name: "Chicken Spitroast burnt 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_burnt_1
+  chicken_spitroast_rotten_6:
+    display_name: "Chicken Spitroast rotten 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_rotten_6
+  chicken_spitroast_rotten_5:
+    display_name: "Chicken Spitroast rotten 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_rotten_5
+  chicken_spitroast_rotten_4:
+    display_name: "Chicken Spitroast rotten 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_rotten_4
+  chicken_spitroast_rotten_3:
+    display_name: "Chicken Spitroast rotten 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_rotten_3
+  chicken_spitroast_rotten_2:
+    display_name: "Chicken Spitroast rotten 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_rotten_2
+  chicken_spitroast_rotten_1:
+    display_name: "Chicken Spitroast rotten 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_spitroast_rotten_1
+  chicken_leg_raw:
+    display_name: "Chicken leg raw"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_leg_raw
+  chicken_leg_cooked:
+    display_name: "Chicken leg cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_leg_cooked
+  chicken_leg_burnt:
+    display_name: "Chicken leg burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_leg_burnt
+  chicken_leg_rotten:
+    display_name: "Chicken leg rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_leg_rotten
+  chicken_filet_raw:
+    display_name: "Chicken filet raw"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_filet_raw
+  chicken_filet_cooked:
+    display_name: "Chicken filet cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_filet_cooked
+  chicken_filet_burnt:
+    display_name: "Chicken filet burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_filet_burnt
+  chicken_filet_rotten:
+    display_name: "Chicken filet rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/chicken/chicken_filet_rotten

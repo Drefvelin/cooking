@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import me.Plugins.TLibs.TLibs;
+import net.tfminecraft.cooking.carve.CarveHandler;
+import net.tfminecraft.cooking.carve.CarvableRoastUtils;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.TrackLoader;
@@ -141,7 +143,12 @@ public class CraftingStation {
         add(item, e.getSlot().getId());
         FoodItem fi = FoodItem.fromItem(item);
         if(fi != null) {
-            e.setDisplayData(fi.getModelData().getDisplayData());
+            if (fi.getCarveSequenceId() != null) {
+                CarvableRoastUtils.readCarveState(fi, item);
+                e.setDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData());
+            } else {
+                e.setDisplayData(fi.getModelData().getDisplayData());
+            }
         }
     }
 
@@ -272,6 +279,10 @@ public class CraftingStation {
         if(tool.equalsIgnoreCase("none")) return;
 
         if(TLibs.getItemAPI().getChecker().checkItemWithPath(item, tool)) {
+            if (CarveHandler.tryCarveFirstCarvableSlot(p, f, item)) {
+                e.setCancelled(true);
+                return;
+            }
             if(slots.isEmpty()) return;
             e.setCancelled(true);
             craft(p);

@@ -52,6 +52,7 @@ public class FoodModel {
         ModelData bestMatch = null;
 
         for (ModelData data : states.values()) {
+            if (data.getStage() >= 0) continue;
             boolean tagMatch = true;
 
             // check if all tags in data are present in the item's tags
@@ -73,6 +74,31 @@ public class FoodModel {
         return bestMatch;
     }
 
+    public ModelData getModelByStageAndTag(int stage, String cookTagId) {
+        ModelData bestMatch = null;
+        for (ModelData data : states.values()) {
+            if (data.getStage() < 0) continue;
+            if (data.getStage() != stage) continue;
+            if (!data.getTags().contains(cookTagId)) continue;
+            if (bestMatch == null || data.getWeight() > bestMatch.getWeight()) {
+                bestMatch = data;
+            }
+        }
+        if (bestMatch != null) return bestMatch;
+        return getModelByTagOnly(cookTagId);
+    }
+
+    private ModelData getModelByTagOnly(String cookTagId) {
+        ModelData bestMatch = null;
+        for (ModelData data : states.values()) {
+            if (data.getStage() >= 0) continue;
+            if (!data.getTags().contains(cookTagId)) continue;
+            if (bestMatch == null || data.getWeight() > bestMatch.getWeight()) {
+                bestMatch = data;
+            }
+        }
+        return bestMatch != null ? bestMatch : getFirstModel();
+    }
 
     public Map<String, ModelData> getStates() {
         return states;

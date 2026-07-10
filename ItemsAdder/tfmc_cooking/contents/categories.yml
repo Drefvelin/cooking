@@ -151,6 +151,38 @@ categories:
       - tfmc_cooking:venison_steak_cooked
       - tfmc_cooking:venison_steak_burnt
       - tfmc_cooking:venison_steak_rotten
+      - tfmc_cooking:chicken_spitroast_raw_6
+      - tfmc_cooking:chicken_spitroast_raw_5
+      - tfmc_cooking:chicken_spitroast_raw_4
+      - tfmc_cooking:chicken_spitroast_raw_3
+      - tfmc_cooking:chicken_spitroast_raw_2
+      - tfmc_cooking:chicken_spitroast_raw_1
+      - tfmc_cooking:chicken_spitroast_cooked_6
+      - tfmc_cooking:chicken_spitroast_cooked_5
+      - tfmc_cooking:chicken_spitroast_cooked_4
+      - tfmc_cooking:chicken_spitroast_cooked_3
+      - tfmc_cooking:chicken_spitroast_cooked_2
+      - tfmc_cooking:chicken_spitroast_cooked_1
+      - tfmc_cooking:chicken_spitroast_burnt_6
+      - tfmc_cooking:chicken_spitroast_burnt_5
+      - tfmc_cooking:chicken_spitroast_burnt_4
+      - tfmc_cooking:chicken_spitroast_burnt_3
+      - tfmc_cooking:chicken_spitroast_burnt_2
+      - tfmc_cooking:chicken_spitroast_burnt_1
+      - tfmc_cooking:chicken_spitroast_rotten_6
+      - tfmc_cooking:chicken_spitroast_rotten_5
+      - tfmc_cooking:chicken_spitroast_rotten_4
+      - tfmc_cooking:chicken_spitroast_rotten_3
+      - tfmc_cooking:chicken_spitroast_rotten_2
+      - tfmc_cooking:chicken_spitroast_rotten_1
+      - tfmc_cooking:chicken_leg_raw
+      - tfmc_cooking:chicken_leg_cooked
+      - tfmc_cooking:chicken_leg_burnt
+      - tfmc_cooking:chicken_leg_rotten
+      - tfmc_cooking:chicken_filet_raw
+      - tfmc_cooking:chicken_filet_cooked
+      - tfmc_cooking:chicken_filet_burnt
+      - tfmc_cooking:chicken_filet_rotten
       - tfmc_cooking:butter
       - tfmc_cooking:butter_pan
       - tfmc_cooking:butter_piece

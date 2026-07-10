@@ -15,6 +15,7 @@ public class ItemCache {
     public static float firePitVisualY;
     public static float firePitPivotY;
     public static String firePitSpinAxis;
+    public static String carveTool;
 
     public static String water;
 

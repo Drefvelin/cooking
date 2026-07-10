@@ -45,11 +45,15 @@ public class FoodItem {
     private List<String> ingredients = new ArrayList<>();
     public CookData cookData;
 
+    private String typeLevelCarveSequence;
+    private String carveSequencePdc;
+    private int carveNextIndex;
+    private int carveRemaining;
+
     private String sauceName;
     private FoodItem sauce;
 
     public int _parsedQualMin, _parsedQualMax;
-
 
     // --------------------------------------------------------------
     // CONSTRUCTOR FROM CONFIG
@@ -60,6 +64,7 @@ public class FoodItem {
 
         this.baseFood = config.getDouble("food", 1.0);
         this.baseNutrition = config.getDouble("nutrition", 1.0);
+        this.typeLevelCarveSequence = config.getString("carve-sequence", null);
 
         String modelId = config.getString("model", null);
         if (modelId != null)
@@ -83,7 +88,8 @@ public class FoodItem {
                         originKey.toUpperCase(),
                         new OverrideData(
                             o.getString("name", null),
-                            o.getString("model", null)
+                            o.getString("model", null),
+                            o.getString("carve-sequence", null)
                         )
                     );
                 }
@@ -109,6 +115,10 @@ public class FoodItem {
         this.baseNutrition = other.baseNutrition;
 
         this.overrides = new HashMap<>(other.overrides);
+        this.typeLevelCarveSequence = other.typeLevelCarveSequence;
+        this.carveSequencePdc = other.carveSequencePdc;
+        this.carveNextIndex = other.carveNextIndex;
+        this.carveRemaining = other.carveRemaining;
         this.ingredients = new ArrayList<>(other.ingredients);
 
         this.model = (other.model == null ? null : new FoodModel(other.model));
@@ -212,6 +222,9 @@ public class FoodItem {
     }
 
     public ModelData getModelData() {
+        if (hasCarveState() && carveRemaining > 0) {
+            return net.tfminecraft.cooking.carve.CarvableRoastUtils.getStageModelData(this);
+        }
         ModelData data = getModel().getModel(this);
         return data != null ? data : model.getModel(this);
     }
@@ -226,6 +239,33 @@ public class FoodItem {
 
     public void setOrigin(String o) { origin = o; }
     public String getOrigin() { return origin; }
+
+    public String getCarveSequenceId() {
+        if (origin != null) {
+            OverrideData od = overrides.get(origin.toUpperCase());
+            if (od != null && od.getCarveSequence() != null) {
+                return od.getCarveSequence();
+            }
+        }
+        return typeLevelCarveSequence;
+    }
+
+    public boolean hasCarveState() {
+        return carveSequencePdc != null && !carveSequencePdc.isEmpty();
+    }
+
+    public String getCarveSequencePdc() { return carveSequencePdc; }
+    public int getCarveNextIndex() { return carveNextIndex; }
+    public int getCarveRemaining() { return carveRemaining; }
+
+    public void setCarveState(String sequenceId, int nextIndex, int remaining) {
+        this.carveSequencePdc = sequenceId;
+        this.carveNextIndex = nextIndex;
+        this.carveRemaining = remaining;
+    }
+
+    public void setCarveNextIndex(int index) { this.carveNextIndex = index; }
+    public void setCarveRemaining(int remaining) { this.carveRemaining = remaining; }
 
     public List<TagTrack> getTagTracks() {
         List<TagTrack> list = new ArrayList<>(tags.values());
@@ -305,10 +345,16 @@ public class FoodItem {
     // FINAL VALUES (QUALITY + TAGS + COOK STATE)
     // --------------------------------------------------------------
     public double getFinalFood() {
+        if (hasCarveState() && carveRemaining > 0) {
+            return applyMultipliers(net.tfminecraft.cooking.carve.CarvableRoastUtils.getRemainingFood(this), 0);
+        }
         return applyMultipliers(baseFood + (hasSauce() ? getSauce().getFinalFood() : 0), 0);
     }
 
     public double getFinalNutrition() {
+        if (hasCarveState() && carveRemaining > 0) {
+            return applyMultipliers(net.tfminecraft.cooking.carve.CarvableRoastUtils.getRemainingNutrition(this), 1);
+        }
         return applyMultipliers(baseNutrition + (hasSauce() ? getSauce().getFinalNutrition() : 0), 1);
     }
 
@@ -417,6 +463,13 @@ public class FoodItem {
 
         if(out.getModel() == null) {
             out.model = new FoodModel(stack);
+        }
+
+        String carveSeq = pdc.get(Keys.CARVE_SEQUENCE, PersistentDataType.STRING);
+        if (carveSeq != null) {
+            Integer next = pdc.get(Keys.CARVE_NEXT_INDEX, PersistentDataType.INTEGER);
+            Integer remaining = pdc.get(Keys.CARVE_REMAINING, PersistentDataType.INTEGER);
+            out.setCarveState(carveSeq, next != null ? next : 0, remaining != null ? remaining : 0);
         }
 
         return out;

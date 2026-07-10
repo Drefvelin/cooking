@@ -1,6 +1,8 @@
 package net.tfminecraft.cooking.utils;
 
 import net.tfminecraft.cooking.item.FoodItem;
+import net.tfminecraft.cooking.carve.CarveSequence;
+import net.tfminecraft.cooking.loader.CarveSequenceLoader;
 import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.item.model.FoodModel;
 import net.tfminecraft.cooking.item.model.ModelData;
@@ -67,6 +69,12 @@ public class ItemBuilder {
         else if(displayName.contains("{inherit}")) displayName = displayName.replace("{inherit}", WordUtils.capitalize(origin != null ? origin : "unknown"));
         
         if(item.getModel() == null) item.setModel(new FoodModel(base));
+        if (item.getCarveSequenceId() != null) {
+            CarveSequence seq = CarveSequenceLoader.get(item.getCarveSequenceId());
+            if (seq != null) {
+                item.setCarveState(item.getCarveSequenceId(), 0, seq.getStartRemaining());
+            }
+        }
         ModelData model = item.getModelData();
 
         ItemStack stack = model.apply(null, new ItemStack(Material.DIRT));
@@ -204,6 +212,11 @@ public class ItemBuilder {
             pdc.set(Keys.MODEL, PersistentDataType.STRING, item.getModel().getId());
 
         stack.setItemMeta(meta);
+
+        if (item.getCarveSequenceId() != null) {
+            net.tfminecraft.cooking.carve.CarvableRoastUtils.initCarveState(stack, item);
+        }
+
         return stack;
     }
 
