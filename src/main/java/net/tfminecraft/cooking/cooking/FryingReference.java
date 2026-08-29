@@ -14,7 +14,7 @@ import net.tfminecraft.cooking.enums.Method;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 
 public class FryingReference extends CookingReference {
 
@@ -73,9 +73,8 @@ public class FryingReference extends CookingReference {
         }
         ItemStack item = p.getInventory().getItemInMainHand();
         if(ItemCache.isButter(item) && !secondaries.containsKey("butter")) {
-            FurnitureSlot slot = f.getType().getSlot("butter");
-            if(slot == null) return;
-            f.addActiveSlot(slot);
+            if (f.getType() == null || f.getType().getSlot("butter") == null) return;
+            PlacedSlot slot = f.getOrCreatePlacedSlot("butter");
             secondaries.put("butter", 30);
             slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.butterModel));
             p.swingMainHand();

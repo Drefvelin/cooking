@@ -32,7 +32,7 @@ import net.tfminecraft.events.FurnitureBreakEvent;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.events.FurnitureSlotItemAddEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 
 public class PlateManager implements Listener{
 
@@ -55,7 +55,7 @@ public class PlateManager implements Listener{
     }
 
     public void update(Furniture f) {
-        for(FurnitureSlot slot : f.getActiveSlots().values()) {
+        for(PlacedSlot slot : f.getActiveSlots().values()) {
             if(slot.getId().contains("display")) continue;
             ItemStack item = slot.getCurrentItem();
             if(item == null) continue;
@@ -68,7 +68,7 @@ public class PlateManager implements Listener{
     }
 
     public void clear(Furniture f) {
-        for(FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
+        for(PlacedSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
             if(slot.getId().contains("display") || FurnitureCache.isBowl(f)) {
                 slot.clearModel();
             }
@@ -84,7 +84,7 @@ public class PlateManager implements Listener{
     }
 
     public boolean hasSauce(Furniture f) {
-        for(FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
+        for(PlacedSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
             if(!slot.getId().contains("display")) {
                 ItemStack item = slot.getCurrentItem();
                 if(item == null) continue;
@@ -104,7 +104,7 @@ public class PlateManager implements Listener{
         );
         p.swingMainHand();
 
-        for (FurnitureSlot slot : f.getActiveSlots().values()) {
+        for (PlacedSlot slot : f.getActiveSlots().values()) {
 
             if (slot.getId().contains("display")) continue;
 
@@ -125,13 +125,11 @@ public class PlateManager implements Listener{
             slot.forceModel(item);
         }
 
-        FurnitureSlot sauceSlot = f.getType().getSlot("sauce");
-        if(sauceSlot == null) return;
+        if (f.getType() == null || f.getType().getSlot("sauce") == null) return;
         if(f.hasActiveSlot("sauce")) return;
         String saucePath = CategoryDictionary.getSauceItemPath(
             StringFormatter.extractHexColor(base.getItemMeta().getDisplayName()), 1);
-        sauceSlot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(saucePath));
-        f.addActiveSlot(sauceSlot);
+        f.getOrCreatePlacedSlot("sauce").forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(saucePath));
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
     }
 
@@ -143,15 +141,11 @@ public class PlateManager implements Listener{
         Map<String, ItemStack> map = Encoder.decodeSlots(base.getItemMeta().getPersistentDataContainer().get(Keys.SLOT_DATA, PersistentDataType.STRING));
         for(Map.Entry<String, ItemStack> entry : map.entrySet()) {
             if(f.hasActiveSlot(entry.getKey())) continue;
-            FurnitureSlot s = f.getType().getSlot(entry.getKey());
-            if(s == null) continue;
-            s.forceModel(entry.getValue());
-            f.addActiveSlot(s);
+            if (f.getType() == null || f.getType().getSlot(entry.getKey()) == null) continue;
+            f.getOrCreatePlacedSlot(entry.getKey()).forceModel(entry.getValue());
         }
-        FurnitureSlot s = f.getType().getSlot("food_item");
-        if(s == null) return;
-        s.forceModel(base);
-        f.addActiveSlot(s);
+        if (f.getType() == null || f.getType().getSlot("food_item") == null) return;
+        f.getOrCreatePlacedSlot("food_item").forceModel(base);
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
     }
 

@@ -39,7 +39,8 @@ import net.tfminecraft.events.FurniturePlaceEvent;
 import net.tfminecraft.events.FurnitureSlotItemAddEvent;
 import net.tfminecraft.events.FurnitureSlotItemTakeEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
+import net.tfminecraft.furniture.SlotDefinition;
 
 public class CraftingManager implements Listener {
 
@@ -151,23 +152,22 @@ public class CraftingManager implements Listener {
         }
         if(FurnitureCache.isButterChurn(f)) {
             if(f.getActiveSlots().size() == 1 && e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
-                FurnitureSlot slot = f.getType().getSlot("stick");
+                PlacedSlot slot = f.getActiveSlot("stick").orElse(null);
                 if(slot == null) return;
-                if(!f.hasActiveSlot(slot.getId())) return;
                 slot.clearModel();
             } else if(f.getActiveSlots().size() > 1) {
                 Furniture carried = InteractibleFurniture.getInstance().getFurnitureManager().getByCarrier(p);
                 if(carried != null) p.sendMessage("carried "+carried.getId());
-                if(carried != null && FurnitureCache.isButterPlate(carried)) {
-                    for(FurnitureSlot slot : carried.getType().getSlots().values()) {
+                if(carried != null && FurnitureCache.isButterPlate(carried) && carried.getType() != null) {
+                    for(SlotDefinition def : carried.getType().getSlots().values()) {
+                        PlacedSlot slot = carried.getOrCreatePlacedSlot(def.getId());
                         slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.butterPieceModel));
-                        carried.addActiveSlot(slot);
                         slot.followParentTransform((ItemDisplay) Bukkit.getEntity(f.getEntityId()));
                     }
                     f.getLoc().getWorld().playSound(f.getLoc(), Sound.ENTITY_ITEM_FRAME_ADD_ITEM, 1f, 1f);
                     return;
                 }
-                FurnitureSlot slot = f.getType().getSlot("stick");
+                PlacedSlot slot = f.getActiveSlot("stick").orElse(null);
                 if(slot == null) return;
                 ItemDisplay display = (ItemDisplay) Bukkit.getEntity(slot.getDisplayStandId());
                 if (display == null) return;
@@ -197,7 +197,7 @@ public class CraftingManager implements Listener {
         Furniture f = e.getFurniture();
         if(FurnitureCache.isButterChurn(f)) {
             churnCooldown.remove(f.getEntityId());
-            for(FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
+            for(PlacedSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
                 slot.clearModel();
             }
         }
@@ -213,7 +213,7 @@ public class CraftingManager implements Listener {
                 }
             }
             if (!e.isCancelled()) {
-                for (FurnitureSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
+                for (PlacedSlot slot : new ArrayList<>(f.getActiveSlots().values())) {
                     slot.clearModel();
                 }
             }
@@ -230,23 +230,19 @@ public class CraftingManager implements Listener {
     public void furniturePlace(FurniturePlaceEvent e) {
         Furniture f = e.getFurniture();
         if(FurnitureCache.isButterChurn(f)) {
-            FurnitureSlot slot = f.getType().getSlot("stick");
-            if(slot == null) return;
-            slot.forceModel(new ItemStack(Material.STICK, 1));
-            f.addActiveSlot(slot);
+            if(f.getType() == null || f.getType().getSlot("stick") == null) return;
+            f.getOrCreatePlacedSlot("stick").forceModel(new ItemStack(Material.STICK, 1));
         }
         if (FurnitureCache.isFirePit(f)) {
-            FurnitureSlot slot = f.getType().getSlot("turner");
-            if (slot == null) return;
-            slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.firePitTurner));
-            f.addActiveSlot(slot);
+            if (f.getType() == null || f.getType().getSlot("turner") == null) return;
+            f.getOrCreatePlacedSlot("turner").forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.firePitTurner));
             applyFirePitTransformOffset(getActiveSlotDisplay(f, "turner"));
         }
     }
 
     private void handleFirePitInteract(FurnitureInteractEvent e) {
         Furniture f = e.getFurniture();
-        FurnitureSlot hitSlot = e.getHitSlot();
+        SlotDefinition hitSlot = e.getHitSlot();
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
         boolean emptyHand = hand == null || hand.getType().equals(Material.AIR);
 
@@ -259,8 +255,7 @@ public class CraftingManager implements Listener {
                 startFirePitCooldown(f, 40 * 50L);
                 f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_FIRE_AMBIENT, 1f, 1f);
             } else if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
-                FurnitureSlot turner = f.getType().getSlot("turner");
-                if (turner != null) turner.clearModel();
+                f.getActiveSlot("turner").ifPresent(PlacedSlot::clearModel);
             } else if (!emptyHand) {
                 e.setCancelled(true);
             }
@@ -268,8 +263,7 @@ public class CraftingManager implements Listener {
         }
 
         if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
-            FurnitureSlot turner = f.getType().getSlot("turner");
-            if (turner != null) turner.clearModel();
+            f.getActiveSlot("turner").ifPresent(PlacedSlot::clearModel);
         }
     }
 

@@ -9,14 +9,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.tfminecraft.cooking.enums.Tag;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 
 public class Encoder {
     public static String getEncodedSlots(Furniture f) {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
-        for (Map.Entry<String, FurnitureSlot> entry : f.getActiveSlots().entrySet()) {
+        for (Map.Entry<String, PlacedSlot> entry : f.getActiveSlots().entrySet()) {
             ItemStack item = entry.getValue().getCurrentItem();
             if (item == null) continue;
             FoodItem fi = FoodItem.fromItem(item);

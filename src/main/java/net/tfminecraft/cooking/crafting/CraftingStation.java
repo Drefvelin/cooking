@@ -24,7 +24,8 @@ import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.events.FurnitureSlotItemAddEvent;
 import net.tfminecraft.events.FurnitureSlotItemTakeEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
+import net.tfminecraft.furniture.SlotDefinition;
 
 public class CraftingStation {
     private Furniture f;
@@ -94,7 +95,7 @@ public class CraftingStation {
 
     public boolean hasFreeSlots() {
         int free = 0;
-        for(FurnitureSlot fs : f.getType().getSlots().values()) {
+        for(SlotDefinition fs : f.getType().getSlots().values()) {
             if(!slots.containsKey(fs.getId()) && fs.getId().contains("input")) {
                 free++;
             }
@@ -190,7 +191,7 @@ public class CraftingStation {
 
             slots.remove(slotId);
 
-            FurnitureSlot slot = f.getActiveSlot(slotId).orElse(null);
+            PlacedSlot slot = f.getActiveSlot(slotId).orElse(null);
             if(slot != null) {
                 slot.clearModel();
                 f.removeActiveSlot(slotId);
@@ -221,7 +222,7 @@ public class CraftingStation {
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1f);
 
         for(Map.Entry<String, ItemStack> entry : slots.entrySet()) {
-            FurnitureSlot slot = f.getActiveSlot(entry.getKey()).orElse(null);
+            PlacedSlot slot = f.getActiveSlot(entry.getKey()).orElse(null);
             ItemStack remaining = slot.getCurrentItem();
             if(remaining == null) continue;
 
@@ -239,11 +240,11 @@ public class CraftingStation {
         output.setAmount(outputAmount);
 
         boolean onBoard = false;
-        for(FurnitureSlot slot : f.getType().getSlots().values()) {
-            if(f.hasActiveSlot(slot.getId())) continue;
-            if(!slot.getId().contains("input")) continue;
+        for(SlotDefinition def : f.getType().getSlots().values()) {
+            if(f.hasActiveSlot(def.getId())) continue;
+            if(!def.getId().contains("input")) continue;
+            PlacedSlot slot = f.getOrCreatePlacedSlot(def.getId());
             slot.forceModel(output);
-            f.addActiveSlot(slot);
             onBoard = true;
             slot.applyDisplayData(item.getModelData().getDisplayData());
 
@@ -255,7 +256,7 @@ public class CraftingStation {
                     break;
                 }
             }
-            slots.put(slot.getId(), output);
+            slots.put(def.getId(), output);
 
             // Assign new recipe or clear it
             currentRecipe = newRecipe;

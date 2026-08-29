@@ -33,7 +33,7 @@ import net.tfminecraft.cooking.utils.ItemUpdater;
 import net.tfminecraft.cooking.utils.Keys;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 import net.tfminecraft.furniture.data.DisplayData;
 
 public class PotReference extends CookingReference {
@@ -69,7 +69,7 @@ public class PotReference extends CookingReference {
     }
 
     public FoodItem getMain() {
-        for(FurnitureSlot slot : f.getActiveSlots().values()) {
+        for(PlacedSlot slot : f.getActiveSlots().values()) {
             ItemStack stack = slot.getCurrentItem();
             if(stack == null) continue;
             FoodItem item = FoodItem.fromItem(stack);
@@ -80,7 +80,7 @@ public class PotReference extends CookingReference {
     }
 
     public void setMain(FoodItem fi) {
-        for(FurnitureSlot slot : f.getActiveSlots().values()) {
+        for(PlacedSlot slot : f.getActiveSlots().values()) {
             ItemStack stack = slot.getCurrentItem();
             if(stack == null) continue;
             FoodItem item = FoodItem.fromItem(stack);
@@ -271,7 +271,7 @@ public class PotReference extends CookingReference {
         if(isSoup()) return;
         for(String key : slots.keySet()) {
             if(!f.hasActiveSlot(key)) continue;
-            FurnitureSlot slot = f.getActiveSlot(key).get();
+            PlacedSlot slot = f.getActiveSlot(key).get();
             if(slot.getCurrentItem() == null) continue;
             ItemStack stack = slot.getCurrentItem();
             stack = ItemUpdater.applyItemUpdate(stack, slots.get(key), null);
@@ -295,7 +295,7 @@ public class PotReference extends CookingReference {
             mashed.setyScale(0);
             mashed.setzScale(0);
             mashed.setyPos(-0.4f);
-            FurnitureSlot slot = f.getActiveSlot(entry.getKey()).get();
+            PlacedSlot slot = f.getActiveSlot(entry.getKey()).get();
             if(slot == null) continue;
             slot.applyDisplayData(mashed);
             found = true;
@@ -324,9 +324,8 @@ public class PotReference extends CookingReference {
             return;
         }
         if(ItemCache.isWater(item) && !secondaries.containsKey("liquid")) {
-            FurnitureSlot slot = f.getType().getSlot("liquid");
-            if(slot == null) return;
-            f.addActiveSlot(slot);
+            if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
+            PlacedSlot slot = f.getOrCreatePlacedSlot("liquid");
             secondaries.put("liquid", -1);
             slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.getLiquidModel(item)));
             addColour(ItemCache.getColour(item));
@@ -359,9 +358,8 @@ public class PotReference extends CookingReference {
     public void updateModel() {
         if(!isSoup()) return;
         String path = getLiquidItemPath();
-        FurnitureSlot slot = f.getType().getSlot("liquid");
-        if(slot == null) return;
-        slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
+        if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
+        f.getOrCreatePlacedSlot("liquid").forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
     }
     
     @Override

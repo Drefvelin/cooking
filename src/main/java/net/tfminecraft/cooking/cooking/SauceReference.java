@@ -23,7 +23,7 @@ import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 
 public class SauceReference extends CookingReference {
 
@@ -190,9 +190,8 @@ public class SauceReference extends CookingReference {
             scoop(p, item);
         }
         if(ItemCache.isLiquid(item) && !secondaries.containsKey("liquid")) {
-            FurnitureSlot slot = f.getType().getSlot("liquid");
-            if(slot == null) return;
-            f.addActiveSlot(slot);
+            if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
+            PlacedSlot slot = f.getOrCreatePlacedSlot("liquid");
             secondaries.put("liquid", -1);
             slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.getLiquidModel(item)));
             addColour(ItemCache.getColour(item));
@@ -214,8 +213,7 @@ public class SauceReference extends CookingReference {
     
     public void updateModel() {
         String path = getLiquidItemPath();
-        FurnitureSlot slot = f.getType().getSlot("liquid");
-        if(slot == null) return;
-        slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
+        if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
+        f.getOrCreatePlacedSlot("liquid").forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
     }
 }

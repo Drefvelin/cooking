@@ -14,13 +14,13 @@ import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.cooking.utils.ItemUpdater;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 
 public final class CarveHandler {
 
     private CarveHandler() {}
 
-    public static boolean tryCarve(Player player, Furniture furniture, FurnitureSlot slot, ItemStack tool) {
+    public static boolean tryCarve(Player player, Furniture furniture, PlacedSlot slot, ItemStack tool) {
         if (player == null || furniture == null || slot == null || tool == null) return false;
         if (ItemCache.carveTool == null || !TLibs.getItemAPI().getChecker().checkItemWithPath(tool, ItemCache.carveTool)) {
             return false;
@@ -74,7 +74,7 @@ public final class CarveHandler {
     }
 
     public static boolean tryCarveFirstCarvableSlot(Player player, Furniture furniture, ItemStack tool) {
-        for (FurnitureSlot active : furniture.getActiveSlots().values()) {
+        for (PlacedSlot active : furniture.getActiveSlots().values()) {
             if (tryCarve(player, furniture, active, tool)) {
                 return true;
             }

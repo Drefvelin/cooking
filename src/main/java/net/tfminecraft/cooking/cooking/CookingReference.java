@@ -21,7 +21,7 @@ import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.events.FurnitureSlotItemAddEvent;
 import net.tfminecraft.events.FurnitureSlotItemTakeEvent;
 import net.tfminecraft.furniture.Furniture;
-import net.tfminecraft.furniture.FurnitureSlot;
+import net.tfminecraft.furniture.PlacedSlot;
 import net.tfminecraft.furniture.data.DisplayData;
 import net.tfminecraft.cooking.cache.CategoryDictionary;
 import net.tfminecraft.cooking.cache.ItemCache;
@@ -121,13 +121,12 @@ public class CookingReference {
         FoodItem fi = FoodItem.fromItem(item);
         if(fi == null) return false;
         slots.put(slot, fi);
-        FurnitureSlot fslot = f.getType().getSlot(slot);
-        if(fslot == null) return false;
+        if(f.getType() == null || f.getType().getSlot(slot) == null) return false;
+        PlacedSlot fslot = f.getOrCreatePlacedSlot(slot);
         ItemStack model = new ItemStack(item);
         model = ItemUpdater.applyItemUpdate(model, fi, f.getId());
         model.setAmount(1);
         fslot.forceModel(model);
-        f.addActiveSlot(fslot);
         addColour(ItemCache.getColour(item));
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
         item.setAmount(item.getAmount()-1);
