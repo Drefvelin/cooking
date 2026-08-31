@@ -4,7 +4,7 @@ name: Cooking
 version: 1.0
 author: Drefvelin
 
-depend: [TLibs, InteractibleFurniture]
+depend: [TLibs, InteractibleFurniture, TFMCCore]
 
 commands:
   cooking:

@@ -18,6 +18,7 @@ import net.tfminecraft.cooking.manager.CookingManager;
 import net.tfminecraft.cooking.manager.CraftingManager;
 import net.tfminecraft.cooking.manager.PlateManager;
 import net.tfminecraft.cooking.manager.TagManager;
+import net.tfminecraft.tfmccore.itemscan.ItemScanService;
 
 public class Cooking extends JavaPlugin {
 
@@ -52,11 +53,16 @@ public class Cooking extends JavaPlugin {
         });
 
         getCommand("cooking").setExecutor(commands);
+        if (ItemScanService.get() != null) {
+            ItemScanService.get().subscribe(tagManager);
+        }
     }
 
     @Override
     public void onDisable() {
-        // cleanup if needed later
+        if (ItemScanService.get() != null) {
+            ItemScanService.get().unsubscribe(tagManager);
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -78,7 +84,6 @@ public class Cooking extends JavaPlugin {
     public void registerListeners() {
         getServer().getPluginManager().registerEvents(plateManager, this);
         getServer().getPluginManager().registerEvents(new CraftingManager(), this);
-        getServer().getPluginManager().registerEvents(tagManager, this);
         getServer().getPluginManager().registerEvents(cookingManager, this);
         getServer().getPluginManager().registerEvents(new ConversionManager(), this);
     }
