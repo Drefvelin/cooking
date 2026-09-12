@@ -1,0 +1,40 @@
+# Tag tracks that contribute a name PREFIX (plain text after hex strip, trailing space added)
+prefix-tracks:
+  - sweet
+  - butter_salted
+  - butter_spiced
+
+# Max filler origins shown in a composed name
+fillers:
+  max: 3
+
+addons:
+  max: 2
+
+dough-fillers:
+  max: 2
+
+# Map ingredient origins to display adjectives in {fillers} names
+origin-adjectives:
+  "Spice Leaf": Spiced
+
+# Category buckets for station logic (Batch 2+)
+categories:
+  seasoning:
+    - salt
+    - pepper
+  sweetener:
+    - sweetener
+  addon:
+    - garnish
+    - spice
+  dough-filler:
+    - fruit
+
+# Per-category tag step display overrides (fallback after per-type tag-labels)
+tag-label-defaults:
+  dairy:
+    dairy_freshness:
+      rotten: "#8B7355Spoiled"
+    butter_freshness:
+      rotten: "#8B7355Spoiled"

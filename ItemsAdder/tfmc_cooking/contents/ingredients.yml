@@ -50,6 +50,13 @@ items:
       generate: false
       model_path: item/ingredients/black_pepper/black_pepper
 
+  salt:
+    display_name: "Salt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/salt/salt
+
   cinnamon:
     display_name: "Cinnamon"
     resource:

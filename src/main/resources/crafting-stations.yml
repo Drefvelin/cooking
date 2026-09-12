@@ -8,29 +8,29 @@ cutting_board:
       ratio: 2
       inputs:
         - c.vegetable(type=vegetable_1)
-      output: vegetable(type=vegetable_cut;origin={origin};quality=1-5;tags=cut.0)
+      output: vegetable(type=vegetable_cut;origin={origin};tags=cut.0)
     chop_vegetables:
       ratio: 1
       inputs:
         - c.vegetable(type=vegetable_cut)
-      output: garnish(type=vegetable_chopped;origin={origin};quality=1-5;tags=cut.1)
+      output: garnish(type=vegetable_chopped;origin={origin};tags=cut.1)
     chop_olive:
       ratio: 1
       inputs:
         - c.vegetable(type=vegetable_chop_only;origin=Olive)
-      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+      output: garnish(type=garnish_chopped;origin={origin};tags=cut.1)
     chop_pistachio:
       ratio: 1
       inputs:
         - c.vegetable(type=vegetable_chop_only;origin=Pistachio)
-      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+      output: garnish(type=garnish_chopped;origin={origin};tags=cut.1)
     chop_rhubarb:
       ratio: 1
       inputs:
         - c.vegetable(type=vegetable_chop_only;origin=Rhubarb)
-      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+      output: garnish(type=garnish_chopped;origin={origin};tags=cut.1)
     chop_garlic:
       ratio: 1
       inputs:
         - c.vegetable(type=vegetable_chop_only;origin=Garlic)
-      output: garnish(type=garnish_chopped;origin={origin};quality=1-5;tags=cut.1)
+      output: garnish(type=garnish_chopped;origin={origin};tags=cut.1)

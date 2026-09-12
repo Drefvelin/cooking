@@ -11,6 +11,14 @@ public class FurnitureCache {
     public static String butterChurn;
     public static String butterPlate;
     public static String firePit;
+    public static String meatHook;
+    public static String sausageMaker;
+    public static String mixingBowl;
+    public static String millingStone;
+    public static String ovenBottom;
+    public static String ovenTop;
+    public static String breadTray;
+    public static String liquidContainer;
 
     public static String plate;
     public static String bowl;
@@ -34,6 +42,38 @@ public class FurnitureCache {
         return f.getId().equalsIgnoreCase(firePit);
     }
 
+    public static boolean isMeatHook(Furniture f) {
+        return f.getId().equalsIgnoreCase(meatHook);
+    }
+
+    public static boolean isSausageMaker(Furniture f) {
+        return f.getId().equalsIgnoreCase(sausageMaker);
+    }
+
+    public static boolean isMixingBowl(Furniture f) {
+        return f.getId().equalsIgnoreCase(mixingBowl);
+    }
+
+    public static boolean isMillingStone(Furniture f) {
+        return f.getId().equalsIgnoreCase(millingStone);
+    }
+
+    public static boolean isOvenBottom(Furniture f) {
+        return f.getId().equalsIgnoreCase(ovenBottom);
+    }
+
+    public static boolean isOvenTop(Furniture f) {
+        return f.getId().equalsIgnoreCase(ovenTop);
+    }
+
+    public static boolean isBreadTray(Furniture f) {
+        return f.getId().equalsIgnoreCase(breadTray);
+    }
+
+    public static boolean isLiquidContainer(Furniture f) {
+        return f.getId().equalsIgnoreCase(liquidContainer);
+    }
+
     public static boolean isPlate(Furniture f) {
         return f.getId().equalsIgnoreCase(plate);
     }
@@ -44,13 +84,5 @@ public class FurnitureCache {
 
     public static boolean isMealHolder(Furniture f) {
         return isBowl(f) || isPlate(f);
-    }
-
-    public static boolean canCarry(Furniture f) {
-        if(f.getId().equalsIgnoreCase(plate)) return true;
-        if(f.getId().equalsIgnoreCase(bowl)) return true;
-        if(f.getId().equalsIgnoreCase(butterPlate)) return true;
-        if(getByFurniture(f) != Method.NONE) return true;
-        return false;
     }
 }

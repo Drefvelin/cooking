@@ -8,6 +8,41 @@ items:
       generate: false
       model_path: item/ingredients/tomato/tomato_rotten
 
+  carrot_rotten:
+    display_name: "Carrot Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/vanilla/carrot_rotten
+
+  wheat_rotten:
+    display_name: "Wheat Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/vanilla/wheat_rotten
+
+  apple_rotten:
+    display_name: "Apple Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/vanilla/apple_rotten
+
+  beetroot_rotten:
+    display_name: "Beetroot Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/beetroot/beetroot_rotten
+
+  potato_rotten:
+    display_name: "Potato Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/vanilla/potato_rotten
+
   onion_rotten:
     display_name: "Onion Rotten"
     resource:
@@ -673,33 +708,226 @@ items:
       generate: false
       model_path: item/ingredients/garlic/chopped_garlic_rotten
 
-  beef_steak_raw:
-    display_name: "Beef Steak Raw"
+  red_meat_steak_raw:
+    display_name: "Red Meat Steak raw"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/beef/beef_steak_raw
+      model_path: item/ingredients/red_meat/red_meat_steak_raw
 
-  beef_steak_cooked:
-    display_name: "Beef Steak Cooked"
+  red_meat_steak_cooked:
+    display_name: "Red Meat Steak cooked"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/beef/beef_steak_cooked
+      model_path: item/ingredients/red_meat/red_meat_steak_cooked
 
-  beef_steak_burnt:
-    display_name: "Beef Steak Burnt"
+  red_meat_steak_burnt:
+    display_name: "Red Meat Steak burnt"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/beef/beef_steak_burnt
+      model_path: item/ingredients/red_meat/red_meat_steak_burnt
 
-  beef_steak_rotten:
-    display_name: "Beef Steak Rotten"
+  red_meat_steak_rotten:
+    display_name: "Red Meat Steak rotten"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/beef/beef_steak_rotten
+      model_path: item/ingredients/red_meat/red_meat_steak_rotten
+
+  red_meat_roast_raw_8:
+    display_name: "Red Meat Roast raw 8"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_8
+  red_meat_roast_raw_7:
+    display_name: "Red Meat Roast raw 7"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_7
+  red_meat_roast_raw_6:
+    display_name: "Red Meat Roast raw 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_6
+  red_meat_roast_raw_5:
+    display_name: "Red Meat Roast raw 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_5
+  red_meat_roast_raw_4:
+    display_name: "Red Meat Roast raw 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_4
+  red_meat_roast_raw_3:
+    display_name: "Red Meat Roast raw 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_3
+  red_meat_roast_raw_2:
+    display_name: "Red Meat Roast raw 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_2
+  red_meat_roast_raw_1:
+    display_name: "Red Meat Roast raw 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_raw_1
+  red_meat_roast_cooked_8:
+    display_name: "Red Meat Roast cooked 8"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_8
+  red_meat_roast_cooked_7:
+    display_name: "Red Meat Roast cooked 7"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_7
+  red_meat_roast_cooked_6:
+    display_name: "Red Meat Roast cooked 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_6
+  red_meat_roast_cooked_5:
+    display_name: "Red Meat Roast cooked 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_5
+  red_meat_roast_cooked_4:
+    display_name: "Red Meat Roast cooked 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_4
+  red_meat_roast_cooked_3:
+    display_name: "Red Meat Roast cooked 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_3
+  red_meat_roast_cooked_2:
+    display_name: "Red Meat Roast cooked 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_2
+  red_meat_roast_cooked_1:
+    display_name: "Red Meat Roast cooked 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_cooked_1
+  red_meat_roast_burnt_8:
+    display_name: "Red Meat Roast burnt 8"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_8
+  red_meat_roast_burnt_7:
+    display_name: "Red Meat Roast burnt 7"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_7
+  red_meat_roast_burnt_6:
+    display_name: "Red Meat Roast burnt 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_6
+  red_meat_roast_burnt_5:
+    display_name: "Red Meat Roast burnt 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_5
+  red_meat_roast_burnt_4:
+    display_name: "Red Meat Roast burnt 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_4
+  red_meat_roast_burnt_3:
+    display_name: "Red Meat Roast burnt 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_3
+  red_meat_roast_burnt_2:
+    display_name: "Red Meat Roast burnt 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_2
+  red_meat_roast_burnt_1:
+    display_name: "Red Meat Roast burnt 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_burnt_1
+  red_meat_roast_rotten_8:
+    display_name: "Red Meat Roast rotten 8"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_8
+  red_meat_roast_rotten_7:
+    display_name: "Red Meat Roast rotten 7"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_7
+  red_meat_roast_rotten_6:
+    display_name: "Red Meat Roast rotten 6"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_6
+  red_meat_roast_rotten_5:
+    display_name: "Red Meat Roast rotten 5"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_5
+  red_meat_roast_rotten_4:
+    display_name: "Red Meat Roast rotten 4"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_4
+  red_meat_roast_rotten_3:
+    display_name: "Red Meat Roast rotten 3"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_3
+  red_meat_roast_rotten_2:
+    display_name: "Red Meat Roast rotten 2"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_2
+  red_meat_roast_rotten_1:
+    display_name: "Red Meat Roast rotten 1"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/red_meat/red_meat_roast_rotten_1
 
   pork_steak_raw:
     display_name: "Pork Steak Raw"
@@ -729,33 +957,201 @@ items:
       generate: false
       model_path: item/ingredients/pork/pork_steak_rotten
 
-  venison_steak_raw:
-    display_name: "Venison Steak Raw"
+  sausage_raw:
+    display_name: "Sausage Raw"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/venison/venison_steak_raw
+      model_path: item/ingredients/sausage/sausage_raw
 
-  venison_steak_cooked:
-    display_name: "Venison Steak Cooked"
+  sausage_cooked:
+    display_name: "Sausage Cooked"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/venison/venison_steak_cooked
+      model_path: item/ingredients/sausage/sausage_cooked
 
-  venison_steak_burnt:
-    display_name: "Venison Steak Burnt"
+  sausage_rotten:
+    display_name: "Sausage Rotten"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/venison/venison_steak_burnt
+      model_path: item/ingredients/sausage/sausage_rotten
 
-  venison_steak_rotten:
-    display_name: "Venison Steak Rotten"
+  sausage_burnt:
+    display_name: "Sausage Burnt"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/venison/venison_steak_rotten
+      model_path: item/ingredients/sausage/sausage_burnt
+
+  sausage_chain_raw_1:
+    display_name: "Sausage Chain Raw (5)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_raw_1
+
+  sausage_chain_raw_2:
+    display_name: "Sausage Chain Raw (4)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_raw_2
+
+  sausage_chain_raw_3:
+    display_name: "Sausage Chain Raw (3)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_raw_3
+
+  sausage_chain_raw_4:
+    display_name: "Sausage Chain Raw (2)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_raw_4
+
+  sausage_chain_raw_5:
+    display_name: "Sausage Chain Raw (1)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_raw_5
+
+  sausage_chain_cooked_1:
+    display_name: "Sausage Chain Cooked (5)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_cooked_1
+
+  sausage_chain_cooked_2:
+    display_name: "Sausage Chain Cooked (4)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_cooked_2
+
+  sausage_chain_cooked_3:
+    display_name: "Sausage Chain Cooked (3)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_cooked_3
+
+  sausage_chain_cooked_4:
+    display_name: "Sausage Chain Cooked (2)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_cooked_4
+
+  sausage_chain_cooked_5:
+    display_name: "Sausage Chain Cooked (1)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_cooked_5
+
+  sausage_chain_rotten_1:
+    display_name: "Sausage Chain Rotten (5)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_rotten_1
+
+  sausage_chain_rotten_2:
+    display_name: "Sausage Chain Rotten (4)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_rotten_2
+
+  sausage_chain_rotten_3:
+    display_name: "Sausage Chain Rotten (3)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_rotten_3
+
+  sausage_chain_rotten_4:
+    display_name: "Sausage Chain Rotten (2)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_rotten_4
+
+  sausage_chain_rotten_5:
+    display_name: "Sausage Chain Rotten (1)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_rotten_5
+
+  sausage_chain_burnt_1:
+    display_name: "Sausage Chain Burnt (5)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_burnt_1
+
+  sausage_chain_burnt_2:
+    display_name: "Sausage Chain Burnt (4)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_burnt_2
+
+  sausage_chain_burnt_3:
+    display_name: "Sausage Chain Burnt (3)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_burnt_3
+
+  sausage_chain_burnt_4:
+    display_name: "Sausage Chain Burnt (2)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_burnt_4
+
+  sausage_chain_burnt_5:
+    display_name: "Sausage Chain Burnt (1)"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/sausage/sausage_chain_burnt_5
+
+  bread_raw:
+    display_name: "Bread Raw"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/bread/bread_raw
+
+  bread_cooked:
+    display_name: "Bread Cooked"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/bread/bread_cooked
+
+  bread_burnt:
+    display_name: "Bread Burnt"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/bread/bread_burnt
+
+  bread_rotten:
+    display_name: "Bread Rotten"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/bread/bread_rotten
 
   butter:
     display_name: "Butter"
@@ -883,12 +1279,61 @@ items:
       generate: false
       model_path: item/tools/cutting_knife
 
-  flour:
-    display_name: "Flour"
+  flour_model:
+    display_name: "Flour (Bowl)"
     resource:
       material: PAPER
       generate: false
       model_path: item/bulk/flour
+
+  yeast_model:
+    display_name: "Yeast (Bowl)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/yeast
+
+  dough_model:
+    display_name: "Dough (Bowl)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/dough
+
+  wood_model:
+    display_name: "Wood (Oven)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/wood
+
+  wood_burnt_model:
+    display_name: "Burnt Wood (Oven)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/wood_burnt
+
+  oven_fire_model:
+    display_name: "Oven Fire"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/oven_fire
+
+  water_block:
+    display_name: "Water Block"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/liquid/water_block
+
+  milk_block:
+    display_name: "Milk Block"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/liquid/milk_block
 
   grain:
     display_name: "Grain"
@@ -912,195 +1357,195 @@ items:
       model_path: item/container/bag_on_stand
 
 
-  chicken_spitroast_raw_6:
-    display_name: "Chicken Spitroast raw 6"
+  poultry_roast_raw_6:
+    display_name: "Poultry Roast raw 6"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_raw_6
-  chicken_spitroast_raw_5:
-    display_name: "Chicken Spitroast raw 5"
+      model_path: item/ingredients/poultry/poultry_roast_raw_6
+  poultry_roast_raw_5:
+    display_name: "Poultry Roast raw 5"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_raw_5
-  chicken_spitroast_raw_4:
-    display_name: "Chicken Spitroast raw 4"
+      model_path: item/ingredients/poultry/poultry_roast_raw_5
+  poultry_roast_raw_4:
+    display_name: "Poultry Roast raw 4"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_raw_4
-  chicken_spitroast_raw_3:
-    display_name: "Chicken Spitroast raw 3"
+      model_path: item/ingredients/poultry/poultry_roast_raw_4
+  poultry_roast_raw_3:
+    display_name: "Poultry Roast raw 3"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_raw_3
-  chicken_spitroast_raw_2:
-    display_name: "Chicken Spitroast raw 2"
+      model_path: item/ingredients/poultry/poultry_roast_raw_3
+  poultry_roast_raw_2:
+    display_name: "Poultry Roast raw 2"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_raw_2
-  chicken_spitroast_raw_1:
-    display_name: "Chicken Spitroast raw 1"
+      model_path: item/ingredients/poultry/poultry_roast_raw_2
+  poultry_roast_raw_1:
+    display_name: "Poultry Roast raw 1"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_raw_1
-  chicken_spitroast_cooked_6:
-    display_name: "Chicken Spitroast cooked 6"
+      model_path: item/ingredients/poultry/poultry_roast_raw_1
+  poultry_roast_cooked_6:
+    display_name: "Poultry Roast cooked 6"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_cooked_6
-  chicken_spitroast_cooked_5:
-    display_name: "Chicken Spitroast cooked 5"
+      model_path: item/ingredients/poultry/poultry_roast_cooked_6
+  poultry_roast_cooked_5:
+    display_name: "Poultry Roast cooked 5"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_cooked_5
-  chicken_spitroast_cooked_4:
-    display_name: "Chicken Spitroast cooked 4"
+      model_path: item/ingredients/poultry/poultry_roast_cooked_5
+  poultry_roast_cooked_4:
+    display_name: "Poultry Roast cooked 4"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_cooked_4
-  chicken_spitroast_cooked_3:
-    display_name: "Chicken Spitroast cooked 3"
+      model_path: item/ingredients/poultry/poultry_roast_cooked_4
+  poultry_roast_cooked_3:
+    display_name: "Poultry Roast cooked 3"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_cooked_3
-  chicken_spitroast_cooked_2:
-    display_name: "Chicken Spitroast cooked 2"
+      model_path: item/ingredients/poultry/poultry_roast_cooked_3
+  poultry_roast_cooked_2:
+    display_name: "Poultry Roast cooked 2"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_cooked_2
-  chicken_spitroast_cooked_1:
-    display_name: "Chicken Spitroast cooked 1"
+      model_path: item/ingredients/poultry/poultry_roast_cooked_2
+  poultry_roast_cooked_1:
+    display_name: "Poultry Roast cooked 1"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_cooked_1
-  chicken_spitroast_burnt_6:
-    display_name: "Chicken Spitroast burnt 6"
+      model_path: item/ingredients/poultry/poultry_roast_cooked_1
+  poultry_roast_burnt_6:
+    display_name: "Poultry Roast burnt 6"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_burnt_6
-  chicken_spitroast_burnt_5:
-    display_name: "Chicken Spitroast burnt 5"
+      model_path: item/ingredients/poultry/poultry_roast_burnt_6
+  poultry_roast_burnt_5:
+    display_name: "Poultry Roast burnt 5"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_burnt_5
-  chicken_spitroast_burnt_4:
-    display_name: "Chicken Spitroast burnt 4"
+      model_path: item/ingredients/poultry/poultry_roast_burnt_5
+  poultry_roast_burnt_4:
+    display_name: "Poultry Roast burnt 4"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_burnt_4
-  chicken_spitroast_burnt_3:
-    display_name: "Chicken Spitroast burnt 3"
+      model_path: item/ingredients/poultry/poultry_roast_burnt_4
+  poultry_roast_burnt_3:
+    display_name: "Poultry Roast burnt 3"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_burnt_3
-  chicken_spitroast_burnt_2:
-    display_name: "Chicken Spitroast burnt 2"
+      model_path: item/ingredients/poultry/poultry_roast_burnt_3
+  poultry_roast_burnt_2:
+    display_name: "Poultry Roast burnt 2"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_burnt_2
-  chicken_spitroast_burnt_1:
-    display_name: "Chicken Spitroast burnt 1"
+      model_path: item/ingredients/poultry/poultry_roast_burnt_2
+  poultry_roast_burnt_1:
+    display_name: "Poultry Roast burnt 1"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_burnt_1
-  chicken_spitroast_rotten_6:
-    display_name: "Chicken Spitroast rotten 6"
+      model_path: item/ingredients/poultry/poultry_roast_burnt_1
+  poultry_roast_rotten_6:
+    display_name: "Poultry Roast rotten 6"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_rotten_6
-  chicken_spitroast_rotten_5:
-    display_name: "Chicken Spitroast rotten 5"
+      model_path: item/ingredients/poultry/poultry_roast_rotten_6
+  poultry_roast_rotten_5:
+    display_name: "Poultry Roast rotten 5"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_rotten_5
-  chicken_spitroast_rotten_4:
-    display_name: "Chicken Spitroast rotten 4"
+      model_path: item/ingredients/poultry/poultry_roast_rotten_5
+  poultry_roast_rotten_4:
+    display_name: "Poultry Roast rotten 4"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_rotten_4
-  chicken_spitroast_rotten_3:
-    display_name: "Chicken Spitroast rotten 3"
+      model_path: item/ingredients/poultry/poultry_roast_rotten_4
+  poultry_roast_rotten_3:
+    display_name: "Poultry Roast rotten 3"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_rotten_3
-  chicken_spitroast_rotten_2:
-    display_name: "Chicken Spitroast rotten 2"
+      model_path: item/ingredients/poultry/poultry_roast_rotten_3
+  poultry_roast_rotten_2:
+    display_name: "Poultry Roast rotten 2"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_rotten_2
-  chicken_spitroast_rotten_1:
-    display_name: "Chicken Spitroast rotten 1"
+      model_path: item/ingredients/poultry/poultry_roast_rotten_2
+  poultry_roast_rotten_1:
+    display_name: "Poultry Roast rotten 1"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_spitroast_rotten_1
-  chicken_leg_raw:
-    display_name: "Chicken leg raw"
+      model_path: item/ingredients/poultry/poultry_roast_rotten_1
+  poultry_roast_leg_raw:
+    display_name: "Poultry Roast Leg raw"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_leg_raw
-  chicken_leg_cooked:
-    display_name: "Chicken leg cooked"
+      model_path: item/ingredients/poultry/poultry_roast_leg_raw
+  poultry_roast_leg_cooked:
+    display_name: "Poultry Roast Leg cooked"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_leg_cooked
-  chicken_leg_burnt:
-    display_name: "Chicken leg burnt"
+      model_path: item/ingredients/poultry/poultry_roast_leg_cooked
+  poultry_roast_leg_burnt:
+    display_name: "Poultry Roast Leg burnt"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_leg_burnt
-  chicken_leg_rotten:
-    display_name: "Chicken leg rotten"
+      model_path: item/ingredients/poultry/poultry_roast_leg_burnt
+  poultry_roast_leg_rotten:
+    display_name: "Poultry Roast Leg rotten"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_leg_rotten
-  chicken_filet_raw:
-    display_name: "Chicken filet raw"
+      model_path: item/ingredients/poultry/poultry_roast_leg_rotten
+  poultry_roast_filet_raw:
+    display_name: "Poultry Roast Filet raw"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_filet_raw
-  chicken_filet_cooked:
-    display_name: "Chicken filet cooked"
+      model_path: item/ingredients/poultry/poultry_roast_filet_raw
+  poultry_roast_filet_cooked:
+    display_name: "Poultry Roast Filet cooked"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_filet_cooked
-  chicken_filet_burnt:
-    display_name: "Chicken filet burnt"
+      model_path: item/ingredients/poultry/poultry_roast_filet_cooked
+  poultry_roast_filet_burnt:
+    display_name: "Poultry Roast Filet burnt"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_filet_burnt
-  chicken_filet_rotten:
-    display_name: "Chicken filet rotten"
+      model_path: item/ingredients/poultry/poultry_roast_filet_burnt
+  poultry_roast_filet_rotten:
+    display_name: "Poultry Roast Filet rotten"
     resource:
       material: TROPICAL_FISH
       generate: false
-      model_path: item/ingredients/chicken/chicken_filet_rotten
+      model_path: item/ingredients/poultry/poultry_roast_filet_rotten

@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.carve.CarveCut;
 import net.tfminecraft.cooking.carve.CarveSequence;
 
@@ -42,13 +44,30 @@ public class CarveSequenceLoader {
             List<CarveCut> cuts = new ArrayList<>();
 
             for (Map<?, ?> map : sec.getMapList("cuts")) {
-                Object outputObj = map.get("output");
-                if (outputObj == null) continue;
                 double food = map.containsKey("food")
                         ? ((Number) map.get("food")).doubleValue() : 1.0;
                 double nutrition = map.containsKey("nutrition")
                         ? ((Number) map.get("nutrition")).doubleValue() : 1.0;
-                cuts.add(new CarveCut(String.valueOf(outputObj), food, nutrition));
+
+                Object outputObj = map.get("output");
+                Object itemObj = map.get("item");
+
+                if (outputObj != null && itemObj != null) {
+                    Cooking.plugin.getLogger().log(Level.WARNING,
+                            "Carve sequence '" + key + "' has a cut with both output and item; skipping.");
+                    continue;
+                }
+
+                if (outputObj != null) {
+                    cuts.add(CarveCut.food(String.valueOf(outputObj), food, nutrition));
+                } else if (itemObj != null) {
+                    int amount = map.containsKey("amount")
+                            ? ((Number) map.get("amount")).intValue() : 1;
+                    cuts.add(CarveCut.item(String.valueOf(itemObj), amount, food, nutrition));
+                } else {
+                    Cooking.plugin.getLogger().log(Level.WARNING,
+                            "Carve sequence '" + key + "' has a cut with no output or item; skipping.");
+                }
             }
 
             sequences.put(key.toLowerCase(), new CarveSequence(key, startRemaining, cuts));

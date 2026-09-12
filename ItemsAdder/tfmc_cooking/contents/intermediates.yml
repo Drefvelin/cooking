@@ -1,0 +1,184 @@
+info:
+  namespace: tfmc_cooking
+items:
+  cup_of_water:
+    display_name: "Cup of Water"
+    resource:
+      material: POTION
+      generate: true
+      textures:
+        - item/intermediate/cup_of_water
+    item_flags:
+      - HIDE_POTION_EFFECTS
+
+  empty_cup:
+    display_name: "Empty Cup"
+    resource:
+      material: PAPER
+      generate: true
+      textures:
+        - item/intermediate/empty_cup
+
+  cup_of_milk:
+    display_name: "Cup of Milk"
+    resource:
+      material: POTION
+      generate: true
+      textures:
+        - item/intermediate/cup_of_milk
+    item_flags:
+      - HIDE_POTION_EFFECTS
+
+  flour:
+    display_name: "Flour"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/flour
+
+  yeast:
+    display_name: "Yeast"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/yeast
+
+  dough:
+    display_name: "Dough"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/dough
+
+  cheese:
+    display_name: "Cheese"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/cheese
+
+  caramel:
+    display_name: "Caramel"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/caramel
+
+  cooking_chocolate:
+    display_name: "Cooking Chocolate"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/cooking_chocolate
+
+  cooking_oil:
+    display_name: "Cooking Oil"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/cooking_oil
+
+  cream:
+    display_name: "Cream"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/cream
+
+  egg_carton:
+    display_name: "Egg Carton"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/egg_carton
+
+  fried_egg:
+    display_name: "Fried Egg"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/fried_egg
+
+  grilled_mushroom:
+    display_name: "Grilled Mushroom"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/grilled_mushroom
+
+  maple_syrup:
+    display_name: "Maple Syrup"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/maple_syrup
+
+  mashed_potatoes:
+    display_name: "Mashed Potatoes"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/mashed_potatoes
+
+  mustard:
+    display_name: "Mustard"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/mustard
+
+  mustard_seeds:
+    display_name: "Mustard Seeds"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/mustard_seeds
+
+  olive_oil:
+    display_name: "Olive Oil"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/olive_oil
+
+  popcorn:
+    display_name: "Popcorn"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/popcorn
+
+  rice:
+    display_name: "Rice"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/rice
+
+  stock:
+    display_name: "Stock"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/stock
+
+  sunflower_seeds:
+    display_name: "Sunflower Seeds"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/sunflower_seeds
+
+  strawberry_jam:
+    display_name: "Strawberry Jam"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/strawberry_jam
+
+  tomato_sauce:
+    display_name: "Tomato Sauce"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/tomato_sauce

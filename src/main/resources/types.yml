@@ -4,59 +4,87 @@ roast:
   overrides:
     CHICKEN:
       name: "#d9baa5Whole Chicken"
-      model: roast
-      carve-sequence: chicken
-  model: roast
+      model: poultry_roast
+      carve-sequence: poultry
+    BEEF:
+      name: "#d9baa5Beef Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    VENISON:
+      name: "#d9baa5Venison Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+  model: poultry_roast
   cooking-options:
     fire_pit:
       tag: 1
       time: 20
       burn: 40
 
-roast_leg:
-  name: "#d9baa5{inherit} Leg"
+meat_poultry:
+  name: "#d9baa5{inherit}"
   overrides:
     CHICKEN:
-      name: "#d9baa5Chicken Leg"
-      model: roast_leg
-  model: roast_leg
-  cooking-options:
-    frying_pan:
-      tag: 1
-      time: 15
-      burn: 30
-
-roast_filet:
-  name: "#d9baa5{inherit} Filet"
-  overrides:
-    CHICKEN:
-      name: "#d9baa5Chicken Filet"
-      model: roast_filet
-  model: roast_filet
+      name: "#d9baa5Chicken"
+      model: meat_poultry
+  model: meat_poultry
   cooking-options:
     frying_pan:
       tag: 1
       time: 12
       burn: 25
 
-meat_1:
-  name: "#d9baa5Steak"
+meat_poultry_leg:
+  name: "#d9baa5{inherit} Leg"
   overrides:
-    BEEF:
-      name: "#d9baa5Beef"
-      model: beef_steak
-    PORK:
-      name: "#d9baa5Pork"
-      model: pork_steak
-    VENISON:
-      name: "#d9baa5Venison"
-      model: venison_steak
-  model: beef_steak
+    CHICKEN:
+      name: "#d9baa5Chicken Leg"
+      model: meat_poultry_leg
+  model: meat_poultry_leg
   cooking-options:
     frying_pan:
       tag: 1
       time: 15
       burn: 30
+
+meat_red_meat:
+  name: "#d9baa5Steak"
+  overrides:
+    BEEF:
+      name: "#d9baa5Beef"
+      model: meat_red_meat
+    VENISON:
+      name: "#d9baa5Venison"
+      model: meat_red_meat
+  model: meat_red_meat
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 15
+      burn: 30
+
+meat_pork:
+  name: "#d9baa5Pork"
+  model: meat_pork
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 15
+      burn: 30
+
+sausage:
+  name: "#d9baa5Sausage"
+  model: sausage
+  cooking-options:
+    frying_pan:
+      tag: 1
+      time: 15
+      burn: 30
+
+sausage_chain:
+  name: "#d9baa5Sausage Chain"
+  model: sausage_chain
+  carve-sequence: sausage
 
 ###Veggies — raw (full pipeline: cut → chop)
 vegetable_1:
@@ -153,6 +181,26 @@ vegetable_chopped:
       model: pumpkin_chopped
   model: carrot_chopped
 
+###Seasoning — does not spoil
+seasoning_1:
+  name: "#f0f0f0{inherit}"
+  overrides:
+    SALT:
+      model: salt
+  model: salt
+  food: 0
+  nutrition: 0
+
+###Sweetener — does not spoil
+sweetener_1:
+  name: "#f0f0f0{inherit}"
+  overrides:
+    SUGAR:
+      model: sugar
+  model: sugar
+  food: 0
+  nutrition: 0
+
 ###Spices — raw
 spice_1:
   name: "#5dad58{inherit}"
@@ -185,6 +233,13 @@ garnish_chopped:
       model: garlic_chopped
   model: olive_chopped
 
+###Baked goods
+bread:
+  name: "#d9c4a5{prefixes}{fillers}Bread"
+  model: bread
+  food: 4
+  nutrition: 3
+
 ###Fruits — raw (no cut step)
 fruit_1:
   name: "#e06666{inherit}"
@@ -209,12 +264,66 @@ fruit_1:
       model: pineapple
     CHERRY:
       model: cherry
+    APPLE:
+      model: apple
   model: strawberry
+
+##Crops
+wheat:
+  name: "#e8c56bWheat"
+  model: wheat
+  food: 1
+  nutrition: 1
+
+flour:
+  name: "#f5f0e8Flour"
+  model: flour
+  food: 1
+  nutrition: 1
+
+yeast:
+  name: "#e8d4a0Yeast"
+  model: yeast
+  food: 1
+  nutrition: 1
+
+dough:
+  name: "#f0e0c0{prefixes}{fillers}Dough"
+  model: dough
+  food: 1
+  nutrition: 1
 
 ##SAUCE
 sauce:
-  name: "{colour}{ingredients}"
+  name: "{colour}{prefixes}{fillers}Sauce"
 
 ##SOUP
 soup:
-  name: "{colour}{ingredients}"
+  name: "{colour}{prefixes}{fillers}Soup"
+
+cup_of_milk:
+  name: "#f5f5f5Cup of Milk"
+  model: cup_of_milk
+  category: dairy
+  food: 2
+  nutrition: 2
+  tag-labels:
+    dairy_freshness:
+      rotten: "#8B7355Spoiled"
+
+milk_bucket:
+  name: "#f5f5f5Milk"
+  category: dairy
+  tag-labels:
+    dairy_freshness:
+      rotten: "#8B7355Spoiled"
+
+butter:
+  name: "#f5f5f5{prefixes}Butter"
+  model: butter
+  category: dairy
+  food: 2
+  nutrition: 2
+  tag-labels:
+    butter_freshness:
+      rotten: "#8B7355Spoiled"

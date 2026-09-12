@@ -1,0 +1,14 @@
+pickup:
+  min: 1
+  max: 5
+
+# When composition.yml legacy-mode is false, roles in composition.yml are authoritative.
+# This exclude list applies only to legacy-mode resolution.
+composition:
+  inherit: average
+  exclude-categories:
+    - seasoning
+    - sweetener
+    - flour
+    - salt
+    - pepper

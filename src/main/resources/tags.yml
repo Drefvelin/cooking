@@ -1,5 +1,6 @@
 
 #########Do not change these unless you know
+# craft-quality-pct: upward star-roll bonus when this step is active on an extra ingredient (e.g. 0.05 = +5% craft quality)
 freshness:
   ageable: true
   fresh:
@@ -10,11 +11,65 @@ freshness:
     name: "#c3db81Stale"
     value: 1600
     nutrition-mult: 0.8
+    quality-reduce: 0.25
   rotten:
     name: "#0a6935Rotten"
     value: 3200
     nutrition-mult: 0.05
     food-mult: 0.6
+    quality-reduce: 0.75
+dairy_freshness:
+  ageable: true
+  fresh:
+    name: "#72ed9fFresh"
+    value: 0
+    nutrition-mult: 1.5
+  stale:
+    name: "#c3db81Sour"
+    value: 400
+    nutrition-mult: 0.8
+    quality-reduce: 0.25
+  rotten:
+    name: "#0a6935Rotten"
+    value: 800
+    nutrition-mult: 0.05
+    food-mult: 0.6
+    quality-reduce: 0.75
+butter_freshness:
+  ageable: true
+  fresh:
+    name: "#72ed9fFresh"
+    value: 0
+    nutrition-mult: 1.5
+  stale:
+    name: "#c3db81Rancid"
+    value: 1600
+    nutrition-mult: 0.8
+    quality-reduce: 0.25
+  rotten:
+    name: "#0a6935Rotten"
+    value: 3200
+    nutrition-mult: 0.05
+    food-mult: 0.6
+    quality-reduce: 0.75
+butter_salted:
+  ageable: false
+  plain:
+    name: ""
+    value: 0
+  butter_salted:
+    name: "#f0f0f0Salted"
+    value: 1
+    craft-quality-pct: 0.05
+butter_spiced:
+  ageable: false
+  plain:
+    name: ""
+    value: 0
+  butter_spiced:
+    name: "#f0f0f0Spiced"
+    value: 1
+    craft-quality-pct: 0.10
 warmth:
   ageable: true
   hot:
@@ -131,3 +186,36 @@ soup_thickness:
     value: 3600
     nutrition-mult: 2.0
     food-mult: 2.0
+
+sweet:
+  sweet:
+    name: "#e8b4b8Sweet"
+    value: 0
+    food-mult: 1.05
+
+fruity:
+  fruity:
+    name: "#c9a227Fruity"
+    value: 0
+    nutrition-mult: 1.08
+    food-mult: 1.03
+
+richly_fruity:
+  richly_fruity:
+    name: "#a67c00Richly Fruity"
+    value: 0
+    nutrition-mult: 1.15
+    food-mult: 1.05
+
+aromatic:
+  aromatic:
+    name: "#8d6e63Aromatic"
+    value: 0
+    food-mult: 1.05
+
+rounded:
+  rounded:
+    name: "#7cb342Rounded"
+    value: 0
+    food-mult: 1.05
+    nutrition-mult: 1.05

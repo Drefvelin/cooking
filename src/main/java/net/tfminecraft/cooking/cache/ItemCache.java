@@ -1,7 +1,11 @@
 package net.tfminecraft.cooking.cache;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import net.tfminecraft.cooking.item.FoodItem;
 
@@ -9,8 +13,6 @@ import me.Plugins.TLibs.TLibs;
 
 public class ItemCache {
     public static String butter;
-    public static String butterModel;
-    public static String butterPieceModel;
     public static String firePitTurner;
     public static float firePitVisualY;
     public static float firePitPivotY;
@@ -19,7 +21,19 @@ public class ItemCache {
 
     public static String water;
 
-    public static String grain;
+    public static String emptyCup;
+    public static String cupOfWater;
+    public static String cupOfMilk;
+
+    public static String liquidBlockWater;
+    public static String liquidBlockMilk;
+    public static int blocksPerBucket = 3;
+    public static int maxBlocks = 6;
+    public static int blocksPerCup = 1;
+
+    public static String potWaterInput;
+    public static String potLiquidDisplay;
+
     public static String flour;
     public static String bag;
 
@@ -31,6 +45,26 @@ public class ItemCache {
     public static String ladle;
     public static String masher;
 
+    public static Map<String, MixingIngredient> mixingIngredients = new HashMap<>();
+
+    public static int butterChurnCount = 3;
+    public static int mixingStirCount = 3;
+    public static int mixingStirDurationTicks = 10;
+    public static float mixingStirTiltDegrees = 20f;
+    public static float mixingStirPivotY = 0f;
+
+    public static int sausageMakerDurationTicks = 6;
+    public static float sausageMakerWobbleDegrees = 4f;
+    public static int sausageMakerCooldownTicks = 10;
+
+    public static List<String> ovenFuel = new ArrayList<>();
+    public static String ovenWoodModel;
+    public static String ovenWoodBurntModel;
+    public static String ovenFireModel;
+    public static int ovenBurnIntervalTicks = 20;
+    public static float ovenBurnChanceFresh = 0.08f;
+    public static float ovenBurnChanceBurnt = 0.12f;
+
     public static boolean isLadle(ItemStack i) {
         return TLibs.getItemAPI().getChecker().checkItemWithPath(i, ladle);
     }
@@ -39,11 +73,14 @@ public class ItemCache {
     }   
 
     public static boolean isButter(ItemStack i) {
+        if (i == null) {
+            return false;
+        }
+        FoodItem food = FoodItem.fromItem(i);
+        if (food != null && "butter".equalsIgnoreCase(food.getId())) {
+            return true;
+        }
         return TLibs.getItemAPI().getChecker().checkItemWithPath(i, butter);
-    }
-
-    public static boolean isGrain(ItemStack i) {
-        return TLibs.getItemAPI().getChecker().checkItemWithPath(i, grain);
     }
 
     public static boolean isFlour(ItemStack i) {
@@ -56,6 +93,44 @@ public class ItemCache {
 
     public static boolean isWater(ItemStack i) {
         return TLibs.getItemAPI().getChecker().checkItemWithPath(i, water);
+    }
+
+    public static boolean isPotWaterInput(ItemStack i) {
+        if (i == null) {
+            return false;
+        }
+        if (i.getType() == Material.WATER_BUCKET) {
+            return true;
+        }
+        return potWaterInput != null
+                && TLibs.getItemAPI().getChecker().checkItemWithPath(i, potWaterInput);
+    }
+
+    public static boolean isEmptyCup(ItemStack i) {
+        return TLibs.getItemAPI().getChecker().checkItemWithPath(i, emptyCup);
+    }
+
+    public static boolean isCupOfWater(ItemStack i) {
+        if (i == null || FoodItem.fromItem(i) != null) {
+            return false;
+        }
+        return TLibs.getItemAPI().getChecker().checkItemWithPath(i, cupOfWater);
+    }
+
+    public static boolean isCupOfMilk(ItemStack i) {
+        FoodItem food = FoodItem.fromItem(i);
+        return food != null && "cup_of_milk".equalsIgnoreCase(food.getId());
+    }
+
+    public static boolean isMilkBucket(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
+        FoodItem food = FoodItem.fromItem(stack);
+        if (food != null && "milk_bucket".equalsIgnoreCase(food.getId())) {
+            return true;
+        }
+        return stack.getType() == Material.MILK_BUCKET;
     }
 
     public static boolean isLiquid(ItemStack i) {
@@ -94,5 +169,48 @@ public class ItemCache {
             }
         }
         return null;
+    }
+
+    public static MixingIngredient getMixingIngredient(String key) {
+        return mixingIngredients.get(key);
+    }
+
+    public static boolean matchesMixingInput(String key, ItemStack stack) {
+        MixingIngredient ingredient = mixingIngredients.get(key);
+        if (ingredient == null || stack == null) {
+            return false;
+        }
+        if (ingredient.getInputFood() != null) {
+            FoodItem foodItem = FoodItem.fromItem(stack);
+            if (foodItem != null && foodItem.getId().equalsIgnoreCase(ingredient.getInputFood())) {
+                return true;
+            }
+        }
+        if (ingredient.getInput() == null) {
+            return false;
+        }
+        return TLibs.getItemAPI().getChecker().checkItemWithPath(stack, ingredient.getInput());
+    }
+
+    public static String getMixingModel(String key) {
+        MixingIngredient ingredient = mixingIngredients.get(key);
+        return ingredient != null ? ingredient.getModel() : null;
+    }
+
+    public static String getMixingOutput(String key) {
+        MixingIngredient ingredient = mixingIngredients.get(key);
+        return ingredient != null ? ingredient.getOutput() : null;
+    }
+
+    public static boolean matchesOvenFuel(ItemStack stack) {
+        if (stack == null || ovenFuel.isEmpty()) {
+            return false;
+        }
+        for (String path : ovenFuel) {
+            if (TLibs.getItemAPI().getChecker().checkItemWithPath(stack, path)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -4,16 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Plugins.TLibs.TLibs;
+import net.tfminecraft.InteractibleFurniture;
 import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.cache.FurnitureCache;
 import net.tfminecraft.cooking.cache.ItemCache;
@@ -35,6 +39,75 @@ public class CookingManager implements Listener {
 
     public void start() {
         tickCycle();
+    }
+
+    public void resumeLoadedStations() {
+        for (Furniture furniture : InteractibleFurniture.getInstance().getFurnitureManager().getPlacedFurniture().values()) {
+            resumeStation(furniture);
+        }
+    }
+
+    private void resumeStation(Furniture furniture) {
+        if (furniture == null || furniture.getType() == null) {
+            return;
+        }
+        if (FurnitureCache.getByFurniture(furniture) == Method.NONE) {
+            return;
+        }
+        boolean hasCookingSlot = false;
+        for (String slotId : furniture.getType().getSlots().keySet()) {
+            if (furniture.hasActiveSlot(slotId)) {
+                hasCookingSlot = true;
+                break;
+            }
+        }
+        if (!hasCookingSlot) {
+            return;
+        }
+        getOrCreateReference(furniture);
+    }
+
+    private void resumeStationsInChunk(Chunk chunk) {
+        for (Furniture furniture : InteractibleFurniture.getInstance().getFurnitureManager().getPlacedFurniture().values()) {
+            if (!furniture.getLoc().getChunk().equals(chunk)) {
+                continue;
+            }
+            resumeStation(furniture);
+        }
+    }
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        Chunk chunk = event.getChunk();
+        Bukkit.getScheduler().runTaskLater(Cooking.plugin, () -> resumeStationsInChunk(chunk), 1L);
+    }
+
+    private CookingReference createReference(Furniture furniture, Method method) {
+        if (method == Method.FRYING_PAN) {
+            return new FryingReference(furniture, method);
+        }
+        if (method == Method.SAUCEPAN) {
+            return new SauceReference(furniture, method);
+        }
+        if (method == Method.POT) {
+            return new PotReference(furniture, method);
+        }
+        return new CookingReference(furniture, method);
+    }
+
+    private CookingReference getOrCreateReference(Furniture furniture) {
+        CookingReference existing = stations.get(furniture.getEntityId());
+        if (existing != null) {
+            return existing;
+        }
+        Method method = FurnitureCache.getByFurniture(furniture);
+        if (method == Method.NONE) {
+            return null;
+        }
+        CookingReference ref = createReference(furniture, method);
+        ref.rebuildFromFurniture();
+        stations.put(furniture.getEntityId(), ref);
+        return ref;
     }
 
     public void tickCycle() {
@@ -65,23 +138,8 @@ public class CookingManager implements Listener {
     @EventHandler
     public void interact(FurnitureInteractEvent e) {
         Furniture f = e.getFurniture();
-        if(stations.containsKey(f.getEntityId())) {
-            CookingReference ref = stations.get(f.getEntityId());
-            ref.interact(e);
-        } else {
-            Method m = FurnitureCache.getByFurniture(f);
-            if(m == Method.NONE) return;
-            CookingReference ref = null;
-            if(m == Method.FRYING_PAN) {
-                ref = new FryingReference(f, m);
-            } else if(m == Method.SAUCEPAN) {
-                ref = new SauceReference(f, m);
-            } else if(m == Method.POT) {
-                ref = new PotReference(f, m);
-            } else {
-                ref = new CookingReference(f, m);
-            }
-            stations.put(f.getEntityId(), ref);
+        CookingReference ref = getOrCreateReference(f);
+        if (ref != null) {
             ref.interact(e);
         }
     }
@@ -99,18 +157,16 @@ public class CookingManager implements Listener {
 
     @EventHandler
     public void addItem(FurnitureSlotItemAddEvent e) {
-        Furniture f = e.getFurniture();
-        if(stations.containsKey(f.getEntityId())) {
-            CookingReference ref = stations.get(f.getEntityId());
+        CookingReference ref = getOrCreateReference(e.getFurniture());
+        if (ref != null) {
             ref.slotAdd(e);
         }
     }
 
     @EventHandler
     public void takeItem(FurnitureSlotItemTakeEvent e) {
-        Furniture f = e.getFurniture();
-        if(stations.containsKey(f.getEntityId())) {
-            CookingReference ref = stations.get(f.getEntityId());
+        CookingReference ref = getOrCreateReference(e.getFurniture());
+        if (ref != null) {
             ref.slotRemove(e);
         }
     }

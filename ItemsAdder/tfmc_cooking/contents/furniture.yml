@@ -67,3 +67,57 @@ items:
       material: PAPER
       generate: false
       model_path: furniture/fire_pit_turner
+  mixing_bowl:
+    display_name: "Mixing Bowl"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/mixing_bowl
+  oven_bottom:
+    display_name: "Oven Bottom"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/oven_bottom
+  oven_top:
+    display_name: "Oven Top"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/oven_top
+  bread_tray:
+    display_name: "Bread Tray"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/bread_tray
+  milling_stone:
+    display_name: "Milling Stone"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/milling_stone
+  milling_stone_top:
+    display_name: "Milling Stone Top"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/milling_stone_top
+  meat_hook:
+    display_name: "Meat Hook"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/meat_hook
+  sausage_maker:
+    display_name: "Sausage Maker"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/sausage_maker
+  liquid_container:
+    display_name: "Liquid Container"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/liquid_container

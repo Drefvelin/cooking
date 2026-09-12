@@ -91,6 +91,11 @@ public final class CarvableRoastUtils {
     }
 
     public static String resolveCookTag(FoodItem item) {
+        TagTrack freshness = item.getTagTrack("freshness");
+        if (freshness != null && freshness.getCurrentStep() != null
+                && "rotten".equals(freshness.getCurrentStep().getId())) {
+            return "rotten";
+        }
         TagTrack cooked = item.getTagTrack("cooked");
         if (cooked != null && cooked.getCurrentStep() != null) {
             return cooked.getCurrentStep().getId();

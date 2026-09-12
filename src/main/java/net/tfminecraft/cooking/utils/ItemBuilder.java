@@ -21,6 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import net.tfminecraft.cooking.cache.CategoryDictionary;
 import net.tfminecraft.cooking.enums.Tag;
+import net.tfminecraft.cooking.quality.OriginQualityResolver;
 
 import me.Plugins.TLibs.Objects.API.SubAPI.StringFormatter;
 
@@ -47,26 +48,54 @@ public class ItemBuilder {
     }
 
     public static ItemStack buildSingle(FoodItem template, ItemStack base) {
+        int qualMin = template._parsedQualMin;
+        int qualMax = template._parsedQualMax;
+        if (qualMax < qualMin || qualMin < 1) {
+            qualMin = Math.max(1, template.getQualityMin());
+            qualMax = Math.max(qualMin, template.getQualityMax());
+        }
+        int q = ThreadLocalRandom.current().nextInt(qualMin, qualMax + 1);
+        return buildSingleWithQuality(template, base, QualityUtils.clamp(q));
+    }
+
+    public static ItemStack buildSingleWithQuality(FoodItem template, int quality) {
+        return buildSingleWithQuality(template, null, quality);
+    }
+
+    public static ItemStack buildComposedWithQuality(FoodItem template, int quality) {
+        return buildSingleWithQuality(template, null, quality, NameComposer.compose(template, Map.of()));
+    }
+
+    public static ItemStack buildSingleWithQuality(FoodItem template, ItemStack base, int quality) {
+        return buildSingleWithQuality(template, base, quality, null);
+    }
+
+    private static ItemStack buildSingleWithQuality(FoodItem template, ItemStack base, int quality,
+            String displayNameOverride) {
 
         FoodItem item = new FoodItem(template);
         Map<String, Integer> indexMap = new HashMap<>();
 
-        int q = ThreadLocalRandom.current().nextInt(item._parsedQualMin, item._parsedQualMax + 1);
-        item.setQualityRange(q, q);
+        item.setQualityRange(quality, quality);
 
         item.setAmount(1);
 
         String origin = item.getOrigin();
-        String displayName = item.getName();
+        String displayName = displayNameOverride != null ? displayNameOverride : item.getName();
 
-        if (origin != null) {
-            OverrideData od = item.getOverrides().get(origin.toUpperCase());
-            if (od != null) {
-                if (od.getName() != null) displayName = od.getName();
+        if (displayNameOverride == null) {
+            if (origin != null) {
+                OverrideData od = item.getOverrides().get(origin.toUpperCase());
+                if (od != null) {
+                    if (od.getName() != null) displayName = od.getName();
+                }
+            }
+            if (displayName.contains("{inherit}") && base != null) {
+                displayName = displayName.replace("{inherit}", StringFormatter.getName(base));
+            } else if (displayName.contains("{inherit}")) {
+                displayName = displayName.replace("{inherit}", WordUtils.capitalize(origin != null ? origin : "unknown"));
             }
         }
-        if(displayName.contains("{inherit}") && base != null) displayName = displayName.replace("{inherit}", StringFormatter.getName(base));
-        else if(displayName.contains("{inherit}")) displayName = displayName.replace("{inherit}", WordUtils.capitalize(origin != null ? origin : "unknown"));
         
         if(item.getModel() == null) item.setModel(new FoodModel(base));
         if (item.getCarveSequenceId() != null) {
@@ -146,9 +175,19 @@ public class ItemBuilder {
         // TAG TRACKS
         for (TagTrack t : item.getTagTracks()) {
             TagStep step = t.getCurrentStep();
-            String display = (step != null ? DisplayUtils.getDisplayString(step.getName(), step.getFoodMultiplier(), step.getNutritionMultiplier()) : "Unknown");
+            if (step == null) {
+                continue;
+            }
+            if (!shouldShowTagLore(item, t, step)) {
+                continue;
+            }
+            String display = DisplayUtils.getDisplayString(
+                    TagDisplayNames.resolve(item, t, step),
+                    step.getFoodMultiplier(),
+                    step.getNutritionMultiplier(),
+                    step.getCraftQualityPct());
             lore.add(display);
-            if(first) indexMap.put("tags", lore.size() - 1);
+            if (first) indexMap.put("tags", lore.size() - 1);
             first = false;
         }
 
@@ -192,6 +231,16 @@ public class ItemBuilder {
             pdc.set(Keys.SAUCE_NAME, PersistentDataType.STRING, item.getSauceName());
         }
 
+        if (!item.getIngredients().isEmpty()) {
+            StringBuilder ingSb = new StringBuilder();
+            boolean ingFirst = true;
+            for (String ing : item.getIngredients()) {
+                if (!ingFirst) ingSb.append(':');
+                ingSb.append(ing);
+                ingFirst = false;
+            }
+            pdc.set(Keys.INGREDIENTS, PersistentDataType.STRING, ingSb.toString());
+        }
 
         // STORE INDEX MAP
         {
@@ -237,7 +286,12 @@ public class ItemBuilder {
         FoodItem template = parsed.template;
         boolean unique = parsed.unique;
 
-        List<ItemStack> stacks = ItemBuilder.build(template, unique, base);
+        List<ItemStack> stacks;
+        if (parsed.explicitQuality) {
+            stacks = ItemBuilder.build(template, unique, base);
+        } else {
+            stacks = buildWithOriginQuality(p, template, unique, base);
+        }
         boolean sound = true;
 
         for (ItemStack is : stacks) {
@@ -256,15 +310,55 @@ public class ItemBuilder {
 
 
     public static ItemStack buildSingleString(String string, ItemStack base) {
-
-        // Parse the input
         FoodParser.Result parsed = FoodParser.parse(string);
-
         FoodItem template = parsed.template;
+        if (parsed.explicitQuality) {
+            return ItemBuilder.buildSingle(template, base);
+        }
+        return ItemBuilder.buildSingleWithQuality(template, base, OriginQualityResolver.resolve(null, template));
+    }
 
-        // Build item(s)
-        ItemStack stack = ItemBuilder.buildSingle(template, base);
-        return stack;
-        
+    private static List<ItemStack> buildWithOriginQuality(Player player, FoodItem template, boolean unique,
+            ItemStack base) {
+        List<ItemStack> list = new ArrayList<>();
+        int amount = template.getAmount();
+
+        if (unique) {
+            for (int i = 0; i < amount; i++) {
+                int quality = OriginQualityResolver.resolve(player, template);
+                list.add(buildSingleWithQuality(template, base, quality));
+            }
+            return list;
+        }
+
+        int quality = OriginQualityResolver.resolve(player, template);
+        ItemStack stack = buildSingleWithQuality(template, base, quality);
+        stack.setAmount(amount);
+        list.add(stack);
+        return list;
+    }
+
+    static boolean shouldShowTagLore(FoodItem item, TagTrack track, TagStep step) {
+        if (step.getCraftQualityPct() > 0) {
+            return true;
+        }
+        if (step.getFoodMultiplier() != 1.0 || step.getNutritionMultiplier() != 1.0) {
+            return true;
+        }
+        String name = TagDisplayNames.resolve(item, track, step);
+        return name != null && !stripHexPrefix(name).isBlank();
+    }
+
+    private static String stripHexPrefix(String name) {
+        if (name == null || name.isEmpty()) {
+            return "";
+        }
+        if (name.charAt(0) == '#' && name.length() > 7) {
+            String hex = name.substring(1, 7);
+            if (hex.matches("[0-9a-fA-F]{6}")) {
+                return name.substring(7);
+            }
+        }
+        return name;
     }
 }

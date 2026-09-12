@@ -13,7 +13,10 @@ public class CategoryDictionary {
 
     public static final Set<String> UNIMPORTANT_CATEGORIES = Set.of(
         "seasoning",
-        "flour"
+        "sweetener",
+        "flour",
+        "salt",
+        "pepper"
     );
 
 

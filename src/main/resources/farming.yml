@@ -1,0 +1,53 @@
+farming:
+  enabled: true
+
+  anti-trample:
+    enabled: true
+    trample-by-walking: false
+    dry-empty-farmland: true
+    trample-particle-multiplier: 1.0
+    crops:
+      - WHEAT
+      - POTATOES
+      - CARROTS
+      - BEETROOTS
+      - NETHER_WART
+      - MELON_STEM
+      - PUMPKIN_STEM
+
+  effects:
+    harvest-particle-multiplier: 1.0
+    replant-particle-multiplier: 1.0
+    tool-swing-particle: true
+
+  replant-delay-min: 10
+  replant-delay-max: 20
+  only-harvest-mature: true
+  tool-damage-per-harvest: 1
+  apply-unbreaking: true
+
+  tools:
+    - path: m.tools.iron_hoe
+      radius: 0
+      quality-bonus-percent: 0
+    - path: m.tools.steel_hoe
+      radius: 1
+      quality-bonus-percent: 3.5
+    - path: m.tools.abyssalite_hoe
+      radius: 2
+      quality-bonus-percent: 6
+    - path: m.tools.mythril_hoe
+      radius: 3
+      quality-bonus-percent: 10
+
+  crops:
+    - crop: WHEAT
+      seed: WHEAT_SEEDS
+    - crop: POTATOES
+      seed: POTATO
+    - crop: CARROTS
+      seed: CARROT
+    - crop: BEETROOTS
+      seed: BEETROOT_SEEDS
+    - crop: NETHER_WART
+      seed: NETHER_WART

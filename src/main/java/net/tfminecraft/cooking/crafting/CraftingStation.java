@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,11 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import me.Plugins.TLibs.TLibs;
-import net.tfminecraft.cooking.carve.CarveHandler;
 import net.tfminecraft.cooking.carve.CarvableRoastUtils;
 import net.tfminecraft.cooking.item.FoodItem;
-import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.TrackLoader;
+import net.tfminecraft.cooking.quality.CompositionContext;
+import net.tfminecraft.cooking.quality.CompositionFreshnessApplier;
+import net.tfminecraft.cooking.quality.CompositionQualityResolver;
+import net.tfminecraft.cooking.quality.CompositionResult;
 import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.events.FurnitureBreakEvent;
@@ -104,6 +107,7 @@ public class CraftingStation {
     }
 
     public boolean canAddItem(ItemStack i) {
+        if (CarvableRoastUtils.isCarvable(i)) return false;
         if(!hasFreeSlots()) return false;
         if(currentRecipe != null && !currentRecipe.canAdd(i)) return false;
         if(slots.size() >= maxSlots) return false;
@@ -132,6 +136,26 @@ public class CraftingStation {
                     break;
                 }
             }
+        }
+    }
+
+    public void rebuildFromFurniture() {
+        slots.clear();
+        currentRecipe = null;
+        if (f == null || f.getType() == null) return;
+
+        List<String> inputIds = f.getType().getSlots().keySet().stream()
+                .filter(id -> id.contains("input"))
+                .sorted()
+                .collect(Collectors.toList());
+
+        for (String slotId : inputIds) {
+            f.getActiveSlot(slotId).ifPresent(ps -> {
+                ItemStack item = ps.getCurrentItem();
+                if (item != null && !item.getType().isAir()) {
+                    add(item.clone(), slotId);
+                }
+            });
         }
     }
 
@@ -170,8 +194,7 @@ public class CraftingStation {
         if(slots.size() < currentRecipe.getRatio()) return;
 
         String origin = "none";
-        int age = 0;
-        int ageables = 0;
+        List<FoodItem> consumedInputs = new ArrayList<>();
 
         int outputAmount = slots.size() / currentRecipe.getRatio();
         int used = outputAmount * currentRecipe.getRatio();
@@ -181,11 +204,7 @@ public class CraftingStation {
 
             FoodItem fi = FoodItem.fromItem(slots.get(slotId));
             if(fi != null) {
-                TagTrack track = fi.getTagTrack("freshness");
-                if(track != null) {
-                    age += track.getValue();
-                    ageables++;
-                }
+                consumedInputs.add(fi);
                 if(isSingleOrigin()) origin = fi.getOrigin();
             }
 
@@ -200,8 +219,6 @@ public class CraftingStation {
             used--;
         }
 
-        int finalage = ageables == 0 ? -1 : age / ageables;
-
         String data = new String(currentRecipe.getOutput());
         if(isSingleOrigin() && !origin.equalsIgnoreCase("none")) {
             data = data.replace("{origin}", origin);
@@ -211,12 +228,6 @@ public class CraftingStation {
 
         if(currentRecipe.isProcessed()) {
             item.addOrModifyTrack(TrackLoader.getByString("processed"));
-        }
-
-        if(finalage != -1) {
-            TagTrack fresh = new TagTrack(TrackLoader.getByString("freshness"));
-            fresh.setValue(finalage);
-            item.addOrModifyTrack(fresh);
         }
 
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1f);
@@ -236,7 +247,9 @@ public class CraftingStation {
         slots.clear();
         currentRecipe = null;
 
-        ItemStack output = ItemBuilder.buildSingle(item, null);
+        CompositionResult composed = CompositionQualityResolver.compose(p, consumedInputs, CompositionContext.CUTTING_BOARD);
+        CompositionFreshnessApplier.applyTracks(item, composed.getFreshnessTracks());
+        ItemStack output = ItemBuilder.buildSingleWithQuality(item, null, composed.getFinalQuality());
         output.setAmount(outputAmount);
 
         boolean onBoard = false;
@@ -280,10 +293,6 @@ public class CraftingStation {
         if(tool.equalsIgnoreCase("none")) return;
 
         if(TLibs.getItemAPI().getChecker().checkItemWithPath(item, tool)) {
-            if (CarveHandler.tryCarveFirstCarvableSlot(p, f, item)) {
-                e.setCancelled(true);
-                return;
-            }
             if(slots.isEmpty()) return;
             e.setCancelled(true);
             craft(p);

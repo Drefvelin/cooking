@@ -1,0 +1,16 @@
+bread_tray:
+  furniture: bread_tray
+  category: grain
+  molds:
+    mold_1: [mold_1_a, mold_1_b]
+    mold_2: [mold_2_a, mold_2_b]
+  fill:
+    input: ia.tfmc_cooking:dough
+    input-food: dough
+    outputs-per-mold: 2
+    food: bread
+    tags: cooked.0:freshness.0
+  bake:
+    cook-seconds: 5
+    burn-seconds: 10
+    sync: true

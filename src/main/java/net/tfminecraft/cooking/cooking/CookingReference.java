@@ -9,14 +9,15 @@ import java.util.Map;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
+import net.tfminecraft.cooking.cache.ItemCache;
 import net.tfminecraft.cooking.enums.Method;
 import net.tfminecraft.cooking.enums.Tag;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.data.CookData;
-import net.tfminecraft.cooking.item.tag.TagTrack;
-import net.tfminecraft.cooking.loader.TrackLoader;
 import net.tfminecraft.cooking.utils.DisplayUtils;
+import net.tfminecraft.cooking.utils.NameComposer;
 import net.tfminecraft.cooking.utils.ItemUpdater;
+import net.tfminecraft.cooking.utils.WarmthUtils;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.events.FurnitureSlotItemAddEvent;
 import net.tfminecraft.events.FurnitureSlotItemTakeEvent;
@@ -24,7 +25,7 @@ import net.tfminecraft.furniture.Furniture;
 import net.tfminecraft.furniture.PlacedSlot;
 import net.tfminecraft.furniture.data.DisplayData;
 import net.tfminecraft.cooking.cache.CategoryDictionary;
-import net.tfminecraft.cooking.cache.ItemCache;
+import net.tfminecraft.cooking.cache.NamingConfig;
 
 public class CookingReference {
     protected Method method;
@@ -142,6 +143,44 @@ public class CookingReference {
 
     public void interact(FurnitureInteractEvent e) { }
 
+    public void rebuildFromFurniture() {
+        slots.clear();
+        secondaries.clear();
+        colours.clear();
+        danger = 0;
+        if (f == null || f.getType() == null) {
+            return;
+        }
+
+        for (String slotId : f.getType().getSlots().keySet()) {
+            if (!f.hasActiveSlot(slotId)) {
+                continue;
+            }
+            f.getActiveSlot(slotId).ifPresent(placedSlot -> {
+                ItemStack stack = placedSlot.getCurrentItem();
+                if (stack == null || stack.getType().isAir()) {
+                    return;
+                }
+                if ("butter".equals(slotId) && method == Method.FRYING_PAN
+                        && ItemCache.isButter(stack)) {
+                    secondaries.put("butter", 30);
+                    return;
+                }
+                FoodItem fi = FoodItem.fromItem(stack);
+                if (fi == null || !fi.canBeCooked() || !fi.getCookData().hasMethod(method)) {
+                    return;
+                }
+                if (!fi.hasTag(Tag.RAW)) {
+                    return;
+                }
+                if (!fi.getCookData().isBeingCooked()) {
+                    fi.getCookData().start(method);
+                }
+                slots.put(slotId, fi);
+            });
+        }
+    }
+
     public void slotAdd(FurnitureSlotItemAddEvent e) {
         ItemStack item = e.getItem();
         FoodItem fi = FoodItem.fromItem(item);
@@ -178,9 +217,7 @@ public class CookingReference {
                 return;
             }
             if(data.getCurrentTime() < 5) return;
-            TagTrack hot = TrackLoader.getByString("warmth");
-            if(hot == null) return;
-            fi.addOrModifyTrack(hot);
+            if (!WarmthUtils.applyHot(fi)) return;
             item = ItemUpdater.applyItemUpdate(item, fi, f.getId());
             if(item == null) return;
             e.setItem(item);
@@ -240,6 +277,10 @@ public class CookingReference {
 
             String category = fi.getCategory().toLowerCase();
 
+            if (NamingConfig.isCategory("seasoning", category)) {
+                continue;
+            }
+
             boolean isUnimportant = CategoryDictionary.UNIMPORTANT_CATEGORIES.contains(category);
 
             // Add unique only
@@ -258,25 +299,19 @@ public class CookingReference {
     }
 
     public String getName(String type) {
-        List<String> ingredients = getIngredients();
+        return NameComposer.formatFillerPhrase(getIngredients(), type);
+    }
 
-        if (ingredients.isEmpty()) {
-            return "Mixed " + type;
+    protected String applyNameTemplate(FoodItem product, String colour, String typeLabel) {
+        String displayName = product.getName();
+        String fillers = NameComposer.formatFillerPhrase(getIngredients());
+        if (fillers.isEmpty()) {
+            fillers = "Mixed ";
         }
-
-        if (ingredients.size() == 1) {
-            return ingredients.get(0) + " " + type;
-        }
-
-        if (ingredients.size() == 2) {
-            return ingredients.get(0) + " and " + ingredients.get(1) + " " + type;
-        }
-
-        // 3 or more
-        String first = ingredients.get(0);
-        String second = ingredients.get(1);
-        String last = ingredients.get(2); // only take first 3 max
-
-        return first + ", " + second + " and " + last + " " + type;
+        displayName = displayName.replace("{colour}", colour == null ? "" : colour);
+        displayName = displayName.replace("{prefixes}", NameComposer.formatPrefixes(product));
+        displayName = displayName.replace("{fillers}", fillers);
+        displayName = displayName.replace("{ingredients}", getName(typeLabel));
+        return displayName;
     }
 }

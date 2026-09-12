@@ -18,19 +18,26 @@ import me.Plugins.TLibs.TLibs;
 import me.Plugins.TLibs.Objects.API.SubAPI.StringFormatter;
 import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.cache.ItemCache;
+import net.tfminecraft.cooking.cup.BucketItems;
 import net.tfminecraft.cooking.enums.Method;
 import net.tfminecraft.cooking.enums.Tag;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.TrackLoader;
+import net.tfminecraft.cooking.quality.CompositionContext;
+import net.tfminecraft.cooking.quality.CompositionFreshnessApplier;
+import net.tfminecraft.cooking.quality.CompositionQualityResolver;
+import net.tfminecraft.cooking.quality.CompositionResult;
 import net.tfminecraft.cooking.utils.DisplayUtils;
 import net.tfminecraft.cooking.utils.Encoder;
 import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.cooking.utils.ItemUpdater;
+import net.tfminecraft.cooking.utils.WarmthUtils;
 import net.tfminecraft.cooking.utils.Keys;
+import net.tfminecraft.cooking.utils.StationAddonRules;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.furniture.Furniture;
 import net.tfminecraft.furniture.PlacedSlot;
@@ -159,31 +166,13 @@ public class PotReference extends CookingReference {
         if (!isSoup()) return;
 
         // ---------- BASE STRING ----------
-        String base = "soup(type=soup;origin=Mixed;quality=1-5;tags=processed.0:warmth.0)";
+        String base = "soup(type=soup;origin=Mixed;tags=processed.0:warmth.0)";
 
         // ---------- BUILD BASE ----------
         FoodItem soup = FoodParser.parse(base).template;
 
-        // ---------- COUNT INGREDIENT TYPES ----------
-        int seasoningCount = 0;
-
-        for (FoodItem fi : slots.values()) {
-            String category = fi.getCategory().toLowerCase();
-
-            if (category.equals("salt") || category.equals("pepper"))
-                seasoningCount++;
-        }
-
-        // ---------- SEASONING TRACK ----------
-        if (seasoningCount == 1) {
-            TagTrack t = new TagTrack(TrackLoader.getByString("seasoning"));
-            t.setValue(0); // seasoned
-            soup.addOrModifyTrack(t);
-        } else if (seasoningCount >= 2) {
-            TagTrack t = new TagTrack(TrackLoader.getByString("seasoning"));
-            t.setValue(1); // well_seasoned
-            soup.addOrModifyTrack(t);
-        }
+        StationAddonRules.applySeasoningTag(soup, slots);
+        StationAddonRules.applyAddonTags(soup, slots);
         FoodItem mi = getMain();
         if(mi != null && mi.hasTagTrack("soup_thickness")) {
             soup.addOrModifyTrack(mi.getTagTrack("soup_thickness"));
@@ -191,11 +180,13 @@ public class PotReference extends CookingReference {
         }
 
         // ---------- BUILD RESULT ----------
-        ItemStack output = ItemBuilder.buildSingle(soup, ladle);
+        CompositionResult composed = CompositionQualityResolver.compose(p, slots.values(), CompositionContext.SOUP_SCOOP);
+        CompositionFreshnessApplier.applyTracks(soup, composed.getFreshnessTracks());
+        int quality = composed.getFinalQuality();
 
-        String displayName = soup.getName();
-        displayName = displayName.replace("{colour}", DisplayUtils.getMergedColour(colours));
-        displayName = displayName.replace("{ingredients}", getName("Soup"));
+        ItemStack output = ItemBuilder.buildSingleWithQuality(soup, ladle, quality);
+
+        String displayName = applyNameTemplate(soup, DisplayUtils.getMergedColour(colours), "Soup");
         ItemMeta m = output.getItemMeta();
         m.setDisplayName(StringFormatter.formatHex(displayName));
         m.getPersistentDataContainer().set(Keys.SLOT_DATA, PersistentDataType.STRING, Encoder.getEncodedSlots(f));
@@ -213,9 +204,7 @@ public class PotReference extends CookingReference {
         FoodItem main = getMain();
         if(!isEmpty() && isSoup() && main != null) {
             TagTrack track = main.getTagTrack("soup_thickness");
-            Bukkit.getPlayer("drefvelin").sendMessage("adding time");
             if(track != null) {
-                Bukkit.getPlayer("drefvelin").sendMessage("time "+track.getValue());
                 track.setValue(track.getValue()+1);
             } else {
                 main.addOrModifyTrack(new TagTrack(TrackLoader.getByString("soup_thickness")));
@@ -253,10 +242,15 @@ public class PotReference extends CookingReference {
         FoodItem fi = FoodItem.fromItem(i);
         if (fi == null) return false;
 
-        String cat = fi.getCategory();
-        if((cat.equalsIgnoreCase("spice") && !hasSlot("spice")) 
-            || (cat.equalsIgnoreCase("salt") && !hasSlot("salt")) 
-            || (cat.equalsIgnoreCase("pepper") && !hasSlot("pepper"))) return true;
+        String cat = fi.getCategory().toLowerCase();
+
+        if (StationAddonRules.isSeasoningCategory(cat)) {
+            return !hasSlot(cat);
+        }
+
+        if (StationAddonRules.isAddonCategory(cat)) {
+            return StationAddonRules.canAcceptAddon(slots, fi, p);
+        }
 
         if(!fi.canBeCooked()) return false;
         
@@ -274,7 +268,11 @@ public class PotReference extends CookingReference {
             PlacedSlot slot = f.getActiveSlot(key).get();
             if(slot.getCurrentItem() == null) continue;
             ItemStack stack = slot.getCurrentItem();
-            stack = ItemUpdater.applyItemUpdate(stack, slots.get(key), null);
+            FoodItem fi = slots.get(key);
+            if (WarmthUtils.isHeated(fi, 3)) {
+                WarmthUtils.applyHot(fi);
+            }
+            stack = ItemUpdater.applyItemUpdate(stack, fi, f.getId());
             p.getInventory().setItemInMainHand(stack);
             f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
             slot.clearModel();
@@ -323,18 +321,26 @@ public class PotReference extends CookingReference {
             mash(p);
             return;
         }
-        if(ItemCache.isWater(item) && !secondaries.containsKey("liquid")) {
-            if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
-            PlacedSlot slot = f.getOrCreatePlacedSlot("liquid");
-            secondaries.put("liquid", -1);
-            slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.getLiquidModel(item)));
-            addColour(ItemCache.getColour(item));
-            p.swingMainHand();
-            updateModel();
-            danger = 0;
-            temperature = 0;
-            f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
-            return;
+        if (!secondaries.containsKey("liquid")) {
+            if (isWrongPotWaterSource(item)) {
+                p.sendMessage("Use a water bucket to fill the pot.");
+                return;
+            }
+            if (ItemCache.isPotWaterInput(item)) {
+                if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
+                PlacedSlot slot = f.getOrCreatePlacedSlot("liquid");
+                secondaries.put("liquid", -1);
+                slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.potLiquidDisplay));
+                addColour("3d85c6");
+                p.getInventory().setItemInMainHand(BucketItems.empty());
+                p.updateInventory();
+                p.swingMainHand();
+                updateModel();
+                danger = 0;
+                temperature = 0;
+                f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f);
+                return;
+            }
         }
         if(canAdd(p, item)) {
             for(String slot : f.getType().getSlots().keySet()) {
@@ -360,6 +366,15 @@ public class PotReference extends CookingReference {
         String path = getLiquidItemPath();
         if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
         f.getOrCreatePlacedSlot("liquid").forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
+    }
+
+    private static boolean isWrongPotWaterSource(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false;
+        }
+        return ItemCache.isCupOfWater(item)
+                || ItemCache.isWater(item)
+                || ItemCache.isLiquid(item);
     }
     
     @Override

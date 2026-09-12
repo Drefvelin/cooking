@@ -5,8 +5,15 @@ version: 1.0
 author: Drefvelin
 
 depend: [TLibs, InteractibleFurniture, TFMCCore]
+softdepend: [RPCharacters, MMOCore]
 
 commands:
   cooking:
-    description: Cooking system command
-    usage: /cooking builditem <string>
+    description: Cooking admin/debug commands
+    usage: /cooking builditem <string> | /cooking preview <target> ...
+    permission: cooking.admin
+
+permissions:
+  cooking.admin:
+    description: Admin access to all Cooking commands
+    default: op

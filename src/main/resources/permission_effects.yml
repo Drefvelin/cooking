@@ -1,0 +1,16 @@
+# Permission nodes used by the Cooking quality system.
+# Register these in your permissions plugin (e.g. LuckPerms).
+#
+# tfmc.cooking.better_crops  — pickup floor (see better_crops below)
+# tfmc.cooking.skilled_chef  — chance to +1 star on active crafts
+
+pickup:
+  better_crops:
+    permission: tfmc.cooking.better_crops
+    min-quality: 2
+
+composition:
+  skilled_chef:
+    permission: tfmc.cooking.skilled_chef
+    chance: 0.15
+    boost: 1

@@ -6,18 +6,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.loader.ConversionLoader;
+import net.tfminecraft.cooking.quality.OriginQualityResolver;
 import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 
-public class ConversionManager implements Listener{
+public class ConversionManager implements Listener {
+
     @EventHandler
     public void pickup(EntityPickupItemEvent e) {
         ItemStack item = e.getItem().getItemStack();
@@ -31,7 +32,12 @@ public class ConversionManager implements Listener{
             e.setCancelled(true);
             e.getItem().remove();
 
-            ItemStack stack = ItemBuilder.buildSingleString(result, item);
+            FoodParser.Result parsed = FoodParser.parse(result);
+            if (parsed == null || parsed.template == null) {
+                return;
+            }
+            int quality = OriginQualityResolver.resolve(p, parsed.template);
+            ItemStack stack = ItemBuilder.buildSingleWithQuality(parsed.template, item, quality);
             stack.setAmount(item.getAmount());
 
             ItemStack leftover = InventoryAdder.addItem(p, stack);
@@ -90,7 +96,6 @@ public class ConversionManager implements Listener{
         }
     }
 
-
     private ItemStack getSlot(int index, Inventory top, Inventory bottom, int topSize) {
         return index < topSize ? top.getItem(index) : bottom.getItem(index - topSize);
     }
@@ -99,6 +104,4 @@ public class ConversionManager implements Listener{
         if (index < topSize) top.setItem(index, item);
         else bottom.setItem(index - topSize, item);
     }
-
 }
-

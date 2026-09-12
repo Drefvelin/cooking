@@ -42,6 +42,7 @@ public class FoodItem {
     private FoodModel model = null;
 
     private Map<String, OverrideData> overrides = new HashMap<>();
+    private Map<String, Map<String, String>> tagLabels = new HashMap<>();
     private List<String> ingredients = new ArrayList<>();
     public CookData cookData;
 
@@ -95,6 +96,24 @@ public class FoodItem {
                 }
             }
         }
+
+        ConfigurationSection labelSec = config.getConfigurationSection("tag-labels");
+        if (labelSec != null) {
+            for (String trackId : labelSec.getKeys(false)) {
+                ConfigurationSection stepSec = labelSec.getConfigurationSection(trackId);
+                if (stepSec == null) continue;
+                Map<String, String> stepLabels = new HashMap<>();
+                for (String stepId : stepSec.getKeys(false)) {
+                    String label = stepSec.getString(stepId);
+                    if (label != null) {
+                        stepLabels.put(stepId, StringFormatter.formatHex(label));
+                    }
+                }
+                if (!stepLabels.isEmpty()) {
+                    tagLabels.put(trackId, stepLabels);
+                }
+            }
+        }
     }
 
 
@@ -115,6 +134,10 @@ public class FoodItem {
         this.baseNutrition = other.baseNutrition;
 
         this.overrides = new HashMap<>(other.overrides);
+        this.tagLabels = new HashMap<>();
+        for (Map.Entry<String, Map<String, String>> entry : other.tagLabels.entrySet()) {
+            this.tagLabels.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
         this.typeLevelCarveSequence = other.typeLevelCarveSequence;
         this.carveSequencePdc = other.carveSequencePdc;
         this.carveNextIndex = other.carveNextIndex;
@@ -174,6 +197,13 @@ public class FoodItem {
     // --------------------------------------------------------------
     public String getId() { return id; }
     public String getName() { return name; }
+
+    public String getTagLabel(String trackId, String stepId) {
+        if (trackId == null || stepId == null) return null;
+        Map<String, String> steps = tagLabels.get(trackId);
+        if (steps == null) return null;
+        return steps.get(stepId);
+    }
 
     public String getCategory() { return category; }
     public void setCategory(String cat) { this.category = cat; }
@@ -460,6 +490,14 @@ public class FoodItem {
             out.setSauceName(sauceNameData);
         }
 
+        String ingredientsData = pdc.get(Keys.INGREDIENTS, PersistentDataType.STRING);
+        if (ingredientsData != null && !ingredientsData.isEmpty()) {
+            for (String ing : ingredientsData.split(":")) {
+                if (ing != null && !ing.isBlank()) {
+                    out.addIngredient(ing);
+                }
+            }
+        }
 
         if(out.getModel() == null) {
             out.model = new FoodModel(stack);

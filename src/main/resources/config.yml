@@ -3,13 +3,19 @@ saucepan: saucepan
 plate: plate
 pot: pot
 bowl: bowl
+mixing-bowl: mixing_bowl
+milling-stone: milling_stone
 
 butter: ia.tfmc_cooking:butter
-butter-model: ia.tfmc_cooking:butter_pan
-butter-piece-model: ia.tfmc_cooking:butter_piece
 butter-churn: butter_churn
+butter-churn-count: 3
 butter-plate: butter_plate
 fire-pit: fire_pit
+meat-hook: meat_hook
+sausage-maker: sausage_maker
+sausage-maker-duration-ticks: 6
+sausage-maker-wobble-degrees: 4
+sausage-maker-cooldown-ticks: 10
 fire-pit-turner: ia.tfmc_cooking:fire_pit_turner
 fire-pit-visual-y: 0
 fire-pit-pivot-y: -0.25
@@ -19,13 +25,92 @@ carve-tool: ia.tfmc_cooking:cutting_knife
 
 water: ia.tfmc_cooking:water
 liquid-fallback: ia.tfmc_cooking:water
+empty-cup: ia.tfmc_cooking:empty_cup
+cup-of-water: ia.tfmc_cooking:cup_of_water
+cup-of-milk: ia.tfmc_cooking:cup_of_milk
+
+liquid-container: liquid_container
+liquid-block-water: ia.tfmc_cooking:water_block
+liquid-block-milk: ia.tfmc_cooking:milk_block
+liquid-blocks-per-bucket: 3
+liquid-max-blocks: 6
+liquid-blocks-per-cup: 1
+
+pot-water-input: v.water_bucket
+pot-liquid-display: ia.tfmc_cooking:water
 
 ladle: ia.tfmc_cooking:ladle
 masher: ia.tfmc_cooking:masher
 
-grain-item: ia.tfmc_cooking:grain
 flour-item: ia.tfmc_cooking:flour
 bag: ia.tfmc_cooking:bag
+
+mixing-ingredients:
+  flour:
+    input: ia.tfmc_cooking:flour
+    input-food: flour
+    model: ia.tfmc_cooking:flour_model
+  water:
+    input: ia.tfmc_cooking:cup_of_water
+    model: ia.tfmc_cooking:water
+  yeast:
+    input: ia.tfmc_cooking:yeast
+    input-food: yeast
+    model: ia.tfmc_cooking:yeast_model
+  dough:
+    output: ia.tfmc_cooking:dough
+    model: ia.tfmc_cooking:dough_model
+
+mixing-stir-count: 3
+mixing-stir-duration-ticks: 10
+mixing-stir-tilt-degrees: 20
+mixing-stir-pivot-y: 0
+
+oven-bottom: oven_bottom
+oven-top: oven_top
+bread-tray: bread_tray
+
+oven-fuel:
+  - v.oak_log
+  - v.oak_wood
+  - v.spruce_log
+  - v.spruce_wood
+  - v.birch_log
+  - v.birch_wood
+  - v.jungle_log
+  - v.jungle_wood
+  - v.acacia_log
+  - v.acacia_wood
+  - v.dark_oak_log
+  - v.dark_oak_wood
+  - v.mangrove_log
+  - v.mangrove_wood
+  - v.cherry_log
+  - v.cherry_wood
+  - v.pale_oak_log
+  - v.pale_oak_wood
+  - v.crimson_stem
+  - v.crimson_hyphae
+  - v.warped_stem
+  - v.warped_hyphae
+
+oven-wood-model: ia.tfmc_cooking:wood_model
+oven-wood-burnt-model: ia.tfmc_cooking:wood_burnt_model
+oven-fire-model: ia.tfmc_cooking:oven_fire_model
+
+# Burn + ambience tick interval (20 ticks = 1 second)
+oven-burn-interval-ticks: 20
+oven-burn-chance-fresh: 0.08
+oven-burn-chance-burnt: 0.12
+
+heat:
+  sources:
+    oven_bottom:
+      type: oven
+  consumers:
+    oven_top:
+      source: oven_bottom
+      lookup: block-below
 
 liquids:
     - default ia.tfmc_cooking:water
@@ -43,7 +128,6 @@ dictionary:
   fish: "#6fa8dcFish"
   vegetable: "#93c47dVegetable"
   fruit: "#e06666Fruit"
-  grain: "#f6b26bGrain"
   dairy: "#ffd966Dairy"
   spice: "#cc4125Spice"
   herb: "#38761dHerb"
@@ -58,3 +142,30 @@ sauce-dict:
     - a86c2e ia.tfmc_cooking:brown_light.ia.tfmc_cooking:brown_light_plated
     - d5c6be ia.tfmc_cooking:gray.ia.tfmc_cooking:gray_plated
     - 53350a ia.tfmc_cooking:brown_dark.ia.tfmc_cooking:brown_dark_plated
+
+nutrition:
+  max-food: 200
+  max-diet: 40
+  attribute-name: nutrition
+  drain-amount: 1
+  drain-interval-ticks: 2400
+  lerp-step-rate: 1.0
+  diet-tiers:
+    - id: terrible
+      min-percent: 0
+      label: "<red>Terrible"
+    - id: bad
+      min-percent: 10
+      label: "<gold>Bad"
+    - id: decent
+      min-percent: 25
+      label: "<yellow>Decent"
+    - id: good
+      min-percent: 45
+      label: "<green>Good"
+    - id: very_good
+      min-percent: 65
+      label: "<aqua>Very Good"
+    - id: fantastic
+      min-percent: 85
+      label: "<light_purple>Fantastic"

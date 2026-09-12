@@ -10,6 +10,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import net.tfminecraft.cooking.cache.CategoryDictionary;
 import net.tfminecraft.cooking.cache.FurnitureCache;
 import net.tfminecraft.cooking.cache.ItemCache;
+import net.tfminecraft.cooking.cache.MixingIngredient;
+import net.tfminecraft.cooking.heat.HeatLoader;
+import net.tfminecraft.cooking.nutrition.NutritionConfig;
 
 public class ConfigLoader {
     public void loadConfig(File configFile) {
@@ -28,10 +31,16 @@ public class ConfigLoader {
         FurnitureCache.butterChurn = config.getString("butter-churn", "none");
         FurnitureCache.butterPlate = config.getString("butter-plate", "none");
         FurnitureCache.firePit = config.getString("fire-pit", "none");
+        FurnitureCache.meatHook = config.getString("meat-hook", "none");
+        FurnitureCache.sausageMaker = config.getString("sausage-maker", "none");
+        FurnitureCache.mixingBowl = config.getString("mixing-bowl", "none");
+        FurnitureCache.millingStone = config.getString("milling-stone", "none");
+        FurnitureCache.ovenBottom = config.getString("oven-bottom", "none");
+        FurnitureCache.ovenTop = config.getString("oven-top", "none");
+        FurnitureCache.breadTray = config.getString("bread-tray", "none");
+        FurnitureCache.liquidContainer = config.getString("liquid-container", "none");
 
         ItemCache.butter = config.getString("butter", "none");
-        ItemCache.butterModel = config.getString("butter-model", "v.magma_cream");
-        ItemCache.butterPieceModel = config.getString("butter-piece-model", "v.magma_cream");
         ItemCache.firePitTurner = config.getString("fire-pit-turner", "ia.tfmc_cooking:fire_pit_turner");
         ItemCache.firePitVisualY = (float) config.getDouble("fire-pit-visual-y", 0.5);
         ItemCache.firePitPivotY = (float) config.getDouble("fire-pit-pivot-y", 0.5);
@@ -40,13 +49,55 @@ public class ConfigLoader {
         ItemCache.liquidFallback = config.getString("liquid-fallback", "ia.tfmc_cooking:water");
 
         ItemCache.water = config.getString("water", "v.water_bucket");
+        ItemCache.emptyCup = config.getString("empty-cup", "ia.tfmc_cooking:empty_cup");
+        ItemCache.cupOfWater = config.getString("cup-of-water", "ia.tfmc_cooking:cup_of_water");
+        ItemCache.cupOfMilk = config.getString("cup-of-milk", "ia.tfmc_cooking:cup_of_milk");
+        ItemCache.liquidBlockWater = config.getString("liquid-block-water", "ia.tfmc_cooking:water_block");
+        ItemCache.liquidBlockMilk = config.getString("liquid-block-milk", "ia.tfmc_cooking:milk_block");
+        ItemCache.blocksPerBucket = config.getInt("liquid-blocks-per-bucket", 3);
+        ItemCache.maxBlocks = config.getInt("liquid-max-blocks", 6);
+        ItemCache.blocksPerCup = config.getInt("liquid-blocks-per-cup", 1);
+        ItemCache.potWaterInput = config.getString("pot-water-input", "v.water_bucket");
+        ItemCache.potLiquidDisplay = config.getString("pot-liquid-display", "ia.tfmc_cooking:water");
 
         ItemCache.ladle = config.getString("ladle", "none");
         ItemCache.masher = config.getString("masher", "none");
 
-        ItemCache.grain = config.getString("grain-item", "none");
         ItemCache.flour = config.getString("flour-item", "none");
         ItemCache.bag = config.getString("bag", "none");
+
+        ItemCache.butterChurnCount = config.getInt("butter-churn-count", 3);
+        ItemCache.mixingStirCount = config.getInt("mixing-stir-count", 3);
+        ItemCache.mixingStirDurationTicks = config.getInt("mixing-stir-duration-ticks", 10);
+        ItemCache.mixingStirTiltDegrees = (float) config.getDouble("mixing-stir-tilt-degrees", 20);
+        ItemCache.mixingStirPivotY = (float) config.getDouble("mixing-stir-pivot-y", 0);
+
+        ItemCache.sausageMakerDurationTicks = config.getInt("sausage-maker-duration-ticks", 6);
+        ItemCache.sausageMakerWobbleDegrees = (float) config.getDouble("sausage-maker-wobble-degrees", 4);
+        ItemCache.sausageMakerCooldownTicks = config.getInt("sausage-maker-cooldown-ticks", 10);
+
+        ItemCache.ovenFuel.clear();
+        ItemCache.ovenFuel.addAll(config.getStringList("oven-fuel"));
+        ItemCache.ovenWoodModel = config.getString("oven-wood-model", "ia.tfmc_cooking:wood_model");
+        ItemCache.ovenWoodBurntModel = config.getString("oven-wood-burnt-model", "ia.tfmc_cooking:wood_burnt_model");
+        ItemCache.ovenFireModel = config.getString("oven-fire-model", "ia.tfmc_cooking:oven_fire_model");
+        ItemCache.ovenBurnIntervalTicks = config.getInt("oven-burn-interval-ticks", 20);
+        ItemCache.ovenBurnChanceFresh = (float) config.getDouble("oven-burn-chance-fresh", 0.08);
+        ItemCache.ovenBurnChanceBurnt = (float) config.getDouble("oven-burn-chance-burnt", 0.12);
+
+        ItemCache.mixingIngredients.clear();
+        if (config.isConfigurationSection("mixing-ingredients")) {
+            for (String key : config.getConfigurationSection("mixing-ingredients").getKeys(false)) {
+                String base = "mixing-ingredients." + key + ".";
+                ItemCache.mixingIngredients.put(
+                        key,
+                        new MixingIngredient(
+                                config.getString(base + "input"),
+                                config.getString(base + "input-food"),
+                                config.getString(base + "model"),
+                                config.getString(base + "output")));
+            }
+        }
 
         if(config.contains("liquids")) {
             for (String key : config.getStringList("liquids")) {
@@ -83,5 +134,8 @@ public class ConfigLoader {
                 CategoryDictionary.sauceDict.put(hex, model);
             }
         }
+
+        HeatLoader.load(config);
+        NutritionConfig.load(config);
 	}
 }

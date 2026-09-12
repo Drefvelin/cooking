@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,6 +32,8 @@ public class ConversionLoader {
     }
 
     public void load(File file) {
+        conversions.clear();
+
         FileConfiguration config = new YamlConfiguration();
 
         try {
@@ -39,11 +42,25 @@ public class ConversionLoader {
             e.printStackTrace();
         }
 
-        for(String s : config.getStringList("conversions")) {
-            String[] parts = s.split("\\s+");
-            if (parts.length < 2) continue; // or log error
-            String input = parts[0];
-            String output = parts[1];
+        for (String s : config.getStringList("conversions")) {
+            if (s == null || s.isBlank()) {
+                continue;
+            }
+
+            String trimmed = s.trim();
+            String[] parts = trimmed.split("\\s+", 2);
+            if (parts.length < 2) {
+                Bukkit.getLogger().warning("[Cooking] Invalid conversion line (missing food string): " + trimmed);
+                continue;
+            }
+
+            String input = parts[0].trim();
+            String output = parts[1].trim();
+            if (input.isEmpty() || output.isEmpty()) {
+                Bukkit.getLogger().warning("[Cooking] Invalid conversion line (empty input or output): " + trimmed);
+                continue;
+            }
+
             conversions.put(input, output);
         }
     }

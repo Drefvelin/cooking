@@ -149,18 +149,11 @@ public class PlateManager implements Listener{
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
     }
 
-    public void carry(FurnitureInteractEvent e) {
-        e.setCancelled(true);
-        Furniture f = e.getFurniture();
-        f.carry(e.getPlayer());
-    }
-
     @EventHandler
     public void interact(FurnitureInteractEvent e) {
         Player p = e.getPlayer();
         ItemStack item = p.getInventory().getItemInMainHand();
         if(item == null || item.getType().equals(Material.AIR)) {
-            if(p.isSneaking() && FurnitureCache.canCarry(e.getFurniture())) carry(e);
             return;
         }
         Furniture f = e.getFurniture();

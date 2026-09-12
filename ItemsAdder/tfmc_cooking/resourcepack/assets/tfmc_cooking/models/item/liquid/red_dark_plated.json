@@ -2,8 +2,8 @@
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "tfmc_cooking:item/liquid/red_dark",
-		"particle": "tfmc_cooking:item/liquid/red_dark"
+		"0": "tfmc_cooking:item/liquid/red_dark_plated",
+		"particle": "tfmc_cooking:item/liquid/red_dark_plated"
 	},
 	"elements": [
 		{

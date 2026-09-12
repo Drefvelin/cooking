@@ -18,6 +18,7 @@ public class FoodParser {
     public static class Result {
         public FoodItem template;
         public boolean unique;
+        public boolean explicitQuality;
     }
 
     // ============================================================
@@ -96,6 +97,7 @@ public class FoodParser {
         int amountMin = 1, amountMax = 1;
         int qualMin = 1, qualMax = 5;
         boolean unique = true;
+        boolean explicitQuality = false;
 
         FoodItem item = null;
 
@@ -129,10 +131,9 @@ public class FoodParser {
                         qualMin = qualMax = Integer.parseInt(value);
                     }
 
-                    // IMPORTANT FIX:
                     item._parsedQualMin = qualMin;
                     item._parsedQualMax = qualMax;
-
+                    explicitQuality = true;
                     break;
                 case "amount":
                     if (value.contains("-")) {
@@ -191,6 +192,7 @@ public class FoodParser {
         // ---------------- FINALIZE ---------------------
         Result r = new Result();
         r.unique = unique;
+        r.explicitQuality = explicitQuality;
 
         item.setCategory(cat);
         item.setOrigin(originInput);
@@ -199,6 +201,8 @@ public class FoodParser {
         item.setAmount(finalAmount);
 
         item.setQualityRange(qualMin, qualMax);
+        item._parsedQualMin = qualMin;
+        item._parsedQualMax = qualMax;
 
         r.template = item;
         return r;

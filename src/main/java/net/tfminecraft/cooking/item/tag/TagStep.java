@@ -13,6 +13,8 @@ public class TagStep {
 
     private final double foodMultiplier;
     private final double nutritionMultiplier;
+    private final double qualityReduce;
+    private final double craftQualityPct;
 
     public TagStep(String key, ConfigurationSection config) {
         this.id = key;
@@ -25,6 +27,8 @@ public class TagStep {
         this.requiredValue = config.getInt("value", 0);
         this.foodMultiplier = config.getDouble("food-mult", 1.0);
         this.nutritionMultiplier = config.getDouble("nutrition-mult", 1.0);
+        this.qualityReduce = config.getDouble("quality-reduce", 0.0);
+        this.craftQualityPct = config.getDouble("craft-quality-pct", 0.0);
     }
 
     public Tag getTag() {
@@ -44,5 +48,7 @@ public class TagStep {
 
     public double getFoodMultiplier() { return foodMultiplier; }
     public double getNutritionMultiplier() { return nutritionMultiplier; }
+    public double getQualityReduce() { return qualityReduce; }
+    public double getCraftQualityPct() { return craftQualityPct; }
 }
 

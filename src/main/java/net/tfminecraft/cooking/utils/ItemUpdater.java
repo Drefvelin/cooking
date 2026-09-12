@@ -185,11 +185,15 @@ public class ItemUpdater {
                 for (TagTrack track : fi.getTagTracks()) {
                     TagStep step = track.getCurrentStep();
                     if (step == null) continue;
+                    if (!ItemBuilder.shouldShowTagLore(fi, track, step)) {
+                        continue;
+                    }
 
                     String line = DisplayUtils.getDisplayString(
-                            step.getName(),
+                            TagDisplayNames.resolve(fi, track, step),
                             step.getFoodMultiplier(),
-                            step.getNutritionMultiplier()
+                            step.getNutritionMultiplier(),
+                            step.getCraftQualityPct()
                     );
 
                     if (pos < newLore.size())
@@ -229,6 +233,19 @@ public class ItemUpdater {
             pdc.set(Keys.SAUCE_NAME, PersistentDataType.STRING, fi.getSauceName());
         } else {
             pdc.remove(Keys.SAUCE_NAME);
+        }
+
+        if (!fi.getIngredients().isEmpty()) {
+            StringBuilder ingSb = new StringBuilder();
+            boolean ingFirst = true;
+            for (String ing : fi.getIngredients()) {
+                if (!ingFirst) ingSb.append(':');
+                ingSb.append(ing);
+                ingFirst = false;
+            }
+            pdc.set(Keys.INGREDIENTS, PersistentDataType.STRING, ingSb.toString());
+        } else {
+            pdc.remove(Keys.INGREDIENTS);
         }
 
         pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
