@@ -1,10 +1,10 @@
 package net.tfminecraft.cooking.item.model;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import net.tfminecraft.cooking.item.FoodItem;
+import net.tfminecraft.furniture.data.DisplayData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +17,13 @@ public class FoodModel {
     /** Load from the model section (e.g. steak_default) */
     public FoodModel(String key, ConfigurationSection config) {
         id = key;
+        Map<String, DisplayData> rootFurnitureDisplay = ModelData.parseFurnitureDisplayData(
+                config.getConfigurationSection("display-data-furniture"));
         for (String stateId : config.getKeys(false)) {
-            if(stateId.equals("colour")) continue;
+            if (stateId.equals("colour") || stateId.equals("display-data-furniture")) continue;
             ConfigurationSection stateConfig = config.getConfigurationSection(stateId);
             if (stateConfig != null) {
-                ModelData model = new ModelData(stateConfig);
+                ModelData model = new ModelData(stateConfig, rootFurnitureDisplay);
                 states.put(stateId, model);
             }
         }
@@ -49,10 +51,12 @@ public class FoodModel {
 
     public ModelData getModel(FoodItem item) {
         List<String> tags = item.getCurrentTagIds();
+        boolean requireRotten = tags.contains("rotten");
         ModelData bestMatch = null;
 
         for (ModelData data : states.values()) {
             if (data.getStage() >= 0) continue;
+            if (requireRotten && !data.getTags().contains("rotten")) continue;
             boolean tagMatch = true;
 
             // check if all tags in data are present in the item's tags

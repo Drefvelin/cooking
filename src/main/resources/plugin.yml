@@ -10,7 +10,7 @@ softdepend: [RPCharacters, MMOCore]
 commands:
   cooking:
     description: Cooking admin/debug commands
-    usage: /cooking builditem <string> | /cooking preview <target> ...
+    usage: /cooking reload | /cooking builditem <string> | /cooking preview <target> ...
     permission: cooking.admin
 
 permissions:

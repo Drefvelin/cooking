@@ -1286,6 +1286,13 @@ items:
       generate: false
       model_path: item/bulk/flour
 
+  flour_rotten_model:
+    display_name: "Flour Musty (Bowl)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/flour_rotten
+
   yeast_model:
     display_name: "Yeast (Bowl)"
     resource:
@@ -1293,12 +1300,26 @@ items:
       generate: false
       model_path: item/bulk/yeast
 
+  yeast_rotten_model:
+    display_name: "Yeast Rotten (Bowl)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/yeast_rotten
+
   dough_model:
     display_name: "Dough (Bowl)"
     resource:
       material: PAPER
       generate: false
       model_path: item/bulk/dough
+
+  dough_rotten_model:
+    display_name: "Dough Rotten (Bowl)"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/bulk/dough_rotten
 
   wood_model:
     display_name: "Wood (Oven)"

@@ -31,6 +31,7 @@ public class ModelLoader {
     }
 
     public void load(File file) {
+        models.clear();
         FileConfiguration config = new YamlConfiguration();
 
         try {

@@ -22,6 +22,7 @@ public class CraftingStationLoader {
     }
 
     public void load(File file) {
+        stations.clear();
 
         FileConfiguration config = new YamlConfiguration();
         try { config.load(file); }

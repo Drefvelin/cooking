@@ -17,6 +17,7 @@ import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.loader.TrackLoader;
 import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.Keys;
+import net.tfminecraft.cooking.enums.Method;
 import net.tfminecraft.cooking.enums.Tag;
 
 import java.util.*;
@@ -501,6 +502,15 @@ public class FoodItem {
 
         if(out.getModel() == null) {
             out.model = new FoodModel(stack);
+        }
+
+        String cookMethod = pdc.get(Keys.COOK_METHOD, PersistentDataType.STRING);
+        if (cookMethod != null && !cookMethod.isEmpty()) {
+            try {
+                Integer cookTime = pdc.get(Keys.COOK_TIME, PersistentDataType.INTEGER);
+                out.getCookData().restore(Method.valueOf(cookMethod), cookTime != null ? cookTime : 0);
+            } catch (IllegalArgumentException ignored) {
+            }
         }
 
         String carveSeq = pdc.get(Keys.CARVE_SEQUENCE, PersistentDataType.STRING);

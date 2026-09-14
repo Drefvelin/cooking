@@ -73,8 +73,12 @@ public class CategoryDictionary {
             } catch (Exception ignored) {}
         }
 
-        if (bestKey != null)
-            return sauceDict.get(bestKey).split("\\.", 2)[index];
+        if (bestKey != null) {
+            String[] paths = sauceDict.get(bestKey).split("\\|", 2);
+            if (index >= 0 && index < paths.length && !paths[index].isBlank()) {
+                return paths[index];
+            }
+        }
 
         return ItemCache.liquidFallback;
     }

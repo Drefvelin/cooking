@@ -118,6 +118,7 @@ public class Cooking extends JavaPlugin {
         });
 
         getCommand("cooking").setExecutor(commands);
+        getCommand("cooking").setTabCompleter(commands);
         if (ItemScanService.get() != null) {
             ItemScanService.get().subscribe(tagManager);
         }
@@ -153,6 +154,13 @@ public class Cooking extends JavaPlugin {
         conversionLoader.load(new File(getDataFolder(), "conversions.yml"));
         farmingLoader.load(new File(getDataFolder(), "farming.yml"));
         carveSequenceLoader.load(new File(getDataFolder(), "carve-sequences.yml"));
+    }
+
+    public void reloadAll() {
+        loadConfigs();
+        craftingManager.rebuildStations();
+        NutritionDrainTask.stop();
+        NutritionDrainTask.start();
     }
 
     // ----------------------------------------------------------------------

@@ -29,6 +29,7 @@ public final class SausageItems {
                 player, meats, CompositionContext.SAUSAGE_MAKER);
 
         FoodItem chain = new FoodItem(template);
+        chain.setCategory("meat");
         chain.setOrigin("Mixed");
         CompositionFreshnessApplier.applyTracks(chain, composed.getFreshnessTracks());
 

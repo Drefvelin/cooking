@@ -273,11 +273,17 @@ categories:
       - tfmc_cooking:masher
       - tfmc_cooking:cutting_knife
       - tfmc_cooking:flour
+      - tfmc_cooking:flour_rotten
       - tfmc_cooking:flour_model
+      - tfmc_cooking:flour_rotten_model
       - tfmc_cooking:yeast
+      - tfmc_cooking:yeast_rotten
       - tfmc_cooking:yeast_model
+      - tfmc_cooking:yeast_rotten_model
       - tfmc_cooking:dough
+      - tfmc_cooking:dough_rotten
       - tfmc_cooking:dough_model
+      - tfmc_cooking:dough_rotten_model
       - tfmc_cooking:empty_cup
       - tfmc_cooking:cup_of_water
       - tfmc_cooking:cup_of_milk

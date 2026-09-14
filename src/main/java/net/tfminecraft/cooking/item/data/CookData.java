@@ -32,6 +32,8 @@ public class CookData {
     public CookData(FoodItem item, CookData other) {
         this.item = item;
         parameters = other.parameters;
+        this.currentMethod = other.currentMethod;
+        this.currentTime = other.currentTime;
     }
 
     public HashMap<Method, CookParameter> getParameters() {
@@ -50,6 +52,15 @@ public class CookData {
     public boolean hasMethod(Method m) {
         return parameters.containsKey(m);
     }
+    public Method getCurrentMethod() {
+        return currentMethod;
+    }
+
+    public void restore(Method method, int time) {
+        this.currentMethod = method;
+        this.currentTime = time;
+    }
+
     public void start(Method m) {
         if(parameters.containsKey(m)) {
             currentMethod = m;

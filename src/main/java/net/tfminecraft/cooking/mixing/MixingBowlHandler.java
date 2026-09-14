@@ -25,6 +25,8 @@ import net.tfminecraft.cooking.cache.FurnitureCache;
 
 import net.tfminecraft.cooking.cache.ItemCache;
 
+import net.tfminecraft.cooking.cup.CupItems;
+
 import net.tfminecraft.cooking.item.FoodItem;
 
 import net.tfminecraft.cooking.item.tag.TagTrack;
@@ -39,6 +41,7 @@ import net.tfminecraft.cooking.quality.CompositionQualityResolver;
 import net.tfminecraft.cooking.quality.CompositionResult;
 import net.tfminecraft.cooking.utils.DoughMixinRules;
 import net.tfminecraft.cooking.utils.IngredientConverter;
+import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.cooking.utils.QualityUtils;
 
@@ -265,7 +268,21 @@ public class MixingBowlHandler implements Listener {
 
 
 
+        boolean waterCup = MixingBowlSlots.WATER.equals(expectedSlot) && ItemCache.isCupOfWater(hand);
+
         hand.setAmount(hand.getAmount() - 1);
+
+        if (waterCup) {
+            ItemStack empty = CupItems.emptyCup();
+            if (hand.getAmount() <= 0) {
+                player.getInventory().setItemInMainHand(empty);
+            } else {
+                ItemStack leftover = InventoryAdder.addItem(player, empty);
+                if (leftover != null) {
+                    furniture.getLoc().getWorld().dropItemNaturally(furniture.getLoc(), leftover);
+                }
+            }
+        }
 
         if (!MixingBowlDisplay.showLayer(furniture, expectedSlot)) {
 

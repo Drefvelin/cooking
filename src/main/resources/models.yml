@@ -2548,6 +2548,13 @@ red_meat_roast:
       item: ia.tfmc_cooking:red_meat_roast_rotten_1
 
 poultry_roast:
+  display-data-furniture:
+    meat_hook:
+      rotation:
+        x: 180
+      position:
+        y: -0.25
+        z: 0.15
   raw_6:
     weight: 16
     stage: 6
@@ -2938,6 +2945,100 @@ apple:
       position:
         y: -0.25
 
+melon:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: v.melon
+    display:
+      item: v.melon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: v.melon
+    display:
+      item: v.melon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: v.melon
+    display:
+      item: v.melon
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
+melon_slice:
+  fresh:
+    weight: 1
+    tags:
+      - fresh
+    gui:
+      item: v.melon_slice
+    display:
+      item: v.melon_slice
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: v.melon_slice
+    display:
+      item: v.melon_slice
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: v.melon_slice
+    display:
+      item: v.melon_slice
+    display-data:
+      rotation:
+        x: 90
+        y: 0
+        z: 90
+      position:
+        y: -0.25
+
 flour:
   fresh:
     weight: 1
@@ -2947,6 +3048,22 @@ flour:
       item: ia.tfmc_cooking:flour
     display:
       item: ia.tfmc_cooking:flour_model
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:flour
+    display:
+      item: ia.tfmc_cooking:flour_model
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:flour_rotten
+    display:
+      item: ia.tfmc_cooking:flour_rotten_model
 
 yeast:
   fresh:
@@ -2957,6 +3074,22 @@ yeast:
       item: ia.tfmc_cooking:yeast
     display:
       item: ia.tfmc_cooking:yeast_model
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:yeast
+    display:
+      item: ia.tfmc_cooking:yeast_model
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:yeast_rotten
+    display:
+      item: ia.tfmc_cooking:yeast_rotten_model
 
 dough:
   fresh:
@@ -2967,6 +3100,22 @@ dough:
       item: ia.tfmc_cooking:dough
     display:
       item: ia.tfmc_cooking:dough_model
+  stale:
+    weight: 1
+    tags:
+      - stale
+    gui:
+      item: ia.tfmc_cooking:dough
+    display:
+      item: ia.tfmc_cooking:dough_model
+  rotten:
+    weight: 1
+    tags:
+      - rotten
+    gui:
+      item: ia.tfmc_cooking:dough_rotten
+    display:
+      item: ia.tfmc_cooking:dough_rotten_model
 
 cup_of_milk:
   fresh:
@@ -3057,6 +3206,11 @@ sausage:
       item: ia.tfmc_cooking:sausage_rotten
 
 sausage_chain:
+  display-data-furniture:
+    meat_hook:
+      position:
+        y: -0.25
+        z: 0.15
   raw_5:
     weight: 15
     stage: 5

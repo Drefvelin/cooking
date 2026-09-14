@@ -18,6 +18,7 @@ import net.tfminecraft.cooking.cup.BucketItems;
 import net.tfminecraft.cooking.cup.CupItems;
 import net.tfminecraft.cooking.cup.MilkBucketConverter;
 import net.tfminecraft.cooking.cup.MilkBucketSnapshot;
+import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.events.FurnitureBreakEvent;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.events.FurniturePlaceEvent;
@@ -164,6 +165,11 @@ public final class LiquidContainerHandler implements Listener {
             return;
         }
 
+        ItemStack hand = player.getInventory().getItemInMainHand();
+        if (hand == null || hand.getType() == Material.AIR) {
+            return;
+        }
+
         LiquidContainerState.tickAge(furniture);
         String type = LiquidContainerState.getType(furniture);
         ItemStack cup;
@@ -181,8 +187,22 @@ public final class LiquidContainerHandler implements Listener {
             return;
         }
 
+        boolean lastCup = hand.getAmount() <= 1;
+        if (!lastCup && !hasStorageSlot(player)) {
+            player.sendMessage("Need a free inventory slot.");
+            return;
+        }
+
         LiquidContainerState.removeBlock(furniture);
-        player.getInventory().setItemInMainHand(cup);
+        if (lastCup) {
+            player.getInventory().setItemInMainHand(cup);
+        } else {
+            hand.setAmount(hand.getAmount() - 1);
+            ItemStack leftover = InventoryAdder.addItem(player, cup);
+            if (leftover != null) {
+                furniture.getLoc().getWorld().dropItemNaturally(furniture.getLoc(), leftover);
+            }
+        }
         player.updateInventory();
         furniture.getLoc().getWorld().playSound(furniture.getLoc(), Sound.ITEM_BOTTLE_FILL, 1f, 1f);
 
@@ -192,6 +212,16 @@ public final class LiquidContainerHandler implements Listener {
             LiquidContainerAging.stop(furniture);
         }
         markDirty(furniture);
+    }
+
+    private static boolean hasStorageSlot(Player player) {
+        for (int slot = 0; slot < 36; slot++) {
+            ItemStack stack = player.getInventory().getItem(slot);
+            if (stack == null || stack.getType() == Material.AIR) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void resumeContainer(Furniture furniture) {

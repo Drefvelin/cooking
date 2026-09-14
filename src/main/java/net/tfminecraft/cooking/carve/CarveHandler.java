@@ -128,7 +128,7 @@ public final class CarveHandler {
 
         slot.setCurrentItem(updated);
 
-        slot.applyDisplayData(CarvableRoastUtils.getStageModelData(roast).getDisplayData());
+        slot.applyDisplayData(CarvableRoastUtils.getStageModelData(roast).getDisplayData(furniture.getId()));
 
         return true;
 

@@ -1,3 +1,6 @@
+logging: true
+wipe-log: true
+
 frying_pan: frying_pan
 saucepan: saucepan
 plate: plate
@@ -123,6 +126,7 @@ colours:
 
 
 dictionary:
+  meat: "#c4564fMeat"
   red_meat: "#c4564fRed Meat"
   poultry: "#f1c232Poultry"
   fish: "#6fa8dcFish"
@@ -136,19 +140,19 @@ dictionary:
   liquid: "#3d85c6Liquid"
 
 sauce-dict:
-    - ffffff ia.tfmc_cooking:milk.ia.tfmc_cooking:milk
-    - 80352e ia.tfmc_cooking:red_dark.ia.tfmc_cooking:red_dark_plated
-    - a8552e ia.tfmc_cooking:red_light.ia.tfmc_cooking:red_light_plated
-    - a86c2e ia.tfmc_cooking:brown_light.ia.tfmc_cooking:brown_light_plated
-    - d5c6be ia.tfmc_cooking:gray.ia.tfmc_cooking:gray_plated
-    - 53350a ia.tfmc_cooking:brown_dark.ia.tfmc_cooking:brown_dark_plated
+    - ffffff ia.tfmc_cooking:milk|ia.tfmc_cooking:milk
+    - 80352e ia.tfmc_cooking:red_dark|ia.tfmc_cooking:red_dark_plated
+    - a8552e ia.tfmc_cooking:red_light|ia.tfmc_cooking:red_light_plated
+    - a86c2e ia.tfmc_cooking:brown_light|ia.tfmc_cooking:brown_light_plated
+    - d5c6be ia.tfmc_cooking:gray|ia.tfmc_cooking:gray_plated
+    - 53350a ia.tfmc_cooking:brown_dark|ia.tfmc_cooking:brown_dark_plated
 
 nutrition:
   max-food: 200
   max-diet: 40
   attribute-name: nutrition
   drain-amount: 1
-  drain-interval-ticks: 2400
+  drain-interval: 120
   lerp-step-rate: 1.0
   diet-tiers:
     - id: terrible

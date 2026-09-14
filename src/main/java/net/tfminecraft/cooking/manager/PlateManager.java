@@ -182,6 +182,6 @@ public class PlateManager implements Listener{
         ItemStack item = e.getItem();
         FoodItem fi = FoodItem.fromItem(item);
         if(fi == null) return;
-        e.setDisplayData(fi.getModelData().getDisplayData());
+        e.setDisplayData(fi.getModelData().getDisplayData(f.getId()));
     }
 }

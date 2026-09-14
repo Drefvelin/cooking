@@ -13,29 +13,54 @@ public final class NutritionService {
 
     public static void tryApplyEat(Player player, FoodItem food) {
         if (player == null || food == null) {
+            NutritionLog.append("EAT_SKIP", player, null, "cause=null-input");
             return;
         }
         if (!Bukkit.getPluginManager().isPluginEnabled("RPCharacters")) {
+            NutritionLog.append("EAT_SKIP", player, null,
+                    "food=" + food.getId() + " cause=rpcharacters-unavailable");
             return;
         }
 
         RPCharacter character = RPCharacters.getActiveCharacter(player);
         if (character == null) {
+            NutritionLog.append("EAT_SKIP", player, null,
+                    "food=" + food.getId() + " cause=no-active-character");
             return;
         }
 
         int gained = (int) Math.ceil(food.getFinalFood());
+        int foodBefore = character.getFoodValue();
+        int dietBefore = character.getDietScore();
         int actualGain = applyFoodGain(character, gained);
         if (actualGain <= 0) {
+            NutritionLog.append("EAT_SKIP", player, character,
+                    "food=" + food.getId()
+                    + " calculatedGain=" + gained
+                    + " actualGain=0"
+                    + " foodBefore=" + foodBefore
+                    + " cause=no-gain");
             return;
         }
 
-        if (applyDietLerp(character, food, actualGain)) {
+        boolean dietChanged = applyDietLerp(character, food, actualGain);
+        if (dietChanged) {
             DietTierService.checkAndNotify(player, character);
         }
 
+        NutritionLog.append("EAT", player, character,
+                "food=" + food.getId()
+                + " calculatedGain=" + gained
+                + " actualGain=" + actualGain
+                + " foodBefore=" + foodBefore
+                + " foodAfter=" + character.getFoodValue()
+                + " foodNutrition=" + food.getFinalNutrition()
+                + " dietBefore=" + dietBefore
+                + " dietAfter=" + character.getDietScore()
+                + " dietChanged=" + dietChanged);
         RPCharacters.getPlayerManager().savePlayer(player);
-        NutritionDisplayService.sync(player, character);
+        NutritionLog.append("SAVE", player, character, "reason=eat");
+        NutritionDisplayService.sync(player, character, "eat");
         NutritionAttributeBridge.apply(player, character);
     }
 

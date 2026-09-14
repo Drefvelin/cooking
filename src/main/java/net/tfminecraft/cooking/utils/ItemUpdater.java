@@ -1,6 +1,7 @@
 package net.tfminecraft.cooking.utils;
 
 import net.tfminecraft.cooking.item.FoodItem;
+import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.item.model.ModelData;
 import net.tfminecraft.cooking.item.tag.TagStep;
 import net.tfminecraft.cooking.item.tag.TagTrack;
@@ -250,6 +251,15 @@ public class ItemUpdater {
 
         pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
         pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, System.currentTimeMillis());
+
+        CookData cookData = fi.getCookData();
+        if (cookData != null && cookData.isBeingCooked() && cookData.getCurrentMethod() != null) {
+            pdc.set(Keys.COOK_METHOD, PersistentDataType.STRING, cookData.getCurrentMethod().name());
+            pdc.set(Keys.COOK_TIME, PersistentDataType.INTEGER, cookData.getCurrentTime());
+        } else {
+            pdc.remove(Keys.COOK_METHOD);
+            pdc.remove(Keys.COOK_TIME);
+        }
 
         stack.setItemMeta(meta);
 

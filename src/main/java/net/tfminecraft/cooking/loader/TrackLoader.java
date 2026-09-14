@@ -26,6 +26,7 @@ public class TrackLoader {
 		return null;
 	}
 	public void load(File configFile) {
+		oList.clear();
 		FileConfiguration config = new YamlConfiguration();
         try {
         	config.load(configFile);

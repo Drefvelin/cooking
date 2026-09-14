@@ -1,14 +1,26 @@
 package net.tfminecraft.cooking.manager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import net.tfminecraft.InteractibleFurniture;
+import net.tfminecraft.RPCharacters.Objects.RPCharacter;
+import net.tfminecraft.RPCharacters.RPCharacters;
+import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.baking.BakingTrayRecipe;
 import net.tfminecraft.cooking.baking.BakingTrayRegistry;
 import net.tfminecraft.cooking.baking.BakingTrayState;
@@ -16,8 +28,13 @@ import net.tfminecraft.cooking.cache.FurnitureCache;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.heat.HeatSources;
+import net.tfminecraft.cooking.loader.FoodLoader;
+import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.mixing.MixingBowlDisplay;
 import net.tfminecraft.cooking.mixing.MixingBowlSlots;
+import net.tfminecraft.cooking.nutrition.NutritionConfig;
+import net.tfminecraft.cooking.nutrition.NutritionDisplayService;
+import net.tfminecraft.cooking.nutrition.NutritionLog;
 import net.tfminecraft.cooking.quality.CompositionContext;
 import net.tfminecraft.cooking.quality.CompositionQualityResolver;
 import net.tfminecraft.cooking.quality.CompositionResult;
@@ -26,23 +43,25 @@ import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.cooking.utils.NameComposer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import net.tfminecraft.furniture.Furniture;
 import net.tfminecraft.furniture.PlacedFurnitureSlot;
 import net.tfminecraft.furniture.PlacedSlot;
 
-public class CommandManager implements CommandExecutor {
+public class CommandManager implements CommandExecutor, TabCompleter {
 
     private static final double MIXING_BOWL_SEARCH_RADIUS = 3.0;
     private static final double HEAT_SEARCH_RADIUS = 4.0;
+    private static final List<String> SUBCOMMANDS = List.of(
+            "reload", "food", "builditem", "preview", "heat", "nametest", "qualitytest");
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
+            return handleReload(sender);
+        }
+        if (args.length > 0 && args[0].equalsIgnoreCase("food")) {
+            return handleFood(sender, args);
+        }
 
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
@@ -80,7 +99,48 @@ public class CommandManager implements CommandExecutor {
         return true;
     }
 
+    private boolean handleReload(CommandSender sender) {
+        Cooking plugin = Cooking.plugin;
+        if (plugin == null) {
+            sender.sendMessage("§cPlugin not ready.");
+            return true;
+        }
+        plugin.reloadAll();
+        sender.sendMessage("§aCooking reloaded ("
+                + ModelLoader.get().size() + " models, "
+                + FoodLoader.get().size() + " food types).");
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (!sender.hasPermission("cooking.admin")) {
+            return Collections.emptyList();
+        }
+        if (args.length == 1) {
+            String prefix = args[0].toLowerCase(Locale.ROOT);
+            List<String> out = new ArrayList<>();
+            for (String sub : SUBCOMMANDS) {
+                if (sub.startsWith(prefix)) {
+                    out.add(sub);
+                }
+            }
+            return out;
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("food")) {
+            String prefix = args[1].toLowerCase(Locale.ROOT);
+            return Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(name -> name.toLowerCase(Locale.ROOT).startsWith(prefix))
+                    .sorted(String.CASE_INSENSITIVE_ORDER)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
     private void sendUsage(Player player) {
+        player.sendMessage("§e/cooking reload");
+        player.sendMessage("§e/cooking food <player> <value>");
         player.sendMessage("§e/cooking builditem <string>");
         player.sendMessage("§e/cooking preview mixing_bowl <flour|water|yeast|dough|all|clear>");
         player.sendMessage("§e/cooking heat");
@@ -89,6 +149,56 @@ public class CommandManager implements CommandExecutor {
         player.sendMessage("§e/cooking qualitytest compose <foodString> [context]");
         player.sendMessage("§e/cooking qualitytest compose2 <food|food|...> [context]");
         player.sendMessage("§7Contexts: " + formatCompositionContexts());
+    }
+
+    private boolean handleFood(CommandSender sender, String[] args) {
+        if (args.length != 3) {
+            sender.sendMessage("§cUsage: /cooking food <player> <value>");
+            return true;
+        }
+        Player target = Bukkit.getPlayerExact(args[1]);
+        if (target == null) {
+            sender.sendMessage("§cThat player is not online.");
+            return true;
+        }
+        RPCharacter character = RPCharacters.getActiveCharacter(target);
+        if (character == null) {
+            sender.sendMessage("§cThat player has no active character.");
+            return true;
+        }
+        int value;
+        try {
+            value = Integer.parseInt(args[2]);
+        } catch (NumberFormatException ex) {
+            sender.sendMessage("§cFood must be a whole number.");
+            return true;
+        }
+        if (value < 0 || value > NutritionConfig.maxFood()) {
+            sender.sendMessage("§cFood must be between 0 and " + NutritionConfig.maxFood() + ".");
+            return true;
+        }
+        int before = character.getFoodValue();
+        character.setFoodValue(value);
+        NutritionLog.append("ADMIN_SET", target, character,
+                "sender=" + sender.getName()
+                + " foodBefore=" + before
+                + " requested=" + value
+                + " foodAfter=" + character.getFoodValue()
+                + " mappedBefore=" + NutritionDisplayService.toFoodLevel(before)
+                + " mappedAfter=" + NutritionDisplayService.toFoodLevel(character.getFoodValue())
+                + " hudBefore=" + target.getFoodLevel()
+                + " saturation=" + target.getSaturation());
+        NutritionDisplayService.sync(target, character, "admin");
+        RPCharacters.getPlayerManager().savePlayer(target);
+        NutritionLog.append("SAVE", target, character,
+                "reason=admin sender=" + sender.getName());
+        sender.sendMessage("§aSet " + target.getName() + "'s food from " + before + " to "
+                + character.getFoodValue() + ".");
+        if (!sender.equals(target)) {
+            target.sendMessage("§eYour food was set to " + character.getFoodValue() + " by "
+                    + sender.getName() + ".");
+        }
+        return true;
     }
 
     private static String formatCompositionContexts() {

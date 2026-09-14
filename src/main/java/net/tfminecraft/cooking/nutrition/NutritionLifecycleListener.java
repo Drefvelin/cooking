@@ -18,7 +18,13 @@ public final class NutritionLifecycleListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Bukkit.getScheduler().runTaskLater(Cooking.plugin, () -> NutritionDisplayService.syncFromPlayer(player), 2L);
+        NutritionLog.append("JOIN", player, null,
+                "phase=schedule hud=" + player.getFoodLevel() + " saturation=" + player.getSaturation());
+        Bukkit.getScheduler().runTaskLater(Cooking.plugin, () -> {
+            NutritionLog.append("JOIN", player, null,
+                    "phase=execute hud=" + player.getFoodLevel() + " saturation=" + player.getSaturation());
+            NutritionDisplayService.syncFromPlayer(player, "join");
+        }, 2L);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -29,20 +35,30 @@ public final class NutritionLifecycleListener implements Listener {
         }
         RPCharacter character = event.getCharacter();
         if (character == null) {
+            NutritionLog.append("ACTIVATE_SKIP", owner, null, "cause=null-character");
             return;
         }
+        NutritionLog.append("ACTIVATE", owner, character,
+                "hud=" + owner.getFoodLevel() + " saturation=" + owner.getSaturation());
         DietTierService.seedIfAbsent(owner, character);
-        NutritionDisplayService.sync(owner, character);
+        NutritionDisplayService.sync(owner, character, "activate");
         NutritionAttributeBridge.apply(owner, character);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        NutritionDisplayService.syncFromPlayer(event.getPlayer());
+        Player player = event.getPlayer();
+        NutritionLog.append("RESPAWN", player, null,
+                "hud=" + player.getFoodLevel() + " saturation=" + player.getSaturation());
+        NutritionDisplayService.syncFromPlayer(player, "respawn");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        // Diet and food pool persist on death; no nutrition reset here.
+        Player player = event.getEntity();
+        RPCharacter character = net.tfminecraft.RPCharacters.RPCharacters.getActiveCharacter(player);
+        NutritionLog.append("DEATH", player, character,
+                "hud=" + player.getFoodLevel() + " saturation=" + player.getSaturation()
+                + " action=preserve");
     }
 }

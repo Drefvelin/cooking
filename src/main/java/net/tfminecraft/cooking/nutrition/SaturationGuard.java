@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import net.tfminecraft.RPCharacters.Objects.RPCharacter;
+import net.tfminecraft.RPCharacters.RPCharacters;
 import net.tfminecraft.cooking.Cooking;
 
 public final class SaturationGuard implements Listener {
@@ -21,7 +23,10 @@ public final class SaturationGuard implements Listener {
         taskId = Bukkit.getScheduler().runTaskTimer(Cooking.plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.getSaturation() != 0f) {
+                    float before = player.getSaturation();
                     player.setSaturation(0f);
+                    NutritionLog.append("SATURATION", player, activeCharacter(player),
+                            "reason=timer before=" + before + " after=" + player.getSaturation());
                 }
             }
         }, 40L, 40L).getTaskId();
@@ -37,7 +42,11 @@ public final class SaturationGuard implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        event.getPlayer().setSaturation(0f);
+        Player player = event.getPlayer();
+        float before = player.getSaturation();
+        player.setSaturation(0f);
+        NutritionLog.append("SATURATION", player, null,
+                "reason=join before=" + before + " after=" + player.getSaturation());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -45,6 +54,20 @@ public final class SaturationGuard implements Listener {
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        Bukkit.getScheduler().runTask(Cooking.plugin, () -> player.setSaturation(0f));
+        float eventSaturation = player.getSaturation();
+        Bukkit.getScheduler().runTask(Cooking.plugin, () -> {
+            float before = player.getSaturation();
+            player.setSaturation(0f);
+            NutritionLog.append("SATURATION", player, activeCharacter(player),
+                    "reason=food-event eventValue=" + eventSaturation
+                    + " before=" + before + " after=" + player.getSaturation());
+        });
+    }
+
+    private static RPCharacter activeCharacter(Player player) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("RPCharacters")) {
+            return null;
+        }
+        return RPCharacters.getActiveCharacter(player);
     }
 }

@@ -16,14 +16,14 @@ public final class NutritionConfig {
     private static final int DEFAULT_MAX_DIET = 40;
     private static final String DEFAULT_ATTRIBUTE_NAME = "nutrition";
     private static final int DEFAULT_DRAIN_AMOUNT = 1;
-    private static final int DEFAULT_DRAIN_INTERVAL_TICKS = 2400;
+    private static final int DEFAULT_DRAIN_INTERVAL_SECONDS = 120;
     private static final double DEFAULT_LERP_STEP_RATE = 1.0;
 
     private static int maxFood = DEFAULT_MAX_FOOD;
     private static int maxDiet = DEFAULT_MAX_DIET;
     private static String attributeName = DEFAULT_ATTRIBUTE_NAME;
     private static int drainAmount = DEFAULT_DRAIN_AMOUNT;
-    private static int drainIntervalTicks = DEFAULT_DRAIN_INTERVAL_TICKS;
+    private static int drainIntervalSeconds = DEFAULT_DRAIN_INTERVAL_SECONDS;
     private static double lerpStepRate = DEFAULT_LERP_STEP_RATE;
     private static List<DietTierDefinition> dietTiers = defaultTiers();
 
@@ -40,7 +40,7 @@ public final class NutritionConfig {
         maxDiet = section.getInt("max-diet", DEFAULT_MAX_DIET);
         attributeName = section.getString("attribute-name", DEFAULT_ATTRIBUTE_NAME);
         drainAmount = section.getInt("drain-amount", DEFAULT_DRAIN_AMOUNT);
-        drainIntervalTicks = section.getInt("drain-interval-ticks", DEFAULT_DRAIN_INTERVAL_TICKS);
+        drainIntervalSeconds = readDrainIntervalSeconds(section);
         lerpStepRate = section.getDouble("lerp-step-rate", DEFAULT_LERP_STEP_RATE);
         dietTiers = parseTiers(section);
     }
@@ -61,8 +61,18 @@ public final class NutritionConfig {
         return drainAmount;
     }
 
-    public static int drainIntervalTicks() {
-        return drainIntervalTicks;
+    public static int drainIntervalSeconds() {
+        return drainIntervalSeconds;
+    }
+
+    private static int readDrainIntervalSeconds(ConfigurationSection section) {
+        if (section.contains("drain-interval")) {
+            return Math.max(1, section.getInt("drain-interval"));
+        }
+        if (section.contains("drain-interval-ticks")) {
+            return Math.max(1, section.getInt("drain-interval-ticks") / 20);
+        }
+        return DEFAULT_DRAIN_INTERVAL_SECONDS;
     }
 
     public static double lerpStepRate() {
@@ -90,7 +100,7 @@ public final class NutritionConfig {
         maxDiet = DEFAULT_MAX_DIET;
         attributeName = DEFAULT_ATTRIBUTE_NAME;
         drainAmount = DEFAULT_DRAIN_AMOUNT;
-        drainIntervalTicks = DEFAULT_DRAIN_INTERVAL_TICKS;
+        drainIntervalSeconds = DEFAULT_DRAIN_INTERVAL_SECONDS;
         lerpStepRate = DEFAULT_LERP_STEP_RATE;
         dietTiers = defaultTiers();
     }

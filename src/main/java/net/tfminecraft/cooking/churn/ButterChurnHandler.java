@@ -113,7 +113,7 @@ public final class ButterChurnHandler implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            ItemStack hand = ItemUpdater.applyItemUpdate(slotItem.clone(), butter, null);
+            ItemStack hand = ItemUpdater.applyItemUpdate(slotItem.clone(), butter, furniture.getId());
             if (hand != null) {
                 event.setItem(hand);
             }

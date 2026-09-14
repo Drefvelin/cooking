@@ -3,6 +3,7 @@ package net.tfminecraft.cooking.item.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -20,12 +21,18 @@ public class ModelData {
     private HashMap<String, String> overrides = new HashMap<>();
 
     private DisplayData displayData;
+    private HashMap<String, DisplayData> furnitureDisplayData = new HashMap<>();
 
     private final ItemStack directItem;
     private final int stage;
 
     /** Load from YAML state section */
     public ModelData(ConfigurationSection stateConfig) {
+        this(stateConfig, Map.of());
+    }
+
+    /** Load from YAML state section, inheriting model-root furniture poses. */
+    public ModelData(ConfigurationSection stateConfig, Map<String, DisplayData> parentFurnitureDisplay) {
         ConfigurationSection gui = stateConfig.getConfigurationSection("gui");
         ConfigurationSection display = stateConfig.getConfigurationSection("display");
         weight = stateConfig.getInt("weight", 0);
@@ -55,6 +62,10 @@ public class ModelData {
         } else {
             this.displayData = new DisplayData();
         }
+        if (parentFurnitureDisplay != null) {
+            this.furnitureDisplayData.putAll(parentFurnitureDisplay);
+        }
+        this.furnitureDisplayData.putAll(parseFurnitureDisplayData(stateConfig.getConfigurationSection("display-data-furniture")));
     }
 
     /** Deep copy constructor */
@@ -64,6 +75,7 @@ public class ModelData {
         this.weight = other.weight;
         this.displayData = other.displayData;
         this.overrides = new HashMap<>(other.overrides);
+        this.furnitureDisplayData = new HashMap<>(other.furnitureDisplayData);
         this.tags.addAll(other.tags);
         this.stage = other.stage;
         this.directItem = other.directItem != null ? other.directItem.clone() : null;
@@ -104,5 +116,30 @@ public class ModelData {
 
     public DisplayData getDisplayData() {
         return displayData;
+    }
+
+    public DisplayData getDisplayData(String furnitureId) {
+        if (furnitureId != null) {
+            DisplayData furniture = furnitureDisplayData.get(furnitureId.toLowerCase());
+            if (furniture != null) {
+                return furniture;
+            }
+        }
+        return displayData;
+    }
+
+    public static Map<String, DisplayData> parseFurnitureDisplayData(ConfigurationSection section) {
+        Map<String, DisplayData> map = new HashMap<>();
+        if (section == null) {
+            return map;
+        }
+        for (String key : section.getKeys(false)) {
+            ConfigurationSection furniture = section.getConfigurationSection(key);
+            if (furniture == null) {
+                continue;
+            }
+            map.put(key.toLowerCase(), new DisplayData(furniture));
+        }
+        return map;
     }
 }

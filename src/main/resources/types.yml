@@ -239,6 +239,9 @@ bread:
   model: bread
   food: 4
   nutrition: 3
+  tag-labels:
+    freshness:
+      rotten: "#8B7355Mouldy"
 
 ###Fruits — raw (no cut step)
 fruit_1:
@@ -266,6 +269,10 @@ fruit_1:
       model: cherry
     APPLE:
       model: apple
+    MELON:
+      model: melon
+    MELON SLICE:
+      model: melon_slice
   model: strawberry
 
 ##Crops
@@ -280,18 +287,27 @@ flour:
   model: flour
   food: 1
   nutrition: 1
+  tag-labels:
+    freshness:
+      rotten: "#8B7355Musty"
 
 yeast:
   name: "#e8d4a0Yeast"
   model: yeast
   food: 1
   nutrition: 1
+  tag-labels:
+    freshness:
+      rotten: "#8B7355Mouldy"
 
 dough:
   name: "#f0e0c0{prefixes}{fillers}Dough"
   model: dough
   food: 1
   nutrition: 1
+  tag-labels:
+    freshness:
+      rotten: "#8B7355Mouldy"
 
 ##SAUCE
 sauce:

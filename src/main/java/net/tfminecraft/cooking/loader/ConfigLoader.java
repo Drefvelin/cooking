@@ -13,6 +13,7 @@ import net.tfminecraft.cooking.cache.ItemCache;
 import net.tfminecraft.cooking.cache.MixingIngredient;
 import net.tfminecraft.cooking.heat.HeatLoader;
 import net.tfminecraft.cooking.nutrition.NutritionConfig;
+import net.tfminecraft.cooking.nutrition.NutritionLog;
 
 public class ConfigLoader {
     public void loadConfig(File configFile) {
@@ -22,6 +23,10 @@ public class ConfigLoader {
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
+        ItemCache.liquidModels.clear();
+        ItemCache.colourMap.clear();
+        CategoryDictionary.dictionary.clear();
+        CategoryDictionary.sauceDict.clear();
         FurnitureCache.fryingPan = config.getString("frying_pan", "none");
         FurnitureCache.saucePan = config.getString("saucepan", "none");
         FurnitureCache.plate = config.getString("plate", "none");
@@ -137,5 +142,9 @@ public class ConfigLoader {
 
         HeatLoader.load(config);
         NutritionConfig.load(config);
+        NutritionLog.configure(
+                config.getBoolean("logging", true),
+                config.getBoolean("wipe-log", true),
+                configFile.getParentFile());
 	}
 }

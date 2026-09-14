@@ -64,19 +64,46 @@ public final class SausageMakerHandler implements Listener {
             return;
         }
 
-        if (isOnCooldown(furniture)) {
+        Player player = event.getPlayer();
+        ItemStack hand = player.getInventory().getItemInMainHand();
+        boolean emptyHand = hand == null || hand.getType() == Material.AIR;
+        FoodItem heldFood = emptyHand ? null : FoodItem.fromItem(hand);
+
+        if (SausageMeatRules.isMeat(heldFood)) {
             event.setCancelled(true);
+            if (!tryFillFirstEmpty(furniture, player, hand)) {
+                player.sendMessage("§cThe sausage maker is full.");
+            }
             return;
         }
 
-        Player player = event.getPlayer();
+        if (!emptyHand && heldFood != null) {
+            event.setCancelled(true);
+            player.sendMessage("§cOnly meat can go in the sausage maker.");
+            return;
+        }
+
+        if (emptyHand) {
+            if (tryTakeLast(furniture, player)) {
+                event.setCancelled(true);
+            }
+            return;
+        }
+
         if (!hasAllMeats(furniture)) {
+            event.setCancelled(true);
             player.sendMessage("§cNeed 3 meats.");
             return;
         }
 
         if (!hasPaper(player)) {
+            event.setCancelled(true);
             player.sendMessage("§cHold paper to casing.");
+            return;
+        }
+
+        if (isOnCooldown(furniture)) {
+            event.setCancelled(true);
             return;
         }
 
@@ -129,6 +156,77 @@ public final class SausageMakerHandler implements Listener {
         consumePaper(player);
         markDirty(furniture);
         furniture.getLoc().getWorld().playSound(furniture.getLoc(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
+    }
+
+    private static boolean tryFillFirstEmpty(Furniture furniture, Player player, ItemStack hand) {
+        String slotId = findFirstEmpty(furniture);
+        if (slotId == null) {
+            return false;
+        }
+
+        ItemStack toPlace = hand.clone();
+        toPlace.setAmount(1);
+        PlacedSlot slot = furniture.getOrCreatePlacedSlot(slotId);
+        slot.setCurrentItem(toPlace);
+        slot.forceModel(toPlace);
+        hand.setAmount(hand.getAmount() - 1);
+        player.swingMainHand();
+        furniture.getLoc().getWorld().playSound(furniture.getLoc(), Sound.ENTITY_ITEM_PICKUP, 0.8f, 1f);
+        markDirty(furniture);
+        return true;
+    }
+
+    private static boolean tryTakeLast(Furniture furniture, Player player) {
+        String slotId = findLastOccupied(furniture);
+        if (slotId == null) {
+            return false;
+        }
+
+        PlacedSlot slot = furniture.getActiveSlot(slotId).orElse(null);
+        if (slot == null) {
+            return false;
+        }
+        ItemStack item = slot.getCurrentItem();
+        if (item == null || item.getType().isAir()) {
+            return false;
+        }
+
+        ItemStack leftover = InventoryAdder.addItem(player, item.clone());
+        if (leftover != null) {
+            furniture.getLoc().getWorld().dropItemNaturally(furniture.getLoc(), leftover);
+        }
+        slot.clearModel();
+        furniture.removeActiveSlot(slotId);
+        player.swingMainHand();
+        furniture.getLoc().getWorld().playSound(furniture.getLoc(), Sound.ENTITY_ITEM_PICKUP, 0.8f, 1.2f);
+        markDirty(furniture);
+        return true;
+    }
+
+    private static String findFirstEmpty(Furniture furniture) {
+        for (String slotId : MEAT_SLOTS) {
+            if (!isOccupied(furniture, slotId)) {
+                return slotId;
+            }
+        }
+        return null;
+    }
+
+    private static String findLastOccupied(Furniture furniture) {
+        for (int i = MEAT_SLOTS.length - 1; i >= 0; i--) {
+            if (isOccupied(furniture, MEAT_SLOTS[i])) {
+                return MEAT_SLOTS[i];
+            }
+        }
+        return null;
+    }
+
+    private static boolean isOccupied(Furniture furniture, String slotId) {
+        if (!furniture.hasActiveSlot(slotId)) {
+            return false;
+        }
+        ItemStack stack = furniture.getActiveSlot(slotId).map(PlacedSlot::getCurrentItem).orElse(null);
+        return SausageMeatRules.isMeat(stack == null ? null : FoodItem.fromItem(stack));
     }
 
     private static List<FoodItem> collectMeats(Furniture furniture) {

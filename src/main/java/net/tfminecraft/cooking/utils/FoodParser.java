@@ -148,7 +148,11 @@ public class FoodParser {
 
                 case "tags":
                     if (!value.isEmpty()) {
-                        for (String t : value.split(":")) {
+                        for (String rawTag : value.split("[,:]")) {
+                            String t = rawTag.trim();
+                            if (t.isEmpty()) {
+                                continue;
+                            }
                             if (!t.contains(".")) {
                                 item.addTagTrack(t);
                                 continue;

@@ -36,6 +36,13 @@ items:
       generate: false
       model_path: item/intermediate/flour
 
+  flour_rotten:
+    display_name: "Flour Musty"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/flour_rotten
+
   yeast:
     display_name: "Yeast"
     resource:
@@ -43,12 +50,26 @@ items:
       generate: false
       model_path: item/intermediate/yeast
 
+  yeast_rotten:
+    display_name: "Yeast Rotten"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/yeast_rotten
+
   dough:
     display_name: "Dough"
     resource:
       material: PAPER
       generate: false
       model_path: item/intermediate/dough
+
+  dough_rotten:
+    display_name: "Dough Rotten"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/intermediate/dough_rotten
 
   cheese:
     display_name: "Cheese"

@@ -18,7 +18,7 @@ import net.tfminecraft.cooking.carve.CarvableRoastUtils;
 import net.tfminecraft.cooking.carve.CarveHandler;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.utils.ItemUpdater;
-import net.tfminecraft.events.FurnitureBreakEvent;
+import net.tfminecraft.events.FurniturePunchEvent;
 import net.tfminecraft.events.FurnitureSlotItemAddEvent;
 import net.tfminecraft.furniture.Furniture;
 import net.tfminecraft.furniture.PlacedSlot;
@@ -67,12 +67,9 @@ public final class MeatHookHandler implements Listener {
     }
 
     @EventHandler
-    public void onBreak(FurnitureBreakEvent event) {
+    public void onPunch(FurniturePunchEvent event) {
         Furniture furniture = event.getFurniture();
         if (!FurnitureCache.isMeatHook(furniture)) {
-            return;
-        }
-        if (!event.hasPlayer()) {
             return;
         }
         var contentSlot = furniture.getActiveSlot(CONTENT_SLOT);
@@ -138,7 +135,7 @@ public final class MeatHookHandler implements Listener {
                 return;
             }
             CarvableRoastUtils.readCarveState(foodItem, stack);
-            slot.applyDisplayData(CarvableRoastUtils.getStageModelData(foodItem).getDisplayData());
+            slot.applyDisplayData(CarvableRoastUtils.getStageModelData(foodItem).getDisplayData(furniture.getId()));
         });
     }
 }

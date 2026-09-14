@@ -97,7 +97,7 @@ public class CookingReference {
         f.getActiveSlot(slot).get().forceModel(stack);
         FoodItem updated = FoodItem.fromItem(stack);
         if(updated != null) {
-            DisplayData display = updated.getModelData().getDisplayData();
+            DisplayData display = updated.getModelData().getDisplayData(f.getId());
             f.getActiveSlot(slot).get().applyDisplayData(display);
         }
     }
@@ -198,7 +198,7 @@ public class CookingReference {
             return;
         }
         fi.getCookData().start(method);
-        e.setDisplayData(fi.getModelData().getDisplayData());
+        e.setDisplayData(fi.getModelData().getDisplayData(f.getId()));
         slots.put(e.getSlot().getId(), fi);
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_LAVA_EXTINGUISH, 1f, 1f); //TODO SOUND
     }

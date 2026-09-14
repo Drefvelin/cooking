@@ -44,4 +44,10 @@ public class Keys {
 
     public static final NamespacedKey INGREDIENTS =
             new NamespacedKey(Cooking.plugin, "food_ingredients");
+
+    public static final NamespacedKey COOK_METHOD =
+            new NamespacedKey(Cooking.plugin, "cook_method");
+
+    public static final NamespacedKey COOK_TIME =
+            new NamespacedKey(Cooking.plugin, "cook_time");
 }

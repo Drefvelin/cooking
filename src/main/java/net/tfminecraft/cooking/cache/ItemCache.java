@@ -118,8 +118,15 @@ public class ItemCache {
     }
 
     public static boolean isCupOfMilk(ItemStack i) {
+        if (i == null) {
+            return false;
+        }
         FoodItem food = FoodItem.fromItem(i);
-        return food != null && "cup_of_milk".equalsIgnoreCase(food.getId());
+        if (food != null && "cup_of_milk".equalsIgnoreCase(food.getId())) {
+            return true;
+        }
+        return cupOfMilk != null
+                && TLibs.getItemAPI().getChecker().checkItemWithPath(i, cupOfMilk);
     }
 
     public static boolean isMilkBucket(ItemStack stack) {

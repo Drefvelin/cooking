@@ -170,9 +170,9 @@ public class CraftingStation {
         if(fi != null) {
             if (fi.getCarveSequenceId() != null) {
                 CarvableRoastUtils.readCarveState(fi, item);
-                e.setDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData());
+                e.setDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData(e.getFurniture().getId()));
             } else {
-                e.setDisplayData(fi.getModelData().getDisplayData());
+                e.setDisplayData(fi.getModelData().getDisplayData(e.getFurniture().getId()));
             }
         }
     }
@@ -259,7 +259,7 @@ public class CraftingStation {
             PlacedSlot slot = f.getOrCreatePlacedSlot(def.getId());
             slot.forceModel(output);
             onBoard = true;
-            slot.applyDisplayData(item.getModelData().getDisplayData());
+            slot.applyDisplayData(item.getModelData().getDisplayData(f.getId()));
 
             // Attempt to match new currentRecipe based on the output item
             CraftingRecipe newRecipe = null;

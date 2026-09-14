@@ -62,6 +62,11 @@ public class CraftingManager implements Listener {
         return f.hasActiveSlot("content");
     }
 
+    public void rebuildStations() {
+        stations.clear();
+        resumeLoadedStations();
+    }
+
     public void resumeLoadedStations() {
         for (Furniture furniture : InteractibleFurniture.getInstance().getFurnitureManager().getPlacedFurniture().values()) {
             resumeStation(furniture);
@@ -132,8 +137,12 @@ public class CraftingManager implements Listener {
 
     @EventHandler
     public void furnitureTakeInteract(FurnitureSlotItemTakeEvent e) {
-
         Furniture f = e.getFurniture();
+        if (FurnitureCache.isFirePit(f) && e.getSlot().getId().equals("content") && isOnFirePitCooldown(f)) {
+            e.setCancelled(true);
+            return;
+        }
+
         CraftingStation station = getOrCreateStation(f);
         if (station != null) {
             station.removeItem(e);
@@ -154,7 +163,7 @@ public class CraftingManager implements Listener {
                     CarvableRoastUtils.readCarveState(fi, stack);
                     ItemDisplay display = getActiveSlotDisplay(f, "content");
                     applyFirePitTransformOffset(display);
-                    slot.applyDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData());
+                    slot.applyDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData(f.getId()));
                 });
             });
         }
@@ -204,24 +213,20 @@ public class CraftingManager implements Listener {
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
         boolean emptyHand = hand == null || hand.getType().equals(Material.AIR);
 
+        if (hitSlot != null && hitSlot.getId().equals("content") && isOnFirePitCooldown(f)) {
+            e.setCancelled(true);
+            return;
+        }
+
         if (hitSlot != null && hitSlot.getId().equals("turner")) {
+            e.setCancelled(true);
             if (emptyHand && hasMeatOnSpit(f)) {
-                e.setCancelled(true);
                 if (isOnFirePitCooldown(f)) return;
                 playFirePitTurnAnimation(f);
                 advanceFirePitCooking(f);
                 startFirePitCooldown(f, 40 * 50L);
                 f.getLoc().getWorld().playSound(f.getLoc(), Sound.BLOCK_FIRE_AMBIENT, 1f, 1f);
-            } else if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
-                f.getActiveSlot("turner").ifPresent(PlacedSlot::clearModel);
-            } else if (!emptyHand) {
-                e.setCancelled(true);
             }
-            return;
-        }
-
-        if (emptyHand && !hasMeatOnSpit(f) && f.hasActiveSlot("turner")) {
-            f.getActiveSlot("turner").ifPresent(PlacedSlot::clearModel);
         }
     }
 
@@ -240,7 +245,7 @@ public class CraftingManager implements Listener {
             if (updated == null) return;
             CarvableRoastUtils.writeCarveState(updated, fi);
             slot.setCurrentItem(updated);
-            slot.applyDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData());
+            slot.applyDisplayData(CarvableRoastUtils.getStageModelData(fi).getDisplayData(f.getId()));
         });
     }
 
