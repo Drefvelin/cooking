@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.tfminecraft.cooking.cache.ItemCache;
 import net.tfminecraft.cooking.enums.Method;
+import net.tfminecraft.cooking.heat.HeatSources;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.quality.CompositionContext;
@@ -37,6 +38,12 @@ public class FryingReference extends CookingReference {
     @Override
     public void tick() {
         super.tick();
+        if (!HeatSources.stationHasHeat(f)) {
+            if (secondaries.containsKey("butter")) {
+                clearButterSecondary();
+            }
+            return;
+        }
         handleCookingSlots();
         handleParticlesAndDanger();
     }
@@ -85,6 +92,10 @@ public class FryingReference extends CookingReference {
         }
         ItemStack item = p.getInventory().getItemInMainHand();
         if (!ItemCache.isButter(item) || secondaries.containsKey("butter")) {
+            return;
+        }
+        if (!HeatSources.stationHasHeat(f)) {
+            p.sendMessage("§cThe pan needs heat from an oven below.");
             return;
         }
         if (f.getType() == null || f.getType().getSlot("butter") == null) {

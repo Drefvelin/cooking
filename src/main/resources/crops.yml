@@ -1,0 +1,206 @@
+# Crop harvest quality + growth gate (Cooking). Spec: docs/crops.md
+# Produce stars roll from province fertility × crop affection, then pickup permissions.
+# Growth ticks use the same affection: chance = (fertility/100) ^ affection.
+# Seeds stay untagged IA/vanilla. CustomCrops one-seed drops stay yield/balance.
+
+growth-gate:
+  enabled: true
+
+harvest-quality:
+  rich:
+    1: 8
+    2: 16
+    3: 28
+    4: 28
+    5: 20
+  poor:
+    1: 40
+    2: 28
+    3: 18
+    4: 10
+    5: 4
+
+crops:
+  wheat:
+    source: vanilla
+    block: WHEAT
+    seed: v.wheat_seeds
+    affection: 0.90
+  potatoes:
+    source: vanilla
+    block: POTATOES
+    seed: v.potato
+    affection: 0.30
+  carrots:
+    source: vanilla
+    block: CARROTS
+    seed: v.carrot
+    affection: 0.55
+  beetroots:
+    source: vanilla
+    block: BEETROOTS
+    seed: v.beetroot_seeds
+    affection: 0.80
+  nether_wart:
+    source: vanilla
+    block: NETHER_WART
+    seed: v.nether_wart
+    affection: 0.15
+
+  melon_stem:
+    source: vanilla
+    block: MELON_STEM
+    affection: 0.70
+  attached_melon_stem:
+    source: vanilla
+    block: ATTACHED_MELON_STEM
+    affection: 0.70
+  pumpkin_stem:
+    source: vanilla
+    block: PUMPKIN_STEM
+    affection: 0.65
+  attached_pumpkin_stem:
+    source: vanilla
+    block: ATTACHED_PUMPKIN_STEM
+    affection: 0.65
+  cocoa:
+    source: vanilla
+    block: COCOA
+    affection: 0.75
+  sweet_berry_bush:
+    source: vanilla
+    block: SWEET_BERRY_BUSH
+    affection: 0.25
+  torchflower:
+    source: vanilla
+    block: TORCHFLOWER
+    affection: 0.80
+  pitcher_crop:
+    source: vanilla
+    block: PITCHER_CROP
+    affection: 0.75
+  sugar_cane:
+    source: vanilla
+    block: SUGAR_CANE
+    affection: 0.45
+
+  rice:
+    source: customcrops
+    seed: ia.playbox_custom_crops:rice_seeds
+    affection: 0.85
+  corn:
+    source: customcrops
+    seed: ia.playbox_custom_crops:corn_seeds
+    affection: 0.80
+  lettuce:
+    source: customcrops
+    seed: ia.playbox_custom_crops:lettuce_seeds
+    affection: 0.70
+  tomato:
+    source: customcrops
+    seed: ia.playbox_custom_crops:tomato_seeds
+    affection: 0.75
+  cucumber:
+    source: customcrops
+    seed: ia.playbox_custom_crops:cucumber_seeds
+    affection: 0.65
+  onion:
+    source: customcrops
+    seed: ia.playbox_custom_crops:onion_seeds
+    affection: 0.35
+  garlic:
+    source: customcrops
+    seed: ia.playbox_custom_crops:garlic_seeds
+    affection: 0.40
+  rhubarb:
+    source: customcrops
+    seed: ia.playbox_custom_crops:rhubarb_seeds
+    affection: 0.50
+  mustard:
+    source: customcrops
+    seed: ia.playbox_custom_crops:mustard_seeds
+    affection: 0.55
+  basil:
+    source: customcrops
+    seed: ia.playbox_custom_crops:basil_seeds
+    affection: 0.50
+  spiceleaf:
+    source: customcrops
+    seed: ia.playbox_custom_crops:spiceleaf_seeds
+    affection: 0.55
+  yeast:
+    source: customcrops
+    seed: ia.playbox_custom_crops:yeast_seeds
+    affection: 0.25
+  apple:
+    source: customcrops
+    seed: ia.playbox_custom_crops:apple_seeds
+    affection: 0.60
+  cherry:
+    source: customcrops
+    seed: ia.playbox_custom_crops:cherry_seeds
+    affection: 0.60
+  peach:
+    source: customcrops
+    seed: ia.playbox_custom_crops:peach_seeds
+    affection: 0.60
+  plum:
+    source: customcrops
+    seed: ia.playbox_custom_crops:plum_seeds
+    affection: 0.60
+  grape:
+    source: customcrops
+    seed: ia.playbox_custom_crops:grape_seeds
+    affection: 0.55
+  strawberry:
+    source: customcrops
+    seed: ia.playbox_custom_crops:strawberry_seeds
+    affection: 0.65
+  orange:
+    source: customcrops
+    seed: ia.playbox_custom_crops:orange_seeds
+    affection: 0.55
+  lemon:
+    source: customcrops
+    seed: ia.playbox_custom_crops:lemon_seeds
+    affection: 0.55
+  lime:
+    source: customcrops
+    seed: ia.playbox_custom_crops:lime_seeds
+    affection: 0.55
+  banana:
+    source: customcrops
+    seed: ia.playbox_custom_crops:banana_seeds
+    affection: 0.40
+  pineapple:
+    source: customcrops
+    seed: ia.playbox_custom_crops:pineapple_seeds
+    affection: 0.45
+  cactusfruit:
+    source: customcrops
+    seed: ia.playbox_custom_crops:cactusfruit_seeds
+    affection: 0.12
+  pistachio:
+    source: customcrops
+    seed: ia.playbox_custom_crops:pistachio_seeds
+    affection: 0.35
+  olive:
+    source: customcrops
+    seed: ia.playbox_custom_crops:olive_seeds
+    affection: 0.30
+  blackpepper:
+    source: customcrops
+    seed: ia.playbox_custom_crops:blackpepper_seeds
+    affection: 0.70
+  vanilla:
+    source: customcrops
+    seed: ia.playbox_custom_crops:vanilla_seeds
+    affection: 0.75
+  cinnamon:
+    source: customcrops
+    seed: ia.playbox_custom_crops:cinnamon_seeds
+    affection: 0.65
+  nutmeg:
+    source: customcrops
+    seed: ia.playbox_custom_crops:nut_seeds
+    affection: 0.70

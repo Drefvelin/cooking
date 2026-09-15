@@ -32,7 +32,7 @@ public final class MilkBucketSnapshot {
         if (food == null) {
             return 0;
         }
-        TagTrack track = food.getTagTrack("dairy_freshness");
+        TagTrack track = food.getTagTrack("freshness");
         return track == null ? 0 : Math.max(0, track.getValue());
     }
 

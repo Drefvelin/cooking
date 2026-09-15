@@ -21,6 +21,7 @@ import net.tfminecraft.cooking.cache.ItemCache;
 import net.tfminecraft.cooking.cup.BucketItems;
 import net.tfminecraft.cooking.enums.Method;
 import net.tfminecraft.cooking.enums.Tag;
+import net.tfminecraft.cooking.heat.HeatSources;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.item.tag.TagTrack;
@@ -54,25 +55,32 @@ public class PotReference extends CookingReference {
     @Override
     public void tick() {
         super.tick();
-        // Heat water over time
+        boolean heated = HeatSources.stationHasHeat(f);
         if (secondaries.containsKey("liquid")) {
-            if (temperature < MAX_TEMPERATURE) {
-                temperature++;
+            if (heated) {
+                if (temperature < MAX_TEMPERATURE) {
+                    temperature++;
+                }
+            } else if (temperature > 0) {
+                temperature--;
             }
         }
 
-        handleCookingSlots();
+        if (heated) {
+            handleCookingSlots();
+        }
 
-        // Particle task
-        new BukkitRunnable() {
-            int i = 0;
-            @Override
-            public void run() {
-                handleParticles();
-                i++;
-                if (i == 10) this.cancel();
-            }
-        }.runTaskTimer(Cooking.plugin, 0L, 2L);
+        if (isBoiling()) {
+            new BukkitRunnable() {
+                int i = 0;
+                @Override
+                public void run() {
+                    handleParticles();
+                    i++;
+                    if (i == 10) this.cancel();
+                }
+            }.runTaskTimer(Cooking.plugin, 0L, 2L);
+        }
     }
 
     public FoodItem getMain() {
@@ -244,11 +252,14 @@ public class PotReference extends CookingReference {
 
         String cat = fi.getCategory().toLowerCase();
 
-        if (StationAddonRules.isSeasoningCategory(cat)) {
-            return !hasSlot(cat);
-        }
-
-        if (StationAddonRules.isAddonCategory(cat)) {
+        if (StationAddonRules.isSeasoningCategory(cat) || StationAddonRules.isAddonCategory(cat)) {
+            if (!isSoup()) {
+                p.sendMessage("§cMash the pot into soup first.");
+                return false;
+            }
+            if (StationAddonRules.isSeasoningCategory(cat)) {
+                return !hasSlot(cat);
+            }
             return StationAddonRules.canAcceptAddon(slots, fi, p);
         }
 
@@ -345,6 +356,10 @@ public class PotReference extends CookingReference {
         if(canAdd(p, item)) {
             for(String slot : f.getType().getSlots().keySet()) {
                 if(add(slot, item)) {
+                    FoodItem added = slots.get(slot);
+                    if (added != null && isHiddenSoupExtra(added.getCategory())) {
+                        hideSlot(slot);
+                    }
                     updateModel();
                     p.swingMainHand();
                     FoodItem main = getMain();
@@ -361,6 +376,22 @@ public class PotReference extends CookingReference {
         }
     }
     
+    private static boolean isHiddenSoupExtra(String category) {
+        return StationAddonRules.isSeasoningCategory(category)
+                || StationAddonRules.isAddonCategory(category);
+    }
+
+    private void hideSlot(String slotId) {
+        if (!f.hasActiveSlot(slotId)) {
+            return;
+        }
+        DisplayData hidden = new DisplayData();
+        hidden.setxScale(0);
+        hidden.setyScale(0);
+        hidden.setzScale(0);
+        f.getActiveSlot(slotId).get().applyDisplayData(hidden);
+    }
+
     public void updateModel() {
         if(!isSoup()) return;
         String path = getLiquidItemPath();

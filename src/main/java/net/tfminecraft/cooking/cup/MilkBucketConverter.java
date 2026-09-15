@@ -30,6 +30,10 @@ public final class MilkBucketConverter implements Listener {
     }
 
     public static ItemStack convert(Player player, ItemStack stack) {
+        return convert(player, stack, null);
+    }
+
+    public static ItemStack convert(Player player, ItemStack stack, Integer qualityOverride) {
         if (stack == null || stack.getType() != Material.MILK_BUCKET) {
             return stack;
         }
@@ -47,7 +51,9 @@ public final class MilkBucketConverter implements Listener {
             return stack;
         }
 
-        int quality = OriginQualityResolver.resolve(player, parsed.template);
+        int quality = qualityOverride != null
+                ? net.tfminecraft.cooking.utils.QualityUtils.clamp(qualityOverride)
+                : OriginQualityResolver.resolve(player, parsed.template);
         ItemStack converted = ItemBuilder.buildSingleWithQuality(parsed.template, stack, quality);
         converted.setAmount(stack.getAmount());
         return converted;

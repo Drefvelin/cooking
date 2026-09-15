@@ -2552,9 +2552,9 @@ poultry_roast:
     meat_hook:
       rotation:
         x: 180
+        y: 180
       position:
-        y: -0.25
-        z: 0.15
+        z: 0.55
   raw_6:
     weight: 16
     stage: 6
@@ -3209,8 +3209,8 @@ sausage_chain:
   display-data-furniture:
     meat_hook:
       position:
-        y: -0.25
-        z: 0.15
+        y: -0.35
+        z: -0.45
   raw_5:
     weight: 15
     stage: 5

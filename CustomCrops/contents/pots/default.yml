@@ -1,0 +1,89 @@
+# ID
+default:
+  # Disables CustomCrops watering mechanics if true
+  vanilla-farmland: true
+  # Maximum water storage capacity
+  max-water-storage: 7
+  # The most basic settings
+  base:
+    # Pot models
+    dry: minecraft:farmland[moisture=0]
+    wet: minecraft:farmland[moisture=7]
+  # Does the pot absorb raindrop
+  absorb-rainwater: true
+  # Does nearby water make the pot wet
+  absorb-nearby-water: true
+  # Set unique looks for pots with different fertilizer statuses
+  fertilized-pots:
+    enable: false
+    quality:
+      dry: playbox_custom_crops:pot
+      wet: playbox_custom_crops:watered_pot
+    yield-increase:
+      dry: playbox_custom_crops:pot
+      wet: playbox_custom_crops:watered_pot
+    variation:
+      dry: playbox_custom_crops:pot
+      wet: playbox_custom_crops:watered_pot
+    soil-retain:
+      dry: playbox_custom_crops:pot
+      wet: playbox_custom_crops:watered_pot
+    speed-grow:
+      dry: playbox_custom_crops:pot
+      wet: playbox_custom_crops:watered_pot
+  # Methods to fill the watering can
+  fill-method:
+    method_1:
+      item: POTION
+      return: GLASS_BOTTLE
+      return-amount: 1
+      amount: 1
+      actions:
+        sound_action:
+          type: sound
+          value:
+            source: player
+            key: minecraft:item.bottle.empty
+            volume: 1
+            pitch: 1
+  # Water bar image settings
+  water-bar:
+    left: '뀂'
+    full: '뀁뀃'
+    empty: '뀁뀄'
+    right: '뀁뀅'
+  # Event settings
+  events:
+    add_water:
+      particle_action:
+        type: particle
+        value:
+          particle: WATER_SPLASH
+          x: 0.5
+          y: 1.3
+          z: 0.5
+          count: 5
+          offset-x: 0.3
+          offset-z: 0.3
+    full:
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bundle.insert"
+          source: 'player'
+          volume: 1
+          pitch: 1
+      actionbar_action:
+        type: actionbar
+        value: '<red><bold>[X] Pot is full'
+    interact:
+      water_hologram:
+        type: hologram
+        value:
+          duration: 10
+          text: '<font:customcrops:default>{water_bar}</font>'
+          apply-correction: true
+          x: 0.5
+          y: 0.0
+          z: 0.5
+          

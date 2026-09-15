@@ -1,9 +1,11 @@
 package net.tfminecraft.cooking.utils;
 
 import net.tfminecraft.cooking.item.FoodItem;
+import net.tfminecraft.cooking.item.tag.AgeScale;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.FoodLoader;
 import net.tfminecraft.cooking.loader.TrackLoader;
+import net.tfminecraft.cooking.utils.WarmthUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -162,11 +164,16 @@ public class FoodParser {
 
                             String trackId = kv2[0];
                             int val = Integer.parseInt(kv2[1]);
+                            int migratedValue = AgeScale.migrateTrackValue(trackId, val);
+                            String migratedId = AgeScale.migrateTrackId(trackId);
+                            if ("warmth".equalsIgnoreCase(migratedId) && migratedValue >= WarmthUtils.ROOM_TEMP_AGE) {
+                                continue;
+                            }
 
-                            TagTrack baseTrack = TrackLoader.getByString(trackId);
+                            TagTrack baseTrack = TrackLoader.getByString(migratedId);
                             if (baseTrack != null) {
                                 TagTrack newt = new TagTrack(baseTrack);
-                                newt.setValue(val);
+                                newt.setValue(migratedValue);
                                 item.addOrModifyTrack(newt);
                             }
                         }

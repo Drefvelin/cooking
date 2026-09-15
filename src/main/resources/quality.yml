@@ -2,6 +2,13 @@ pickup:
   min: 1
   max: 5
 
+nutrition-from-quality:
+  1: 0.28
+  2: 0.50
+  3: 0.75
+  4: 1.05
+  5: 1.70
+
 # When composition.yml legacy-mode is false, roles in composition.yml are authoritative.
 # This exclude list applies only to legacy-mode resolution.
 composition:

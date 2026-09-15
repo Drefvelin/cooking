@@ -184,7 +184,7 @@ public final class MillingStoneHandler implements Listener {
             return null;
         }
         FoodItem wheat = new FoodItem(template);
-        wheat.setCategory("crop");
+        wheat.setCategory("grain");
         wheat.setOrigin("Wheat");
         return ItemBuilder.buildSingleWithQuality(wheat, quality);
     }

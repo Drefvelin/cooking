@@ -2,7 +2,7 @@ flour:
   furniture: milling_stone
   input-count: 8
   input-food: wheat
-  input: c.crop(type=wheat)
+  input: c.grain(type=wheat)
   vanilla-fallback: v.wheat
   output-food: flour
   revolutions: 4

@@ -3,6 +3,7 @@ package net.tfminecraft.cooking.utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import net.tfminecraft.cooking.crops.CropsConfig;
 import net.tfminecraft.cooking.farming.HoeQualityBonus;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.loader.ConversionLoader;
@@ -33,7 +34,9 @@ public final class IngredientConverter {
             return stack;
         }
 
-        int quality = OriginQualityResolver.resolve(player, parsed.template);
+        int quality = CropsConfig.isFarmFood(result)
+                ? 1
+                : OriginQualityResolver.resolve(player, parsed.template);
         quality = HoeQualityBonus.apply(quality, hoeQualityBonusPercent);
         ItemStack converted = ItemBuilder.buildSingleWithQuality(parsed.template, stack, quality);
         converted.setAmount(stack.getAmount());

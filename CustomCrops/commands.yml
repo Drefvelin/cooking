@@ -1,0 +1,116 @@
+#
+# Don't change this
+#
+config-version: "43"
+
+#
+# For safety reasons, editing this file requires a restart to apply
+#
+
+# A command to reload the plugin
+# Usage: [COMMAND]
+reload:
+  enable: true
+  permission: "customcrops.command.reload"
+  usage:
+  - "/customcrops reload"
+  - "/ccrops reload"
+
+# A command to get the season
+# Usage: [COMMAND] [world]
+get_season:
+  enable: true
+  permission: "customcrops.command.get_season"
+  usage:
+  - "/customcrops season get"
+  - "/ccrops season get"
+
+# A command to set the season
+# Usage: [COMMAND] [world] [season]
+set_season:
+  enable: true
+  permission: "customcrops.command.set_season"
+  usage:
+  - "/customcrops season set"
+  - "/ccrops season set"
+
+# A command to get date
+# Usage: [COMMAND] [world]
+get_date:
+  enable: true
+  permission: "customcrops.command.get_date"
+  usage:
+  - "/customcrops date get"
+  - "/ccrops date get"
+
+# A command to set date
+# Usage: [COMMAND] [world] [date]
+set_date:
+  enable: true
+  permission: "customcrops.command.set_date"
+  usage:
+  - "/customcrops date set"
+  - "/ccrops date set"
+
+# A command to debug the custom data
+# Usage: [COMMAND] <--this>
+debug_data:
+  enable: true
+  permission: "customcrops.command.debug"
+  usage:
+  - "/customcrops debug data"
+  - "/ccrops debug data"
+
+# A command to debug the loaded chunks
+# Usage: [COMMAND]
+debug_worlds:
+  enable: true
+  permission: "customcrops.command.debug"
+  usage:
+  - "/customcrops debug worlds"
+  - "/ccrops debug worlds"
+
+# A command to toggle the insight mode
+# Usage: [COMMAND]
+debug_insight:
+  enable: true
+  permission: "customcrops.command.debug"
+  usage:
+  - "/customcrops debug insight"
+  - "/ccrops debug insight"
+
+# A command to force the blocks ticking
+# Usage: [COMMAND] [world] [type] [mode]
+force_tick:
+  enable: true
+  permission: "customcrops.command.force_tick"
+  usage:
+  - "/customcrops force-tick"
+  - "/ccrops force-tick"
+
+# A command to restore the blocks by CustomCrops data in one chunk
+# Usage: [COMMAND]
+unsafe_restore:
+  enable: true
+  permission: "customcrops.command.unsafe.restore"
+  usage:
+  - "/customcrops unsafe restore"
+  - "/ccrops unsafe restore"
+
+# A command to delete the CustomCrops data in one chunk
+# Usage: [COMMAND]
+unsafe_delete:
+  enable: true
+  permission: "customcrops.command.unsafe.delete"
+  usage:
+  - "/customcrops unsafe delete"
+  - "/ccrops unsafe delete"
+
+# A command to fix the CustomCrops data in one section(16x16x16)
+# Usage: [COMMAND]
+unsafe_fix:
+  enable: true
+  permission: "customcrops.command.unsafe.fix"
+  usage:
+  - "/customcrops unsafe fix"
+  - "/ccrops unsafe fix"

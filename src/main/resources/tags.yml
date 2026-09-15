@@ -18,40 +18,6 @@ freshness:
     nutrition-mult: 0.05
     food-mult: 0.6
     quality-reduce: 0.75
-dairy_freshness:
-  ageable: true
-  fresh:
-    name: "#72ed9fFresh"
-    value: 0
-    nutrition-mult: 1.5
-  stale:
-    name: "#c3db81Sour"
-    value: 400
-    nutrition-mult: 0.8
-    quality-reduce: 0.25
-  rotten:
-    name: "#0a6935Rotten"
-    value: 800
-    nutrition-mult: 0.05
-    food-mult: 0.6
-    quality-reduce: 0.75
-butter_freshness:
-  ageable: true
-  fresh:
-    name: "#72ed9fFresh"
-    value: 0
-    nutrition-mult: 1.5
-  stale:
-    name: "#c3db81Rancid"
-    value: 1600
-    nutrition-mult: 0.8
-    quality-reduce: 0.25
-  rotten:
-    name: "#0a6935Rotten"
-    value: 3200
-    nutrition-mult: 0.05
-    food-mult: 0.6
-    quality-reduce: 0.75
 butter_salted:
   ageable: false
   plain:
@@ -75,16 +41,13 @@ warmth:
   hot:
     name: "#d95f4aHot"
     value: 0
-    nutrition-mult: 1.5
-    food-mult: 1.5
+    nutrition-mult: 1.55
+    food-mult: 1.25
   warm:
     name: "#dea254Warm"
     value: 10
-    nutrition-mult: 1.2
-    food-mult: 1.5
-  cold:
-    name: "#2765a3Cold"
-    value: 20
+    nutrition-mult: 1.30
+    food-mult: 1.20
 processed:
   processed:
     name: "#d4d656Processed"
@@ -98,21 +61,22 @@ cooked:
     name: "#de7864Raw"
     value: 0
     nutrition-mult: 0.5
+    food-mult: 0.40
   cooked:
     name: "#ba5b23Cooked"
     value: 1
-    nutrition-mult: 1.5
-    food-mult: 1.5
+    nutrition-mult: 1.25
+    food-mult: 1.55
   burnt:
     name: "#423b36Burnt"
     value: 2
     nutrition-mult: 0.1
-    food-mult: 0.2
+    food-mult: 0.25
   boiled:
     name: "#d69a72Boiled"
     value: 3
-    nutrition-mult: 1.5
-    food-mult: 1.5
+    nutrition-mult: 1.25
+    food-mult: 1.55
 cut:
   cut:
     name: "#a3b09dCut"
@@ -124,12 +88,13 @@ seasoning:
   seasoned:
     name: "#ba906cSeasoned"
     value: 0
-    nutrition-mult: 1.1
+    nutrition-mult: 1.20
+    food-mult: 1.22
   well_seasoned:
     name: "#b8641cWell Seasoned"
     value: 1
-    nutrition-mult: 1.2
-    food-mult: 1.1
+    nutrition-mult: 1.40
+    food-mult: 1.45
 ##SAUCES
 sauce_cooked:
   unreduced:
@@ -140,8 +105,8 @@ sauce_cooked:
   simmered:
     name: "#a3835aSimmered"
     value: 1
-    nutrition-mult: 1.5
-    food-mult: 1.5
+    nutrition-mult: 1.25
+    food-mult: 1.40
   over-reduced:
     name: "#755b39Overcooked"
     value: 2
@@ -211,11 +176,12 @@ aromatic:
   aromatic:
     name: "#8d6e63Aromatic"
     value: 0
-    food-mult: 1.05
+    food-mult: 1.15
+    nutrition-mult: 1.15
 
 rounded:
   rounded:
     name: "#7cb342Rounded"
     value: 0
-    food-mult: 1.05
-    nutrition-mult: 1.05
+    food-mult: 1.22
+    nutrition-mult: 1.22

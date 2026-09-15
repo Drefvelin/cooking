@@ -5,6 +5,8 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.Plugins.TLibs.TLibs;
+import net.tfminecraft.cooking.item.CookingPathHandler;
 import net.tfminecraft.cooking.loader.FoodLoader;
 import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.loader.TrackLoader;
@@ -16,6 +18,23 @@ import net.tfminecraft.cooking.loader.NamingLoader;
 import net.tfminecraft.cooking.farming.FarmHarvestListener;
 import net.tfminecraft.cooking.farming.FarmTrampleListener;
 import net.tfminecraft.cooking.farming.FarmingLoader;
+import net.tfminecraft.cooking.husbandry.HusbandryBreedListener;
+import net.tfminecraft.cooking.husbandry.HusbandryCareListener;
+import net.tfminecraft.cooking.husbandry.HusbandryDamageListener;
+import net.tfminecraft.cooking.husbandry.HusbandryDeathListener;
+import net.tfminecraft.cooking.husbandry.HusbandryHarvestListener;
+import net.tfminecraft.cooking.husbandry.HusbandryInspectListener;
+import net.tfminecraft.cooking.husbandry.HusbandryLifecycleListener;
+import net.tfminecraft.cooking.husbandry.HusbandryMountListener;
+import net.tfminecraft.cooking.husbandry.HusbandryNerfListener;
+import net.tfminecraft.cooking.husbandry.HusbandryNeuterListener;
+import net.tfminecraft.cooking.husbandry.HusbandryTamingListener;
+import net.tfminecraft.cooking.crops.CropCustomCropsBridge;
+import net.tfminecraft.cooking.crops.CropGrowthListener;
+import net.tfminecraft.cooking.crops.CropsLoader;
+import net.tfminecraft.cooking.husbandry.HusbandryLoader;
+import net.tfminecraft.cooking.husbandry.HusbandryRepository;
+import net.tfminecraft.cooking.husbandry.HusbandryTickTask;
 import net.tfminecraft.cooking.loader.PermissionEffectsLoader;
 import net.tfminecraft.cooking.loader.CompositionConfigLoader;
 import net.tfminecraft.cooking.loader.QualityConfigLoader;
@@ -29,6 +48,8 @@ import net.tfminecraft.cooking.baking.BakingTrayAging;
 import net.tfminecraft.cooking.baking.BakingTrayHandler;
 import net.tfminecraft.cooking.baking.BakingTrayLoader;
 import net.tfminecraft.cooking.milling.MillingRecipeLoader;
+import net.tfminecraft.cooking.trough.TroughAging;
+import net.tfminecraft.cooking.trough.TroughHandler;
 import net.tfminecraft.cooking.churn.ButterChurnAging;
 import net.tfminecraft.cooking.churn.ButterChurnHandler;
 import net.tfminecraft.cooking.cup.DrinkConsumeListener;
@@ -72,6 +93,9 @@ public class Cooking extends JavaPlugin {
     private final CompositionConfigLoader compositionConfigLoader = new CompositionConfigLoader();
     private final PermissionEffectsLoader permissionEffectsLoader = new PermissionEffectsLoader();
     private final FarmingLoader farmingLoader = new FarmingLoader();
+    private final CropsLoader cropsLoader = new CropsLoader();
+    private final HusbandryLoader husbandryLoader = new HusbandryLoader();
+    private HusbandryRepository husbandryRepository;
 
     private final TagManager tagManager = new TagManager();
     private final CookingManager cookingManager = new CookingManager();
@@ -85,6 +109,8 @@ public class Cooking extends JavaPlugin {
     private final MillingRecipeLoader millingRecipeLoader = new MillingRecipeLoader();
     private final BakingTrayHandler bakingTrayHandler = new BakingTrayHandler();
     private final MillingStoneHandler millingStoneHandler = new MillingStoneHandler();
+    private final TroughHandler troughHandler = new TroughHandler();
+    private final TroughAging troughAging = new TroughAging();
     private final BakingTrayAging bakingTrayAging = new BakingTrayAging();
     private final OvenCavityManager ovenCavityManager = new OvenCavityManager();
     private final OvenBurnManager ovenBurnManager = new OvenBurnManager();
@@ -99,6 +125,8 @@ public class Cooking extends JavaPlugin {
         createFolders();
         createConfigs();
         loadConfigs();
+        TLibs.getItemAPI().registerPathHandler("c", CookingPathHandler.INSTANCE);
+        openHusbandryDatabase();
         registerListeners();
 
         cookingManager.start();
@@ -106,6 +134,7 @@ public class Cooking extends JavaPlugin {
             plateManager.start();
             meatHookHandler.start();
             bakingTrayAging.start();
+            troughAging.start();
             ovenCavityManager.start();
             ovenLifecycleHandler.resumeLoadedOvens();
             craftingManager.resumeLoadedStations();
@@ -115,6 +144,8 @@ public class Cooking extends JavaPlugin {
             meatHookHandler.resumeLoadedHooks();
             SaturationGuard.start();
             NutritionDrainTask.start();
+            HusbandryLifecycleListener.resumeLoadedWorlds();
+            HusbandryTickTask.start();
         });
 
         getCommand("cooking").setExecutor(commands);
@@ -128,12 +159,16 @@ public class Cooking extends JavaPlugin {
     public void onDisable() {
         SaturationGuard.stop();
         NutritionDrainTask.stop();
+        HusbandryTickTask.stop();
+        HusbandryLifecycleListener.flushLoadedForDisable();
         ovenBurnManager.stopAll();
         LiquidContainerAging.stopAll();
         ButterChurnAging.stopAll();
         if (ItemScanService.get() != null) {
             ItemScanService.get().unsubscribe(tagManager);
         }
+        closeHusbandryDatabase();
+        TLibs.getItemAPI().unregisterPathHandler("c");
     }
 
     // ----------------------------------------------------------------------
@@ -153,6 +188,8 @@ public class Cooking extends JavaPlugin {
         permissionEffectsLoader.load(new File(getDataFolder(), "permission_effects.yml"));
         conversionLoader.load(new File(getDataFolder(), "conversions.yml"));
         farmingLoader.load(new File(getDataFolder(), "farming.yml"));
+        cropsLoader.load(new File(getDataFolder(), "crops.yml"));
+        husbandryLoader.load(new File(getDataFolder(), "husbandry.yml"));
         carveSequenceLoader.load(new File(getDataFolder(), "carve-sequences.yml"));
     }
 
@@ -161,6 +198,8 @@ public class Cooking extends JavaPlugin {
         craftingManager.rebuildStations();
         NutritionDrainTask.stop();
         NutritionDrainTask.start();
+        HusbandryTickTask.stop();
+        HusbandryTickTask.start();
     }
 
     // ----------------------------------------------------------------------
@@ -176,12 +215,28 @@ public class Cooking extends JavaPlugin {
         getServer().getPluginManager().registerEvents(sausageMakerHandler, this);
         getServer().getPluginManager().registerEvents(bakingTrayHandler, this);
         getServer().getPluginManager().registerEvents(millingStoneHandler, this);
+        getServer().getPluginManager().registerEvents(troughHandler, this);
         getServer().getPluginManager().registerEvents(ovenLifecycleHandler, this);
         getServer().getPluginManager().registerEvents(ovenHandler, this);
         getServer().getPluginManager().registerEvents(new OvenCavityHandler(), this);
         getServer().getPluginManager().registerEvents(new HeatPickupGuard(), this);
         getServer().getPluginManager().registerEvents(new FarmHarvestListener(), this);
         getServer().getPluginManager().registerEvents(new FarmTrampleListener(), this);
+        getServer().getPluginManager().registerEvents(new CropGrowthListener(), this);
+        CropCustomCropsBridge customCropsBridge = new CropCustomCropsBridge();
+        getServer().getPluginManager().registerEvents(customCropsBridge, this);
+        CropCustomCropsBridge.tryRegister(this);
+        getServer().getPluginManager().registerEvents(new HusbandryLifecycleListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryCareListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryTamingListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryHarvestListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryBreedListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryNeuterListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryInspectListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryNerfListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryMountListener(), this);
+        getServer().getPluginManager().registerEvents(new HusbandryDamageListener(), this);
         getServer().getPluginManager().registerEvents(new ConversionManager(), this);
         getServer().getPluginManager().registerEvents(new RegenBlocker(), this);
         getServer().getPluginManager().registerEvents(new SaturationGuard(), this);
@@ -196,6 +251,33 @@ public class Cooking extends JavaPlugin {
 
     public OvenBurnManager getOvenBurnManager() {
         return ovenBurnManager;
+    }
+
+    public HusbandryRepository getHusbandryRepository() {
+        return husbandryRepository;
+    }
+
+    private void openHusbandryDatabase() {
+        File dbFile = new File(new File(getDataFolder(), "Data"), "husbandry.db");
+        try {
+            husbandryRepository = HusbandryRepository.open(dbFile);
+        } catch (RuntimeException ex) {
+            getLogger().severe("Failed to open husbandry SQLite database: " + ex.getMessage());
+            throw ex;
+        }
+    }
+
+    private void closeHusbandryDatabase() {
+        if (husbandryRepository == null) {
+            return;
+        }
+        try {
+            husbandryRepository.close();
+        } catch (RuntimeException ex) {
+            getLogger().warning("Failed to close husbandry SQLite database: " + ex.getMessage());
+        } finally {
+            husbandryRepository = null;
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -229,7 +311,9 @@ public class Cooking extends JavaPlugin {
                 "quality.yml",
                 "composition.yml",
                 "permission_effects.yml",
-                "farming.yml"
+                "farming.yml",
+                "crops.yml",
+                "husbandry.yml"
         };
 
         for (String s : files) {

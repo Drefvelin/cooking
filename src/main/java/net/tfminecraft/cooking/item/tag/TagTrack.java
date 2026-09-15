@@ -43,6 +43,10 @@ public class TagTrack {
         }
         this.value = value;
     }
+
+    public void forceSetValue(int value) {
+        this.value = value;
+    }
     public boolean isAgeable() { return ageable; }
 
     public TagStep getCurrentStep() {

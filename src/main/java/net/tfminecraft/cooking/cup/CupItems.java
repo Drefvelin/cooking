@@ -21,7 +21,7 @@ public final class CupItems {
     }
 
     public static ItemStack cupOfMilk(Player player, int quality, int dairyFreshnessValue) {
-        String itemString = "ingredient(type=cup_of_milk;origin=Milk;tags=dairy_freshness."
+        String itemString = "ingredient(type=cup_of_milk;origin=Milk;tags=freshness."
                 + dairyFreshnessValue + ")";
         FoodParser.Result parsed = FoodParser.parse(itemString);
         if (parsed == null || parsed.template == null) {
@@ -32,7 +32,7 @@ public final class CupItems {
 
     public static ItemStack cupOfMilk(Player player, int dairyFreshnessValue) {
         FoodParser.Result parsed = FoodParser.parse(
-                "ingredient(type=cup_of_milk;origin=Milk;tags=dairy_freshness.0)");
+                "ingredient(type=cup_of_milk;origin=Milk;tags=freshness.0)");
         if (parsed == null || parsed.template == null) {
             return null;
         }

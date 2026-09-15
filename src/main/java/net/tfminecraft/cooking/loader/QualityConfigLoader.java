@@ -2,8 +2,9 @@ package net.tfminecraft.cooking.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -31,6 +32,20 @@ public class QualityConfigLoader {
             }
         }
 
-        QualityConfig.apply(min, max, excludes);
+        QualityConfig.apply(min, max, excludes, parseNutritionFromQuality(config));
+    }
+
+    private static Map<Integer, Double> parseNutritionFromQuality(FileConfiguration config) {
+        Map<Integer, Double> parsed = new HashMap<>();
+        if (!config.isConfigurationSection("nutrition-from-quality")) {
+            return parsed;
+        }
+        for (String key : config.getConfigurationSection("nutrition-from-quality").getKeys(false)) {
+            try {
+                parsed.put(Integer.parseInt(key), config.getDouble("nutrition-from-quality." + key));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return parsed;
     }
 }

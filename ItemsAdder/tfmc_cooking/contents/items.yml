@@ -1356,13 +1356,6 @@ items:
       generate: false
       model_path: item/liquid/milk_block
 
-  grain:
-    display_name: "Grain"
-    resource:
-      material: PAPER
-      generate: false
-      model_path: item/bulk/grain
-
   bag:
     display_name: "Bag"
     resource:

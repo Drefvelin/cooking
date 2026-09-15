@@ -44,6 +44,7 @@ public class ConfigLoader {
         FurnitureCache.ovenTop = config.getString("oven-top", "none");
         FurnitureCache.breadTray = config.getString("bread-tray", "none");
         FurnitureCache.liquidContainer = config.getString("liquid-container", "none");
+        FurnitureCache.trough = config.getString("trough", "none");
 
         ItemCache.butter = config.getString("butter", "none");
         ItemCache.firePitTurner = config.getString("fire-pit-turner", "ia.tfmc_cooking:fire_pit_turner");
@@ -70,6 +71,8 @@ public class ConfigLoader {
 
         ItemCache.flour = config.getString("flour-item", "none");
         ItemCache.bag = config.getString("bag", "none");
+        ItemCache.troughFeed = config.getString("trough-feed", "m.pets.universal_feed");
+        ItemCache.troughItemsPerClick = Math.max(1, config.getInt("trough-items-per-click", 4));
 
         ItemCache.butterChurnCount = config.getInt("butter-churn-count", 3);
         ItemCache.mixingStirCount = config.getInt("mixing-stir-count", 3);

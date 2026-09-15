@@ -121,3 +121,9 @@ items:
       material: PAPER
       generate: false
       model_path: furniture/liquid_container
+  trough:
+    display_name: "Trough"
+    resource:
+      material: PAPER
+      generate: false
+      model_path: furniture/trough

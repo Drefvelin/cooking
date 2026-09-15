@@ -3,6 +3,7 @@ package net.tfminecraft.cooking.utils;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.item.model.ModelData;
+import net.tfminecraft.cooking.item.tag.AgeScale;
 import net.tfminecraft.cooking.item.tag.TagStep;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.utils.Keys;
@@ -30,12 +31,29 @@ public class ItemUpdater {
             if (!track.isAgeable()) continue;
 
             TagStep before = track.getCurrentStep();
-            int newAge = track.getValue() + (int) deltaSeconds;
+            int oldValue = track.getValue();
+            AgeScale.Scaled scaled = AgeScale.apply(
+                    oldValue,
+                    deltaSeconds,
+                    fi.resolveAgeMultiplier(track.getId()),
+                    fi.getAgeRemainder(track.getId()));
+            int newAge = scaled.value();
+            fi.setAgeRemainder(track.getId(), scaled.leftover());
 
-            track.setValue(newAge);
+            if ("warmth".equals(track.getId())) {
+                track.forceSetValue(newAge);
+                if (WarmthUtils.expireIfRoomTemp(fi)) {
+                    changed = true;
+                    continue;
+                }
+            } else {
+                track.setValue(newAge);
+            }
             TagStep after = track.getCurrentStep();
 
-            if (!before.getTag().equals(after.getTag())) {
+            if (before != null && after != null && !before.getTag().equals(after.getTag())) {
+                changed = true;
+            } else if (newAge != oldValue || scaled.leftover() > 0) {
                 changed = true;
             }
         }
@@ -250,6 +268,12 @@ public class ItemUpdater {
         }
 
         pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
+        String remainder = fi.encodeAgeRemainder();
+        if (remainder != null) {
+            pdc.set(Keys.AGE_REMAINDER, PersistentDataType.STRING, remainder);
+        } else {
+            pdc.remove(Keys.AGE_REMAINDER);
+        }
         pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, System.currentTimeMillis());
 
         CookData cookData = fi.getCookData();
@@ -265,7 +289,9 @@ public class ItemUpdater {
 
         // model update -----------------------------------------------------------
         ModelData newModel = fi.getModelData();
-        stack = newModel.apply(furniture, stack);
+        if (newModel != null) {
+            stack = newModel.apply(furniture, stack);
+        }
 
         return stack;
     }
@@ -286,10 +312,18 @@ public class ItemUpdater {
         if (lastUpdate == null) lastUpdate = now;
 
         long deltaSeconds = (now - lastUpdate) / 1000;
-        if (deltaSeconds <= 0) return null;
+        boolean expired = WarmthUtils.expireIfRoomTemp(fi);
+        if (fi.hasSauce()) {
+            expired |= WarmthUtils.expireIfRoomTemp(fi.getSauce());
+        }
 
-        boolean changed = applyAging(fi, deltaSeconds);
-        if (!changed) return null;
+        boolean changed = false;
+        if (deltaSeconds > 0) {
+            changed = applyAging(fi, deltaSeconds);
+        }
+        if (!changed && !expired) {
+            return null;
+        }
 
         return applyItemUpdate(stack, fi, furniture);
     }

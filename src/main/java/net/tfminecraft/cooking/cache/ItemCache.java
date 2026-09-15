@@ -36,6 +36,8 @@ public class ItemCache {
 
     public static String flour;
     public static String bag;
+    public static String troughFeed = "m.pets.universal_feed";
+    public static int troughItemsPerClick = 4;
 
     public static HashMap<String, String> liquidModels = new HashMap<>();
     public static HashMap<String, String> colourMap = new HashMap<>();

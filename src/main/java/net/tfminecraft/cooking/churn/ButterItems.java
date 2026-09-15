@@ -19,11 +19,6 @@ import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.cooking.utils.QualityUtils;
 
 public final class ButterItems {
-    private static final int DAIRY_STALE_THRESHOLD = 400;
-    private static final int DAIRY_ROTTEN_THRESHOLD = 800;
-    private static final int BUTTER_STALE_VALUE = 1600;
-    private static final int BUTTER_ROTTEN_VALUE = 3200;
-
     private ButterItems() {}
 
     public static ItemStack fromMilkSnapshot(Player player, int milkQuality, int dairyFreshness) {
@@ -72,7 +67,7 @@ public final class ButterItems {
 
         CompositionFreshnessApplier.applyTracks(
                 butter,
-                Map.of("butter_freshness", mapDairyToButterFreshness(dairyFreshness)));
+                Map.of("freshness", Math.max(0, dairyFreshness)));
 
         if (hasSalt) {
             TagTrack salted = new TagTrack(TrackLoader.getByString("butter_salted"));
@@ -94,9 +89,9 @@ public final class ButterItems {
         milkStub.setCategory("dairy");
         milkStub.setQualityRange(QualityUtils.clamp(milkQuality), QualityUtils.clamp(milkQuality));
 
-        TagTrack dairyTrack = new TagTrack(TrackLoader.getByString("dairy_freshness"));
-        dairyTrack.setValue(Math.max(0, dairyFreshness));
-        milkStub.addOrModifyTrack(dairyTrack);
+        TagTrack freshness = new TagTrack(TrackLoader.getByString("freshness"));
+        freshness.setValue(Math.max(0, dairyFreshness));
+        milkStub.addOrModifyTrack(freshness);
         return milkStub;
     }
 
@@ -120,15 +115,5 @@ public final class ButterItems {
         freshness.setValue(Math.max(0, spiceFreshness));
         stub.addOrModifyTrack(freshness);
         return stub;
-    }
-
-    static int mapDairyToButterFreshness(int dairyFreshness) {
-        if (dairyFreshness >= DAIRY_ROTTEN_THRESHOLD) {
-            return BUTTER_ROTTEN_VALUE;
-        }
-        if (dairyFreshness >= DAIRY_STALE_THRESHOLD) {
-            return BUTTER_STALE_VALUE;
-        }
-        return 0;
     }
 }

@@ -5,7 +5,7 @@ version: 1.0
 author: Drefvelin
 
 depend: [TLibs, InteractibleFurniture, TFMCCore]
-softdepend: [RPCharacters, MMOCore]
+softdepend: [RPCharacters, MMOCore, CustomCrops, SimpleFactions]
 
 commands:
   cooking:

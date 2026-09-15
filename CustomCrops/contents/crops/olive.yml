@@ -1,0 +1,147 @@
+olive:
+  type: ITEM_FRAME
+  pot-whitelist:
+  - default
+  seed: playbox_custom_crops:olive_seeds
+  requirements:
+    break:
+      requirement_1:
+        type: permission
+        value: professions.vegetables
+        not-met-actions:
+          message_action:
+            type: message
+            value: '&cYou don''t have permission to harvest this crop'
+    plant:
+      requirement_1:
+        type: permission
+        value: professions.vegetables
+        not-met-actions:
+          message_action:
+            type: message
+            value: '&cYou don''t have permission to plant this crop'
+  # Event settings
+  events:
+    plant:
+      # Send sound while planting
+      sound_action:
+        type: sound
+        value:
+          source: player
+          key: minecraft:item.crop.plant
+          volume: 1
+          pitch: 1
+  max-points: 4
+  points:
+    '0':
+      model: playbox_custom_crops:olive_stage_1
+    '1':
+      model: playbox_custom_crops:olive_stage_2
+    '2':
+      model: playbox_custom_crops:olive_stage_3
+    '3':
+      model: playbox_custom_crops:olive_stage_4
+    '4':
+      model: playbox_custom_crops:olive_stage_5
+      events:
+        interact:
+          empty_hand_action:
+            type: conditional
+            value:
+              conditions:
+                requirement_1:
+                  type: permission
+                  value: professions.vegetables
+                  message: '&cYou don''t have permission to harvest this crop'
+                requirement_empty_hand:
+                  type: item-in-hand
+                  value:
+                    item: AIR
+              actions:
+                break_action:
+                  type: break
+                  value: false
+                action_replant:
+                  type: replant
+                  value:
+                    point: 2
+                    crop: olive
+                    model: playbox_custom_crops:olive_stage_3
+                sound_action:
+                  type: sound
+                  value:
+                    key: minecraft:block.crop.break
+                    source: player
+                    volume: 1
+                    pitch: 1
+                action_drop:
+                  type: drop-items
+                  value:
+                    other-items:
+                      loot_1:
+                        min: 2
+                        max: 4
+                        chance: 1
+                        item: tfmc_cooking:olive
+        break:
+          action_drop:
+            type: drop-items
+            value:
+              other-items:
+                loot_2:
+                  min: 1
+                  max: 1
+                  chance: 1
+                  item: playbox_custom_crops:olive_seeds
+                loot_3:
+                  min: 2
+                  max: 4
+                  chance: 1
+                  item: tfmc_cooking:olive
+  death-conditions:
+    no_water:
+      conditions:
+        '&&':
+          condition_1:
+            type: random
+            value: 0.05
+          condition_2:
+            type: point-less-than
+            value: 4
+  custom-bone-meal:
+    default:
+      item: BONE_MEAL
+      chance:
+        '2': 0.05
+        '1': 0.1
+      actions:
+        swing_action:
+          type: swing-hand
+          value: true
+        particle_action:
+          type: particle
+          value:
+            particle: VILLAGER_HAPPY
+            count: 5
+            x: 0.5
+            y: 0.5
+            z: 0.5
+            offset-x: 0.3
+            offset-y: 0.3
+            offset-z: 0.3
+        sound_action:
+          type: sound
+          value:
+            key: minecraft:item.bone_meal.use
+            source: player
+            volume: 1
+            pitch: 1
+  grow-conditions:
+    default:
+      point: 1
+      conditions:
+        condition_1:
+          type: moisture-more-than
+          value: 6
+        sf_fertility:
+          type: province-fertility

@@ -5,7 +5,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Campfire;
 
 import net.tfminecraft.InteractibleFurniture;
 import net.tfminecraft.cooking.oven.OvenState;
@@ -62,6 +65,19 @@ public final class HeatSources {
         return findSource(consumer).map(HeatSources::hasHeat).orElse(false);
     }
 
+    public static boolean stationHasHeat(Furniture furniture) {
+        if (furniture == null) {
+            return false;
+        }
+        if (isConsumer(furniture)) {
+            return consumerHasHeat(furniture);
+        }
+        if (isSource(furniture)) {
+            return hasHeat(furniture);
+        }
+        return false;
+    }
+
     public static boolean hasBlockingConsumerAbove(Furniture source) {
         if (!isSource(source)) {
             return false;
@@ -93,7 +109,21 @@ public final class HeatSources {
     private static boolean hasHeatForType(HeatSourceType type, Furniture source) {
         return switch (type) {
             case OVEN -> OvenState.hasHeat(source);
+            case CAMPFIRE -> isLitCampfire(source);
         };
+    }
+
+    private static boolean isLitCampfire(Furniture source) {
+        Optional<Location> origin = source.getOriginBlockLocation();
+        if (origin.isEmpty()) {
+            return false;
+        }
+        Block block = origin.get().getBlock();
+        Material type = block.getType();
+        if (type != Material.CAMPFIRE && type != Material.SOUL_CAMPFIRE) {
+            return false;
+        }
+        return block.getBlockData() instanceof Campfire campfire && campfire.isLit();
     }
 
     private static Optional<Furniture> findSourceByLookup(Furniture consumer, HeatConsumerDefinition definition) {

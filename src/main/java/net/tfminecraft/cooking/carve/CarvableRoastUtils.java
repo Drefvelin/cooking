@@ -63,13 +63,34 @@ public final class CarvableRoastUtils {
     public static double getRemainingFood(FoodItem item) {
         CarveSequence seq = getSequence(item);
         if (seq == null) return item.getBaseFood();
+        if (item.hasBaseOverride()) {
+            int start = Math.max(1, seq.getStartRemaining());
+            return item.getBaseFood() * item.getCarveRemaining() / (double) start;
+        }
         return seq.sumRemainingFood(item.getCarveNextIndex());
     }
 
     public static double getRemainingNutrition(FoodItem item) {
         CarveSequence seq = getSequence(item);
         if (seq == null) return item.getBaseNutrition();
+        if (item.hasBaseOverride()) {
+            int start = Math.max(1, seq.getStartRemaining());
+            return item.getBaseNutrition() * item.getCarveRemaining() / (double) start;
+        }
         return seq.sumRemainingNutrition(item.getCarveNextIndex());
+    }
+
+    public static int countFoodCuts(CarveSequence seq) {
+        if (seq == null) {
+            return 0;
+        }
+        int count = 0;
+        for (CarveCut cut : seq.getCuts()) {
+            if (cut.isFoodCut()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /** Visual stage for IA models: raw_1 = whole bird, raw_6 = mostly carved. */

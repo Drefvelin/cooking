@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import net.tfminecraft.cooking.crops.CropsConfig;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.loader.ConversionLoader;
 import net.tfminecraft.cooking.quality.OriginQualityResolver;
@@ -29,19 +30,18 @@ public class ConversionManager implements Listener {
         String result = ConversionLoader.getByItem(item);
 
         if (result != null) {
-            e.setCancelled(true);
-            e.getItem().remove();
-
             FoodParser.Result parsed = FoodParser.parse(result);
             if (parsed == null || parsed.template == null) {
                 return;
             }
-            int quality = OriginQualityResolver.resolve(p, parsed.template);
+            int quality = CropsConfig.isFarmFood(result)
+                    ? 1
+                    : OriginQualityResolver.resolve(p, parsed.template);
             ItemStack stack = ItemBuilder.buildSingleWithQuality(parsed.template, item, quality);
             stack.setAmount(item.getAmount());
-
+            e.setCancelled(true);
+            e.getItem().remove();
             ItemStack leftover = InventoryAdder.addItem(p, stack);
-
             if (leftover == null) {
                 p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
             } else {
@@ -54,16 +54,14 @@ public class ConversionManager implements Listener {
     public void onOpen(InventoryOpenEvent e) {
         Inventory top = e.getInventory();
 
-        // --- Only process VANILLA inventories ---
         InventoryHolder holder = top.getHolder();
         if (holder != null &&
-            !(holder instanceof org.bukkit.block.BlockState) &&  // chests, barrels, etc
-            !(holder instanceof org.bukkit.entity.Entity) &&     // horses, etc
-            !(holder instanceof Player)) {                       // player crafting
+            !(holder instanceof org.bukkit.block.BlockState) &&
+            !(holder instanceof org.bukkit.entity.Entity) &&
+            !(holder instanceof Player)) {
             return;
         }
 
-        // --- original logic continues here ---
         Player p = (Player) e.getPlayer();
         Inventory bottom = p.getInventory();
 

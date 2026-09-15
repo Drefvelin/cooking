@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.tfminecraft.InteractibleFurniture;
@@ -27,6 +30,12 @@ import net.tfminecraft.cooking.baking.BakingTrayState;
 import net.tfminecraft.cooking.cache.FurnitureCache;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.tag.TagTrack;
+import net.tfminecraft.cooking.husbandry.HusbandryAnimal;
+import net.tfminecraft.cooking.husbandry.HusbandryConfig;
+import net.tfminecraft.cooking.husbandry.HusbandryEntities;
+import net.tfminecraft.cooking.husbandry.HusbandryRepository;
+import net.tfminecraft.cooking.husbandry.HusbandrySpawner;
+import net.tfminecraft.cooking.husbandry.HusbandrySpecies;
 import net.tfminecraft.cooking.heat.HeatSources;
 import net.tfminecraft.cooking.loader.FoodLoader;
 import net.tfminecraft.cooking.loader.ModelLoader;
@@ -52,7 +61,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     private static final double MIXING_BOWL_SEARCH_RADIUS = 3.0;
     private static final double HEAT_SEARCH_RADIUS = 4.0;
     private static final List<String> SUBCOMMANDS = List.of(
-            "reload", "food", "builditem", "preview", "heat", "nametest", "qualitytest");
+            "reload", "food", "builditem", "preview", "heat", "nametest", "qualitytest", "husbandry");
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -61,6 +70,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         }
         if (args.length > 0 && args[0].equalsIgnoreCase("food")) {
             return handleFood(sender, args);
+        }
+        if (args.length > 0 && args[0].equalsIgnoreCase("husbandry")) {
+            return handleHusbandry(sender, args);
         }
 
         if (!(sender instanceof Player)) {
@@ -135,6 +147,36 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                     .sorted(String.CASE_INSENSITIVE_ORDER)
                     .collect(Collectors.toList());
         }
+        if (args.length == 2 && args[0].equalsIgnoreCase("husbandry")) {
+            String prefix = args[1].toLowerCase(Locale.ROOT);
+            List<String> out = new ArrayList<>();
+            for (String sub : List.of("spawn", "save")) {
+                if (sub.startsWith(prefix)) {
+                    out.add(sub);
+                }
+            }
+            return out;
+        }
+        if (args.length == 3 && args[0].equalsIgnoreCase("husbandry")
+                && args[1].equalsIgnoreCase("spawn")) {
+            String prefix = args[2].toUpperCase(Locale.ROOT);
+            List<String> out = new ArrayList<>();
+            for (EntityType type : HusbandryConfig.species().keySet()) {
+                if (type.name().startsWith(prefix)) {
+                    out.add(type.name());
+                }
+            }
+            out.sort(String.CASE_INSENSITIVE_ORDER);
+            return out;
+        }
+        if (args.length == 4 && args[0].equalsIgnoreCase("husbandry")
+                && args[1].equalsIgnoreCase("spawn")) {
+            return List.of("0", "20", "1000");
+        }
+        if (args.length == 5 && args[0].equalsIgnoreCase("husbandry")
+                && args[1].equalsIgnoreCase("spawn")) {
+            return List.of("0", "100", "200");
+        }
         return Collections.emptyList();
     }
 
@@ -148,7 +190,91 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         player.sendMessage("§e/cooking qualitytest pickup <foodString>");
         player.sendMessage("§e/cooking qualitytest compose <foodString> [context]");
         player.sendMessage("§e/cooking qualitytest compose2 <food|food|...> [context]");
+        player.sendMessage("§e/cooking husbandry spawn <type> [genetics] [care]");
+        player.sendMessage("§e/cooking husbandry save");
         player.sendMessage("§7Contexts: " + formatCompositionContexts());
+    }
+
+    private boolean handleHusbandry(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("cooking.admin")) {
+            sender.sendMessage("§cNo permission.");
+            return true;
+        }
+        if (args.length >= 2 && args[1].equalsIgnoreCase("save")) {
+            return handleHusbandrySave(sender);
+        }
+        if (args.length < 2 || !args[1].equalsIgnoreCase("spawn")) {
+            sender.sendMessage("§cUsage: /cooking husbandry spawn <type> [genetics] [care]");
+            sender.sendMessage("§cUsage: /cooking husbandry save");
+            return true;
+        }
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("§cOnly players can spawn animals.");
+            return true;
+        }
+        if (args.length < 3) {
+            sender.sendMessage("§cUsage: /cooking husbandry spawn <type> [genetics] [care]");
+            return true;
+        }
+        EntityType type;
+        try {
+            type = EntityType.valueOf(args[2].toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException ex) {
+            sender.sendMessage("§cUnknown entity type.");
+            return true;
+        }
+        HusbandrySpecies species = HusbandryConfig.species(type);
+        if (species == null) {
+            sender.sendMessage("§cThat type is not a husbandry species.");
+            return true;
+        }
+        int genetics = HusbandryConfig.initialGeneticMax();
+        int care = 0;
+        if (args.length >= 4) {
+            try {
+                genetics = Integer.parseInt(args[3]);
+            } catch (NumberFormatException ex) {
+                sender.sendMessage("§cGenetics must be a number.");
+                return true;
+            }
+        }
+        if (args.length >= 5) {
+            try {
+                care = Integer.parseInt(args[4]);
+            } catch (NumberFormatException ex) {
+                sender.sendMessage("§cCare must be a number.");
+                return true;
+            }
+        }
+        LivingEntity spawned = HusbandrySpawner.spawn(player, type, genetics, care);
+        if (spawned == null) {
+            sender.sendMessage("§cFailed to spawn animal.");
+            return true;
+        }
+        sender.sendMessage("§aSpawned " + spawned.getName()
+                + " genetics " + Math.max(0, Math.min(HusbandryConfig.maxGenetics(), genetics))
+                + " care " + Math.max(0, Math.min(HusbandryConfig.careMax(), care)) + ".");
+        return true;
+    }
+
+    private boolean handleHusbandrySave(CommandSender sender) {
+        HusbandryRepository repository = Cooking.plugin == null ? null : Cooking.plugin.getHusbandryRepository();
+        if (repository == null) {
+            sender.sendMessage("§cHusbandry database is not open.");
+            return true;
+        }
+        int saved = 0;
+        for (UUID uuid : HusbandryEntities.loadedIds()) {
+            Optional<HusbandryAnimal> stored = repository.getAnimal(uuid);
+            if (stored.isEmpty()) {
+                continue;
+            }
+            repository.upsertAnimal(stored.get());
+            saved++;
+        }
+        repository.checkpointWal(false);
+        sender.sendMessage("§aSaved " + saved + " loaded animals.");
+        return true;
     }
 
     private boolean handleFood(CommandSender sender, String[] args) {

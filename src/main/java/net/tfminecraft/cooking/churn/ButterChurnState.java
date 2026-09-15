@@ -1,11 +1,13 @@
 package net.tfminecraft.cooking.churn;
 
+import net.tfminecraft.cooking.item.tag.AgeScale;
 import net.tfminecraft.furniture.Furniture;
 
 public final class ButterChurnState {
     public static final String VAR_CHURN_COUNT = "butter.churnCount";
     public static final String VAR_MILK_QUALITY = "butter.milkQuality";
     public static final String VAR_DAIRY_FRESHNESS = "butter.dairyFreshness";
+    public static final String VAR_FRESHNESS_REMAINDER = "butter.freshnessRemainder";
     public static final String VAR_LAST_UPDATE = "butter.lastUpdate";
     public static final String VAR_HAS_SALT = "butter.hasSalt";
     public static final String VAR_SALT_QUALITY = "butter.saltQuality";
@@ -140,8 +142,22 @@ public final class ButterChurnState {
         if (seconds <= 0) {
             return;
         }
-        furniture.getVariables().put(VAR_DAIRY_FRESHNESS, getDairyFreshness(furniture) + seconds);
+        AgeScale.Scaled scaled = AgeScale.apply(
+                getDairyFreshness(furniture),
+                seconds,
+                AgeScale.forFood("milk_bucket", "freshness"),
+                getFreshnessRemainder(furniture));
+        furniture.getVariables().put(VAR_DAIRY_FRESHNESS, scaled.value());
+        furniture.getVariables().put(VAR_FRESHNESS_REMAINDER, scaled.leftover());
         furniture.getVariables().put(VAR_LAST_UPDATE, now);
+    }
+
+    private static double getFreshnessRemainder(Furniture furniture) {
+        Object value = furniture.getVariables().get(VAR_FRESHNESS_REMAINDER);
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        return 0;
     }
 
     public static void clearExtras(Furniture furniture) {
@@ -156,6 +172,7 @@ public final class ButterChurnState {
         furniture.getVariables().remove(VAR_CHURN_COUNT);
         furniture.getVariables().remove(VAR_MILK_QUALITY);
         furniture.getVariables().remove(VAR_DAIRY_FRESHNESS);
+        furniture.getVariables().remove(VAR_FRESHNESS_REMAINDER);
         furniture.getVariables().remove(VAR_LAST_UPDATE);
         clearExtras(furniture);
     }

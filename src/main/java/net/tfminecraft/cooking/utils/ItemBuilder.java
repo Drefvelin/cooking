@@ -1,5 +1,6 @@
 package net.tfminecraft.cooking.utils;
 
+import net.tfminecraft.cooking.item.CookingPathHandler;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.carve.CarveSequence;
 import net.tfminecraft.cooking.loader.CarveSequenceLoader;
@@ -206,6 +207,11 @@ public class ItemBuilder {
 
         pdc.set(Keys.QUALITY, PersistentDataType.INTEGER, item.getQualityMin());
 
+        if (item.hasBaseOverride()) {
+            pdc.set(Keys.BASE_FOOD, PersistentDataType.DOUBLE, item.getBaseFood());
+            pdc.set(Keys.BASE_NUTRITION, PersistentDataType.DOUBLE, item.getBaseNutrition());
+        }
+
         pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, System.currentTimeMillis());
 
         // TAG TRACK VALUES
@@ -219,6 +225,11 @@ public class ItemBuilder {
                 first = false;
             }
             pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
+        }
+
+        String remainder = item.encodeAgeRemainder();
+        if (remainder != null) {
+            pdc.set(Keys.AGE_REMAINDER, PersistentDataType.STRING, remainder);
         }
 
         // SAUCE SAVE
@@ -269,6 +280,10 @@ public class ItemBuilder {
         return stack;
     }
 
+    public static String qualityStars(int q) {
+        return buildStars(QualityUtils.clamp(q), 5);
+    }
+
     private static String buildStars(int q, int max) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= max; i++)
@@ -277,7 +292,7 @@ public class ItemBuilder {
     }
 
     public static void buildFromString(Player p, String string, ItemStack base) {
-        FoodParser.Result parsed = FoodParser.parse(string);
+        FoodParser.Result parsed = FoodParser.parse(CookingPathHandler.stripPrefix(string));
         if (parsed == null || parsed.template == null) {
             p.sendMessage("§cInvalid item string!");
             return;
@@ -310,7 +325,7 @@ public class ItemBuilder {
 
 
     public static ItemStack buildSingleString(String string, ItemStack base) {
-        FoodParser.Result parsed = FoodParser.parse(string);
+        FoodParser.Result parsed = FoodParser.parse(CookingPathHandler.stripPrefix(string));
         FoodItem template = parsed.template;
         if (parsed.explicitQuality) {
             return ItemBuilder.buildSingle(template, base);

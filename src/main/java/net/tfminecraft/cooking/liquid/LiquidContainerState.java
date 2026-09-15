@@ -1,5 +1,6 @@
 package net.tfminecraft.cooking.liquid;
 
+import net.tfminecraft.cooking.item.tag.AgeScale;
 import net.tfminecraft.furniture.Furniture;
 
 public final class LiquidContainerState {
@@ -7,6 +8,7 @@ public final class LiquidContainerState {
     public static final String VAR_BLOCKS = "liquid.blocks";
     public static final String VAR_MILK_QUALITY = "liquid.milkQuality";
     public static final String VAR_DAIRY_FRESHNESS = "liquid.dairyFreshness";
+    public static final String VAR_FRESHNESS_REMAINDER = "liquid.freshnessRemainder";
     public static final String VAR_LAST_UPDATE = "liquid.lastUpdate";
 
     public static final String TYPE_WATER = "water";
@@ -114,8 +116,22 @@ public final class LiquidContainerState {
         if (seconds <= 0) {
             return;
         }
-        furniture.getVariables().put(VAR_DAIRY_FRESHNESS, getDairyFreshness(furniture) + seconds);
+        AgeScale.Scaled scaled = AgeScale.apply(
+                getDairyFreshness(furniture),
+                seconds,
+                AgeScale.forFood("milk_bucket", "freshness"),
+                getFreshnessRemainder(furniture));
+        furniture.getVariables().put(VAR_DAIRY_FRESHNESS, scaled.value());
+        furniture.getVariables().put(VAR_FRESHNESS_REMAINDER, scaled.leftover());
         furniture.getVariables().put(VAR_LAST_UPDATE, now);
+    }
+
+    private static double getFreshnessRemainder(Furniture furniture) {
+        Object value = furniture.getVariables().get(VAR_FRESHNESS_REMAINDER);
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        return 0;
     }
 
     public static void clear(Furniture furniture) {
@@ -123,6 +139,7 @@ public final class LiquidContainerState {
         furniture.getVariables().remove(VAR_BLOCKS);
         furniture.getVariables().remove(VAR_MILK_QUALITY);
         furniture.getVariables().remove(VAR_DAIRY_FRESHNESS);
+        furniture.getVariables().remove(VAR_FRESHNESS_REMAINDER);
         furniture.getVariables().remove(VAR_LAST_UPDATE);
     }
 }

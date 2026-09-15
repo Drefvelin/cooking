@@ -1,0 +1,295 @@
+# Unique identifier for the sprinkler
+sprinkler_1:
+  # Sprinkler's working range:
+  # □■□
+  # ■▼■
+  # □■□
+  range: 1
+  # Sprinkling pattern mode:
+  # 1 = square, 2 = rhombus, 3 = circle
+  working-mode: 2
+  # Maximum capacity for storing water
+  storage: 4
+  # Indicates whether the sprinkler has unlimited water supply
+  infinite: false
+  # The amount of water added to pot per sprinkling operation
+  water: 1
+  # The amount of water consumed per sprinkling operation
+  sprinkling: 1
+  # 3D model identifier for the sprinkler
+  3D-item: customcrops:sprinkler_1 # without water
+  3D-item-with-water: customcrops:sprinkler_1 # with water
+  # Optional 2D item model identifier
+  2D-item: customcrops:sprinkler_1_item
+  # The type of sprinkler (BLOCK or FURNITURE)
+  type: FURNITURE
+  # List of allowed planting pots where the sprinkler can function
+  pot-whitelist:
+    - default
+  # Methods available for refilling the sprinkler's water supply
+  fill-method:
+    # Custom refill method 1 configuration
+    method_1:
+      # Item used for refilling
+      item: WATER_BUCKET
+      # Item returned after refilling (optional)
+      return: BUCKET
+      # Amount of water added by this method
+      amount: 3
+    # Custom refill method 2 configuration
+    method_2:
+      item: POTION
+      return: GLASS_BOTTLE
+      amount: 1
+  # Configuration for the water level display bar
+  water-bar:
+    left: '뀂'   # Left end of the water bar
+    full: '뀁뀃' # Full segment of the water bar
+    empty: '뀁뀄' # Empty segment of the water bar
+    right: '뀁뀅' # Right end of the water bar
+  # Event settings for various interactions and actions
+  events:
+    place:
+      # Action performed when placing the sprinkler
+      swing_hand_action:
+        type: swing-hand
+        value: true
+      # Sound effect triggered when placing the sprinkler
+      sound_action:
+        type: sound
+        value:
+          source: player
+          key: minecraft:block.bone_block.place
+          volume: 1
+          pitch: 1
+    interact:
+      # Conditional action executed on interaction
+      force_work_action:
+        type: conditional
+        value:
+          conditions:
+            requirement_1:
+              type: sneak
+              value: true
+          actions:
+            action_1:
+              type: force-tick
+      # Hologram display action upon interaction
+      hologram_action:
+        type: hologram
+        value:
+          text: '<font:customcrops:default>{water_bar}</font>'
+          duration: 40
+          x: 0.5
+          y: -0.3
+          z: 0.5
+          visible-to-all: false
+    work:
+      # Visual effect displayed when the sprinkler is working
+      fake_item_action:
+        type: fake-item
+        value:
+          item: customcrops:water_effect
+          duration: 100
+          x: 0.5
+          y: 0.4
+          z: 0.5
+          visible-to-all: true
+    add_water:
+      # Particle effect shown when adding water
+      particle_action:
+        type: particle
+        value:
+          particle: WATER_SPLASH
+          x: 0.5
+          y: 0.7
+          z: 0.5
+          count: 5
+      # Sound effect played when adding water
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bucket.empty"
+          source: 'player'
+          volume: 1
+          pitch: 1
+
+sprinkler_2:
+  # Sprinkler's working range:
+  # □□□□□
+  # □■■■□
+  # □■▼■□
+  # □■■■□
+  # □□□□□
+  range: 1
+  working-mode: 1
+  storage: 4
+  water: 1
+  3D-item: customcrops:sprinkler_2
+  2D-item: customcrops:sprinkler_2_item
+  type: FURNITURE
+  pot-whitelist:
+    - default
+  fill-method:
+    method_1:
+      item: WATER_BUCKET
+      return: BUCKET
+      amount: 3
+    method_2:
+      item: POTION
+      return: GLASS_BOTTLE
+      amount: 1
+  water-bar:
+    left: '뀂'
+    full: '뀁뀃'
+    empty: '뀁뀄'
+    right: '뀁뀅'
+  events:
+    place:
+      swing_hand_action:
+        type: swing-hand
+        value: true
+      sound_action:
+        type: sound
+        value:
+          source: player
+          key: minecraft:block.bone_block.place
+          volume: 1
+          pitch: 1
+    interact:
+      force_work_action:
+        type: conditional
+        value:
+          conditions:
+            requirement_1:
+              type: sneak
+              value: true
+          actions:
+            action_1:
+              type: force-tick
+      hologram_action:
+        type: hologram
+        value:
+          text: '<font:customcrops:default>{water_bar}</font>'
+          duration: 40
+          x: 0.5
+          y: -0.3
+          z: 0.5
+          visible-to-all: false
+    work:
+      fake_item_action:
+        type: fake-item
+        value:
+          item: customcrops:water_effect
+          duration: 100
+          x: 0.5
+          y: 0.4
+          z: 0.5
+          visible-to-all: true
+    add_water:
+      particle_action:
+        type: particle
+        value:
+          particle: WATER_SPLASH
+          x: 0.5
+          y: 0.7
+          z: 0.5
+          count: 5
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bucket.empty"
+          source: 'player'
+          volume: 1
+          pitch: 1
+
+sprinkler_3:
+  # Sprinkler's working range:
+  # □□□□□□□
+  # □■■■■■□
+  # □■■■■■□
+  # □■■▼■■□
+  # □■■■■■□
+  # □■■■■■□
+  # □□□□□□□
+  range: 2
+  working-mode: 1
+  storage: 4
+  water: 1
+  3D-item: customcrops:sprinkler_3
+  2D-item: customcrops:sprinkler_3_item
+  type: FURNITURE
+  pot-whitelist:
+    - default
+  fill-method:
+    method_1:
+      item: WATER_BUCKET
+      return: BUCKET
+      amount: 3
+    method_2:
+      item: POTION
+      return: GLASS_BOTTLE
+      amount: 1
+  water-bar:
+    left: '뀂'
+    full: '뀁뀃'
+    empty: '뀁뀄'
+    right: '뀁뀅'
+  events:
+    place:
+      swing_hand_action:
+        type: swing-hand
+        value: true
+      sound_action:
+        type: sound
+        value:
+          source: player
+          key: minecraft:block.bone_block.place
+          volume: 1
+          pitch: 1
+    interact:
+      force_work_action:
+        type: conditional
+        value:
+          conditions:
+            requirement_1:
+              type: sneak
+              value: true
+          actions:
+            action_1:
+              type: force-tick
+      hologram_action:
+        type: hologram
+        value:
+          text: '<font:customcrops:default>{water_bar}</font>'
+          duration: 40
+          x: 0.5
+          y: -0.3
+          z: 0.5
+          visible-to-all: false
+    work:
+      fake_item_action:
+        type: fake-item
+        value:
+          item: customcrops:water_effect
+          duration: 100
+          x: 0.5
+          y: 0.4
+          z: 0.5
+          visible-to-all: true
+    add_water:
+      particle_action:
+        type: particle
+        value:
+          particle: WATER_SPLASH
+          x: 0.5
+          y: 0.7
+          z: 0.5
+          count: 5
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bucket.empty"
+          source: 'player'
+          volume: 1
+          pitch: 1

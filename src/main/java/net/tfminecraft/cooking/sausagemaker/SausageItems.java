@@ -31,11 +31,25 @@ public final class SausageItems {
         FoodItem chain = new FoodItem(template);
         chain.setCategory("meat");
         chain.setOrigin("Mixed");
+        double totalFood = 0;
+        double totalNutrition = 0;
+        for (FoodItem meat : meats) {
+            if (meat == null) {
+                continue;
+            }
+            totalFood += meat.getBaseFood();
+            totalNutrition += meat.getBaseNutrition();
+        }
+        chain.setBaseFood(totalFood);
+        chain.setBaseNutrition(totalNutrition);
         CompositionFreshnessApplier.applyTracks(chain, composed.getFreshnessTracks());
 
-        TagTrack cooked = new TagTrack(TrackLoader.getByString("cooked"));
-        cooked.setValue(0);
-        chain.addOrModifyTrack(cooked);
+        TagTrack cookedTemplate = TrackLoader.getByString("cooked");
+        if (cookedTemplate != null) {
+            TagTrack cooked = new TagTrack(cookedTemplate);
+            cooked.setValue(0);
+            chain.addOrModifyTrack(cooked);
+        }
 
         return ItemBuilder.buildComposedWithQuality(chain, composed.getFinalQuality());
     }

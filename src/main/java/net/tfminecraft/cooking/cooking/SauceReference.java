@@ -30,6 +30,8 @@ import net.tfminecraft.cooking.cache.ItemCache;
 
 import net.tfminecraft.cooking.enums.Method;
 
+import net.tfminecraft.cooking.heat.HeatSources;
+
 import net.tfminecraft.cooking.item.FoodItem;
 
 import net.tfminecraft.cooking.item.tag.TagTrack;
@@ -77,6 +79,10 @@ public class SauceReference extends CookingReference {
     public void tick() {
 
         super.tick();
+
+        if (!HeatSources.stationHasHeat(f)) {
+            return;
+        }
 
         handleCookingSlots();
 

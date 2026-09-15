@@ -90,7 +90,7 @@ public final class CarveHandler {
 
 
 
-        ItemStack reward = buildReward(player, roast, stack, cut);
+        ItemStack reward = buildReward(player, roast, stack, cut, sequence);
 
         if (reward == null) return false;
 
@@ -136,7 +136,7 @@ public final class CarveHandler {
 
 
 
-    private static ItemStack buildReward(Player player, FoodItem roast, ItemStack stack, CarveCut cut) {
+    private static ItemStack buildReward(Player player, FoodItem roast, ItemStack stack, CarveCut cut, CarveSequence sequence) {
 
         if (cut.isItemCut()) {
 
@@ -166,7 +166,11 @@ public final class CarveHandler {
 
         CarvableRoastUtils.copyInheritedTracks(roast, partTemplate);
 
-
+        if (roast.hasBaseOverride()) {
+            int edible = Math.max(1, CarvableRoastUtils.countFoodCuts(sequence));
+            partTemplate.setBaseFood(roast.getBaseFood() / edible);
+            partTemplate.setBaseNutrition(roast.getBaseNutrition() / edible);
+        }
 
         CompositionResult composed = CompositionQualityResolver.compose(player, List.of(roast), CompositionContext.CARVE);
 

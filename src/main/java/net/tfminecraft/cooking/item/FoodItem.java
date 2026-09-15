@@ -11,12 +11,14 @@ import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.item.data.OverrideData;
 import net.tfminecraft.cooking.item.model.FoodModel;
 import net.tfminecraft.cooking.item.model.ModelData;
+import net.tfminecraft.cooking.item.tag.AgeScale;
 import net.tfminecraft.cooking.item.tag.TagStep;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.loader.TrackLoader;
 import net.tfminecraft.cooking.utils.FoodParser;
 import net.tfminecraft.cooking.utils.Keys;
+import net.tfminecraft.cooking.utils.WarmthUtils;
 import net.tfminecraft.cooking.enums.Method;
 import net.tfminecraft.cooking.enums.Tag;
 
@@ -39,10 +41,13 @@ public class FoodItem {
 
     private double baseFood;
     private double baseNutrition;
+    private boolean baseOverride;
 
     private FoodModel model = null;
 
     private Map<String, OverrideData> overrides = new HashMap<>();
+    private Map<String, Double> age = new HashMap<>();
+    private Map<String, Double> ageRemainder = new HashMap<>();
     private Map<String, Map<String, String>> tagLabels = new HashMap<>();
     private List<String> ingredients = new ArrayList<>();
     public CookData cookData;
@@ -91,12 +96,15 @@ public class FoodItem {
                         new OverrideData(
                             o.getString("name", null),
                             o.getString("model", null),
-                            o.getString("carve-sequence", null)
+                            o.getString("carve-sequence", null),
+                            readAge(o.getConfigurationSection("age"))
                         )
                     );
                 }
             }
         }
+
+        this.age.putAll(readAge(config.getConfigurationSection("age")));
 
         ConfigurationSection labelSec = config.getConfigurationSection("tag-labels");
         if (labelSec != null) {
@@ -133,8 +141,11 @@ public class FoodItem {
         this.qualityMax = other.qualityMax;
         this.baseFood = other.baseFood;
         this.baseNutrition = other.baseNutrition;
+        this.baseOverride = other.baseOverride;
 
         this.overrides = new HashMap<>(other.overrides);
+        this.age = new HashMap<>(other.age);
+        this.ageRemainder = new HashMap<>(other.ageRemainder);
         this.tagLabels = new HashMap<>();
         for (Map.Entry<String, Map<String, String>> entry : other.tagLabels.entrySet()) {
             this.tagLabels.put(entry.getKey(), new HashMap<>(entry.getValue()));
@@ -183,11 +194,25 @@ public class FoodItem {
         if (elapsed <= 0) return;
 
         int seconds = (int) (elapsed / 1000);
+        if (seconds <= 0) {
+            return;
+        }
 
         for (TagTrack track : tags.values()) {
             if (!track.isAgeable()) continue;
-            track.setValue(track.getValue() + seconds);
+            AgeScale.Scaled scaled = AgeScale.apply(
+                    track.getValue(),
+                    seconds,
+                    resolveAgeMultiplier(track.getId()),
+                    getAgeRemainder(track.getId()));
+            if ("warmth".equals(track.getId())) {
+                track.forceSetValue(scaled.value());
+            } else {
+                track.setValue(scaled.value());
+            }
+            setAgeRemainder(track.getId(), scaled.leftover());
         }
+        WarmthUtils.expireIfRoomTemp(this);
 
         lastUpdate = now;
     }
@@ -221,7 +246,22 @@ public class FoodItem {
     }
 
     public double getBaseFood() { return baseFood; }
+
+    public void setBaseFood(double food) {
+        this.baseFood = food;
+        this.baseOverride = true;
+    }
+
     public double getBaseNutrition() { return baseNutrition; }
+
+    public void setBaseNutrition(double nutrition) {
+        this.baseNutrition = nutrition;
+        this.baseOverride = true;
+    }
+
+    public boolean hasBaseOverride() {
+        return baseOverride;
+    }
 
     public long getLastUpdate() { return lastUpdate; }
     public void setLastUpdate(long ts) { this.lastUpdate = ts; }
@@ -271,6 +311,92 @@ public class FoodItem {
     public void setOrigin(String o) { origin = o; }
     public String getOrigin() { return origin; }
 
+    public double resolveAgeMultiplier(String trackId) {
+        if (trackId == null) {
+            return AgeScale.DEFAULT;
+        }
+        if (origin != null) {
+            OverrideData od = overrides.get(origin.toUpperCase());
+            if (od != null) {
+                Double override = od.getAge(trackId);
+                if (override != null) {
+                    return AgeScale.clamp(override);
+                }
+            }
+        }
+        Double type = age.get(trackId.toLowerCase());
+        return type == null ? AgeScale.DEFAULT : AgeScale.clamp(type);
+    }
+
+    public double getAgeRemainder(String trackId) {
+        if (trackId == null) {
+            return 0;
+        }
+        return ageRemainder.getOrDefault(trackId.toLowerCase(), 0.0);
+    }
+
+    public void setAgeRemainder(String trackId, double leftover) {
+        if (trackId == null) {
+            return;
+        }
+        if (leftover <= 0) {
+            ageRemainder.remove(trackId.toLowerCase());
+            return;
+        }
+        ageRemainder.put(trackId.toLowerCase(), leftover);
+    }
+
+    public String encodeAgeRemainder() {
+        if (ageRemainder.isEmpty()) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String, Double> entry : ageRemainder.entrySet()) {
+            if (entry.getValue() == null || entry.getValue() <= 0) {
+                continue;
+            }
+            if (!first) {
+                sb.append(';');
+            }
+            sb.append(entry.getKey()).append(':').append(entry.getValue());
+            first = false;
+        }
+        return sb.isEmpty() ? null : sb.toString();
+    }
+
+    public void decodeAgeRemainder(String raw) {
+        ageRemainder.clear();
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String entry : raw.split(";")) {
+            int sep = entry.indexOf(':');
+            if (sep <= 0 || sep >= entry.length() - 1) {
+                continue;
+            }
+            try {
+                String trackId = entry.substring(0, sep).toLowerCase();
+                double leftover = Double.parseDouble(entry.substring(sep + 1));
+                if (leftover > 0) {
+                    ageRemainder.put(trackId, leftover);
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+    }
+
+    private static Map<String, Double> readAge(ConfigurationSection section) {
+        Map<String, Double> map = new HashMap<>();
+        if (section == null) {
+            return map;
+        }
+        for (String key : section.getKeys(false)) {
+            map.put(key.toLowerCase(), section.getDouble(key, AgeScale.DEFAULT));
+        }
+        return map;
+    }
+
     public String getCarveSequenceId() {
         if (origin != null) {
             OverrideData od = overrides.get(origin.toUpperCase());
@@ -318,11 +444,10 @@ public class FoodItem {
 
     public void addOrModifyTrack(TagTrack t) {
         updateAge();
-        if(hasTagTrack(t.getId())) {
-            getTagTrack(t.getId()).setValue(t.getValue());
-        } else {
-            tags.put(t.getId(), new TagTrack(t));
+        if (t == null) {
+            return;
         }
+        tags.put(t.getId(), new TagTrack(t));
     }
 
     public void addTagTrack(String trackId) {
@@ -332,6 +457,13 @@ public class FoodItem {
 
     public boolean hasTagTrack(String tag) {
         return tags.containsKey(tag);
+    }
+
+    public void removeTrack(String id) {
+        if (id == null) {
+            return;
+        }
+        tags.remove(id);
     }
 
     public List<TagStep> getCurrentTags() {
@@ -377,21 +509,32 @@ public class FoodItem {
     // --------------------------------------------------------------
     public double getFinalFood() {
         if (hasCarveState() && carveRemaining > 0) {
-            return applyMultipliers(net.tfminecraft.cooking.carve.CarvableRoastUtils.getRemainingFood(this), 0);
+            return applyMultipliers(net.tfminecraft.cooking.carve.CarvableRoastUtils.getRemainingFood(this), 0)
+                    + sauceFinal(0);
         }
-        return applyMultipliers(baseFood + (hasSauce() ? getSauce().getFinalFood() : 0), 0);
+        return applyMultipliers(baseFood, 0) + sauceFinal(0);
     }
 
     public double getFinalNutrition() {
         if (hasCarveState() && carveRemaining > 0) {
-            return applyMultipliers(net.tfminecraft.cooking.carve.CarvableRoastUtils.getRemainingNutrition(this), 1);
+            return applyMultipliers(net.tfminecraft.cooking.carve.CarvableRoastUtils.getRemainingNutrition(this), 1)
+                    + sauceFinal(1);
         }
-        return applyMultipliers(baseNutrition + (hasSauce() ? getSauce().getFinalNutrition() : 0), 1);
+        return applyMultipliers(baseNutrition, 1) + sauceFinal(1);
+    }
+
+    private double sauceFinal(int type) {
+        if (!hasSauce()) {
+            return 0;
+        }
+        return type == 1 ? getSauce().getFinalNutrition() : getSauce().getFinalFood();
     }
 
     private double applyMultipliers(double base, int type) {
-
-        double qualityMultiplier = 1.0 + (getQualityMin() - 1) * 0.20;
+        int stars = Math.max(1, getQualityMin());
+        double qualityMultiplier = type == 1
+                ? net.tfminecraft.cooking.quality.QualityConfig.nutritionMultiplier(stars)
+                : 1.0 + (stars - 1) * 0.20;
 
         double result = base * qualityMultiplier;
 
@@ -433,6 +576,15 @@ public class FoodItem {
         Integer qual = pdc.get(Keys.QUALITY, PersistentDataType.INTEGER);
         if (qual != null) out.setQualityRange(qual, qual);
 
+        Double storedFood = pdc.get(Keys.BASE_FOOD, PersistentDataType.DOUBLE);
+        if (storedFood != null) {
+            out.setBaseFood(storedFood);
+        }
+        Double storedNutrition = pdc.get(Keys.BASE_NUTRITION, PersistentDataType.DOUBLE);
+        if (storedNutrition != null) {
+            out.setBaseNutrition(storedNutrition);
+        }
+
         // Tag tracks
         String tagData = pdc.get(Keys.TAGS, PersistentDataType.STRING);
         if (tagData != null && !tagData.isEmpty()) {
@@ -448,14 +600,22 @@ public class FoodItem {
                 try { value = Integer.parseInt(kv[1]); }
                 catch (Exception e) { continue; }
 
-                TagTrack baseTrack = TrackLoader.getByString(trackId);
+                int migratedValue = AgeScale.migrateTrackValue(trackId, value);
+                String migratedId = AgeScale.migrateTrackId(trackId);
+                TagTrack baseTrack = TrackLoader.getByString(migratedId);
                 if (baseTrack == null) continue;
 
                 TagTrack t = new TagTrack(baseTrack);
-                t.setValue(value);
+                if ("warmth".equals(t.getId())) {
+                    t.forceSetValue(migratedValue);
+                } else {
+                    t.setValue(migratedValue);
+                }
                 out.addOrModifyTrack(t);
             }
         }
+
+        out.decodeAgeRemainder(pdc.get(Keys.AGE_REMAINDER, PersistentDataType.STRING));
 
         Long lastUpdate = pdc.get(Keys.LAST_UPDATE, PersistentDataType.LONG);
         if (lastUpdate != null)

@@ -183,3 +183,10 @@ items:
       generate: false
       model_path: item/ingredients/cherry/cherry
 
+  cactus_fruit:
+    display_name: "Cactus Fruit"
+    resource:
+      material: TROPICAL_FISH
+      generate: false
+      model_path: item/ingredients/cherry/cherry
+

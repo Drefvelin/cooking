@@ -8,6 +8,9 @@ pot: pot
 bowl: bowl
 mixing-bowl: mixing_bowl
 milling-stone: milling_stone
+trough: trough
+trough-feed: m.pets.universal_feed
+trough-items-per-click: 4
 
 butter: ia.tfmc_cooking:butter
 butter-churn: butter_churn
@@ -110,8 +113,19 @@ heat:
   sources:
     oven_bottom:
       type: oven
+    fire_pit:
+      type: campfire
   consumers:
     oven_top:
+      source: oven_bottom
+      lookup: block-below
+    frying_pan:
+      source: oven_bottom
+      lookup: block-below
+    saucepan:
+      source: oven_bottom
+      lookup: block-below
+    pot:
       source: oven_bottom
       lookup: block-below
 

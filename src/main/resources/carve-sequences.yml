@@ -2,20 +2,20 @@ poultry:
   start-remaining: 6
   cuts:
     - output: "meat(type=meat_poultry_leg;origin=Chicken)"
-      food: 2.0
-      nutrition: 1.5
+      food: 20.0
+      nutrition: 8.0
     - output: "meat(type=meat_poultry_leg;origin=Chicken)"
-      food: 2.0
-      nutrition: 1.5
+      food: 20.0
+      nutrition: 8.0
     - output: "meat(type=meat_poultry;origin=Chicken)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_poultry;origin=Chicken)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_poultry;origin=Chicken)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - item: "v.bone"
       amount: 2
       food: 0
@@ -25,26 +25,26 @@ red_meat:
   start-remaining: 8
   cuts:
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=meat_red_meat;origin=Beef)"
-      food: 1.5
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - item: "v.bone"
       amount: 4
       food: 0
@@ -54,17 +54,17 @@ sausage:
   start-remaining: 5
   cuts:
     - output: "meat(type=sausage;origin=Mixed)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=sausage;origin=Mixed)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=sausage;origin=Mixed)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=sausage;origin=Mixed)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0
     - output: "meat(type=sausage;origin=Mixed)"
-      food: 1.0
-      nutrition: 1.0
+      food: 18.0
+      nutrition: 8.0

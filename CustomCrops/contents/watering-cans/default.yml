@@ -1,0 +1,113 @@
+# ID
+watering_can_1:
+  # ItemsAdder/Oraxen item ID
+  item: playbox_custom_crops:watering_can
+  # This is optional. It will determine the appearance of watering cans with different water storage capacities
+  #appearance:
+  #  0: 1000 # CustomModelData
+  #  1: 1001
+  #  2: 1002
+  #  3: 1003
+  # Maximum water storage capacity
+  capacity: 20
+  # Amount of water added to pot in a single interaction
+  water: 5
+  # Effective Range
+  effective-range:
+    width: 3
+    length: 3
+  # Methods to fill the watering can
+  fill-method:
+    # The name of the method, it's totally customized
+    method_1:
+      # The target block/furniture (That means you can create a well to get water)
+      target: WATER
+      # Amount of water to add
+      amount: 5
+      # Requirements for this fill method
+      requirements: {}
+  # Watering cans only work in specified planting pots
+  pot-whitelist:
+    - default
+  # Allow watering can to divert water to sprinkler
+  sprinkler-whitelist:
+    - sprinkler_1
+    - sprinkler_2
+    - sprinkler_3
+  # Dynamic lore settings
+  dynamic-lore:
+    # Should watering-can has dynamic lore according to the water amount
+    enable: true
+    # Available placeholders:
+    # {water_bar}: water bar image
+    # {current}: current amount of water
+    # {storage}: max water storage
+    lore:
+      - '<italic:false><white><font:customcrops:default>{water_bar}</font>'
+      - '<italic:false><gray>Right click water to add water to the can.'
+  # Water bar image settings
+  water-bar:
+    left: '뀂'
+    full: '뀁뀃'
+    empty: '뀁뀄'
+    right: '뀁뀅'
+  # Event settings
+  events:
+    #Full
+    full:
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bundle.insert"
+          source: 'player'
+          volume: 1
+          pitch: 1
+      actionbar_action:
+        type: actionbar
+        value: '<red><bold>[X] Can is full'
+    # No water
+    no_water:
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bundle.insert"
+          source: 'player'
+          volume: 1
+          pitch: 1
+      actionbar_action:
+        type: actionbar
+        value: '<red><bold>[X] Can is empty'
+    # Consume water
+    consume_water:
+      # The name of the action, it's totally customized
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:block.water.ambient"
+          source: 'player'
+          volume: 1
+          pitch: 1
+      actionbar_action:
+        type: actionbar
+        value: '<font:customcrops:default>{water_bar}</font>'
+    # Add water to the watering-can
+    add_water:
+      # The name of the action, it's totally customized
+      particle_action:
+        type: particle
+        value:
+          particle: WATER_SPLASH
+          x: 0.5
+          y: 1.3
+          z: 0.5
+          count: 5
+      sound_action:
+        type: sound
+        value:
+          key: "minecraft:item.bucket.empty"
+          source: 'player'
+          volume: 1
+          pitch: 1
+      actionbar_action:
+        type: actionbar
+        value: '<font:customcrops:default>{water_bar}</font>'

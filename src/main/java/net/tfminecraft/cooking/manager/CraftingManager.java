@@ -30,6 +30,7 @@ import net.tfminecraft.cooking.cache.ItemCache;
 import net.tfminecraft.cooking.carve.CarvableRoastUtils;
 import net.tfminecraft.cooking.crafting.CraftingStation;
 import net.tfminecraft.cooking.enums.Method;
+import net.tfminecraft.cooking.heat.HeatSources;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.utils.ItemUpdater;
@@ -122,6 +123,11 @@ public class CraftingManager implements Listener {
     public void furnitureInteract(FurnitureSlotItemAddEvent e) {
         Furniture f = e.getFurniture();
         if (FurnitureCache.isFirePit(f) && e.getSlot().getId().equals("content")) {
+            if (!HeatSources.stationHasHeat(f)) {
+                e.setCancelled(true);
+                e.getPlayer().sendMessage("§cLight the campfire under the fire pit first.");
+                return;
+            }
             FoodItem fi = FoodItem.fromItem(e.getItem());
             if (fi == null || !fi.getCookData().hasMethod(Method.FIRE_PIT)) {
                 e.setCancelled(true);
@@ -221,6 +227,10 @@ public class CraftingManager implements Listener {
         if (hitSlot != null && hitSlot.getId().equals("turner")) {
             e.setCancelled(true);
             if (emptyHand && hasMeatOnSpit(f)) {
+                if (!HeatSources.stationHasHeat(f)) {
+                    e.getPlayer().sendMessage("§cLight the campfire under the fire pit first.");
+                    return;
+                }
                 if (isOnFirePitCooldown(f)) return;
                 playFirePitTurnAnimation(f);
                 advanceFirePitCooking(f);

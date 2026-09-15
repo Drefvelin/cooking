@@ -1,16 +1,26 @@
 package net.tfminecraft.cooking.item.data;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import me.Plugins.TLibs.Objects.API.SubAPI.StringFormatter;
 
 public class OverrideData {
     private String name;
     private String model;
     private String carveSequence;
+    private final Map<String, Double> age;
 
     public OverrideData(String name, String model, String carveSequence) {
-        if(name != null) this.name = StringFormatter.formatHex(name);
+        this(name, model, carveSequence, Map.of());
+    }
+
+    public OverrideData(String name, String model, String carveSequence, Map<String, Double> age) {
+        if (name != null) this.name = StringFormatter.formatHex(name);
         this.model = model;
         this.carveSequence = carveSequence;
+        this.age = age == null || age.isEmpty() ? Map.of() : Collections.unmodifiableMap(new HashMap<>(age));
     }
 
     public String getName() {
@@ -21,5 +31,12 @@ public class OverrideData {
     }
     public String getCarveSequence() {
         return carveSequence;
+    }
+
+    public Double getAge(String trackId) {
+        if (trackId == null || age.isEmpty()) {
+            return null;
+        }
+        return age.get(trackId.toLowerCase());
     }
 }

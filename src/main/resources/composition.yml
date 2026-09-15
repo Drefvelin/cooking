@@ -1,9 +1,6 @@
 # Composition roles and modifier tuning.
 # legacy-mode: false enables mains/extras pipeline on all compose stations.
-#
-# Sausage maker (Batch 2): three meat inputs use default mains role (average quality + freshness).
-# SAUSAGE_MAKER context override deferred until the maker handler lands.
-# Cheese: next feature after dairy/butter pipeline.
+# Sausage maker meat inputs use the default mains role (average quality + freshness).
 
 legacy-mode: false
 

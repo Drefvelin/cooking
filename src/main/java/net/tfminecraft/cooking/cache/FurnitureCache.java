@@ -19,6 +19,7 @@ public class FurnitureCache {
     public static String ovenTop;
     public static String breadTray;
     public static String liquidContainer;
+    public static String trough;
 
     public static String plate;
     public static String bowl;
@@ -72,6 +73,10 @@ public class FurnitureCache {
 
     public static boolean isLiquidContainer(Furniture f) {
         return f.getId().equalsIgnoreCase(liquidContainer);
+    }
+
+    public static boolean isTrough(Furniture f) {
+        return f.getId().equalsIgnoreCase(trough);
     }
 
     public static boolean isPlate(Furniture f) {

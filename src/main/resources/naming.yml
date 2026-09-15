@@ -18,7 +18,7 @@ dough-fillers:
 origin-adjectives:
   "Spice Leaf": Spiced
 
-# Category buckets for station logic (Batch 2+)
+# Category buckets for station logic
 categories:
   seasoning:
     - salt
@@ -34,7 +34,6 @@ categories:
 # Per-category tag step display overrides (fallback after per-type tag-labels)
 tag-label-defaults:
   dairy:
-    dairy_freshness:
-      rotten: "#8B7355Spoiled"
-    butter_freshness:
+    freshness:
+      stale: "#c3db81Sour"
       rotten: "#8B7355Spoiled"

@@ -10,11 +10,45 @@ roast:
       name: "#d9baa5Beef Roast"
       model: red_meat_roast
       carve-sequence: red_meat
+    PORK:
+      name: "#d9baa5Pork Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    MUTTON:
+      name: "#d9baa5Mutton Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    GOAT:
+      name: "#d9baa5Goat Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    HORSE:
+      name: "#d9baa5Horse Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    DONKEY:
+      name: "#d9baa5Donkey Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    MULE:
+      name: "#d9baa5Mule Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    CAMEL:
+      name: "#d9baa5Camel Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
+    LLAMA:
+      name: "#d9baa5Llama Roast"
+      model: red_meat_roast
+      carve-sequence: red_meat
     VENISON:
       name: "#d9baa5Venison Roast"
       model: red_meat_roast
       carve-sequence: red_meat
   model: poultry_roast
+  food: 26
+  nutrition: 8
   cooking-options:
     fire_pit:
       tag: 1
@@ -28,6 +62,8 @@ meat_poultry:
       name: "#d9baa5Chicken"
       model: meat_poultry
   model: meat_poultry
+  food: 18
+  nutrition: 8
   cooking-options:
     frying_pan:
       tag: 1
@@ -41,6 +77,8 @@ meat_poultry_leg:
       name: "#d9baa5Chicken Leg"
       model: meat_poultry_leg
   model: meat_poultry_leg
+  food: 18
+  nutrition: 8
   cooking-options:
     frying_pan:
       tag: 1
@@ -57,6 +95,8 @@ meat_red_meat:
       name: "#d9baa5Venison"
       model: meat_red_meat
   model: meat_red_meat
+  food: 18
+  nutrition: 8
   cooking-options:
     frying_pan:
       tag: 1
@@ -66,6 +106,8 @@ meat_red_meat:
 meat_pork:
   name: "#d9baa5Pork"
   model: meat_pork
+  food: 18
+  nutrition: 8
   cooking-options:
     frying_pan:
       tag: 1
@@ -75,6 +117,8 @@ meat_pork:
 sausage:
   name: "#d9baa5Sausage"
   model: sausage
+  food: 18
+  nutrition: 8
   cooking-options:
     frying_pan:
       tag: 1
@@ -84,6 +128,8 @@ sausage:
 sausage_chain:
   name: "#d9baa5Sausage Chain"
   model: sausage_chain
+  food: 18
+  nutrition: 8
   carve-sequence: sausage
 
 ###Veggies — raw (full pipeline: cut → chop)
@@ -109,6 +155,8 @@ vegetable_1:
     PUMPKIN:
       model: pumpkin
   model: tomato
+  food: 8
+  nutrition: 6
 
 ###Veggies — raw (chop only, no cut step; excludes from cut_vegetables recipe)
 vegetable_chop_only:
@@ -123,6 +171,8 @@ vegetable_chop_only:
     GARLIC:
       model: garlic
   model: olive
+  food: 8
+  nutrition: 6
 
 ###Veggies — cut (pan + pot)
 vegetable_cut:
@@ -147,6 +197,8 @@ vegetable_cut:
     PUMPKIN:
       model: pumpkin_cut
   model: carrot_cut
+  food: 8
+  nutrition: 6
   cooking-options:
     frying_pan:
       tag: 1
@@ -180,6 +232,8 @@ vegetable_chopped:
     PUMPKIN:
       model: pumpkin_chopped
   model: carrot_chopped
+  food: 8
+  nutrition: 6
 
 ###Seasoning — does not spoil
 seasoning_1:
@@ -218,6 +272,8 @@ spice_1:
     SPICE LEAF:
       model: spice_leaf
   model: basil
+  food: 0
+  nutrition: 0
 
 ###Garnish — chopped (no cooking yet)
 garnish_chopped:
@@ -232,13 +288,15 @@ garnish_chopped:
     GARLIC:
       model: garlic_chopped
   model: olive_chopped
+  food: 8
+  nutrition: 6
 
 ###Baked goods
 bread:
   name: "#d9c4a5{prefixes}{fillers}Bread"
   model: bread
-  food: 4
-  nutrition: 3
+  food: 16
+  nutrition: 5
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -274,19 +332,21 @@ fruit_1:
     MELON SLICE:
       model: melon_slice
   model: strawberry
+  food: 8
+  nutrition: 7
 
 ##Crops
 wheat:
   name: "#e8c56bWheat"
   model: wheat
-  food: 1
-  nutrition: 1
+  food: 4
+  nutrition: 4
 
 flour:
   name: "#f5f0e8Flour"
   model: flour
-  food: 1
-  nutrition: 1
+  food: 4
+  nutrition: 4
   tag-labels:
     freshness:
       rotten: "#8B7355Musty"
@@ -294,8 +354,8 @@ flour:
 yeast:
   name: "#e8d4a0Yeast"
   model: yeast
-  food: 1
-  nutrition: 1
+  food: 4
+  nutrition: 4
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -303,8 +363,8 @@ yeast:
 dough:
   name: "#f0e0c0{prefixes}{fillers}Dough"
   model: dough
-  food: 1
-  nutrition: 1
+  food: 4
+  nutrition: 4
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -312,34 +372,49 @@ dough:
 ##SAUCE
 sauce:
   name: "{colour}{prefixes}{fillers}Sauce"
+  food: 6
+  nutrition: 5
 
 ##SOUP
 soup:
   name: "{colour}{prefixes}{fillers}Soup"
+  food: 26
+  nutrition: 8
 
 cup_of_milk:
   name: "#f5f5f5Cup of Milk"
   model: cup_of_milk
   category: dairy
-  food: 2
-  nutrition: 2
+  food: 10
+  nutrition: 6
+  age:
+    freshness: 0.25
   tag-labels:
-    dairy_freshness:
+    freshness:
+      stale: "#c3db81Sour"
       rotten: "#8B7355Spoiled"
 
 milk_bucket:
   name: "#f5f5f5Milk"
   category: dairy
+  food: 10
+  nutrition: 6
+  age:
+    freshness: 0.25
   tag-labels:
-    dairy_freshness:
+    freshness:
+      stale: "#c3db81Sour"
       rotten: "#8B7355Spoiled"
 
 butter:
   name: "#f5f5f5{prefixes}Butter"
   model: butter
   category: dairy
-  food: 2
-  nutrition: 2
+  food: 10
+  nutrition: 6
+  age:
+    freshness: 1
   tag-labels:
-    butter_freshness:
+    freshness:
+      stale: "#c3db81Rancid"
       rotten: "#8B7355Spoiled"

@@ -17,6 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
 import net.tfminecraft.cooking.Cooking;
+import net.tfminecraft.cooking.crops.CropHarvestItems;
+import net.tfminecraft.cooking.crops.CropHarvestQuality;
+import net.tfminecraft.cooking.crops.CropsConfig;
+import net.tfminecraft.cooking.crops.CropDefinition;
 import net.tfminecraft.cooking.utils.IngredientConverter;
 import net.tfminecraft.cooking.utils.InventoryAdder;
 
@@ -70,6 +74,12 @@ public final class FarmHarvestService {
             return false;
         }
 
+        CropDefinition cropQuality = CropsConfig.byBlock(block.getType());
+        Integer harvestQuality = null;
+        if (cropQuality != null && CropsConfig.SOURCE_VANILLA.equals(cropQuality.source())) {
+            harvestQuality = rollHarvestQuality(player, block, cropQuality, hoe);
+        }
+
         BlockState state = block.getState();
         List<ItemStack> drops = new ArrayList<>(block.getDrops(tool));
         ItemStack replantSeed = takeOneSeed(drops, cropDef.seed());
@@ -78,7 +88,9 @@ public final class FarmHarvestService {
             if (drop == null || drop.getType().isAir() || drop.getAmount() <= 0) {
                 continue;
             }
-            ItemStack converted = IngredientConverter.convertHarvestDrop(player, drop, hoe.qualityBonusPercent());
+            ItemStack converted = harvestQuality != null
+                    ? CropHarvestItems.convertDrop(drop, cropQuality, harvestQuality)
+                    : IngredientConverter.convertHarvestDrop(player, drop, hoe.qualityBonusPercent());
             ItemStack leftover = InventoryAdder.addItem(player, converted);
             if (leftover != null) {
                 block.getWorld().dropItemNaturally(block.getLocation(), leftover);
@@ -93,6 +105,15 @@ public final class FarmHarvestService {
         }
 
         return true;
+    }
+
+    private static int rollHarvestQuality(
+            Player player,
+            Block block,
+            CropDefinition crop,
+            FarmingToolDefinition hoe) {
+        int harvested = CropHarvestQuality.roll(crop.id(), block.getLocation(), player);
+        return HoeQualityBonus.apply(harvested, hoe.qualityBonusPercent());
     }
 
     private static boolean isMature(Block block) {

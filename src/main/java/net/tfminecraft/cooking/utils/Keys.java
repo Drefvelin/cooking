@@ -17,6 +17,12 @@ public class Keys {
     public static final NamespacedKey QUALITY =
             new NamespacedKey(Cooking.plugin, "food_quality");
 
+    public static final NamespacedKey BASE_FOOD =
+            new NamespacedKey(Cooking.plugin, "food_base");
+
+    public static final NamespacedKey BASE_NUTRITION =
+            new NamespacedKey(Cooking.plugin, "food_nutrition_base");
+
     public static final NamespacedKey STATE =
             new NamespacedKey(Cooking.plugin, "food_state");
 
@@ -25,6 +31,8 @@ public class Keys {
 
     public static final NamespacedKey TAGS =
             new NamespacedKey(Cooking.plugin, "tags");
+    public static final NamespacedKey AGE_REMAINDER =
+            new NamespacedKey(Cooking.plugin, "age_remainder");
     public static final NamespacedKey LAST_UPDATE =
             new NamespacedKey(Cooking.plugin, "last_update");
     public static final NamespacedKey LORE_INDEX_MAP =

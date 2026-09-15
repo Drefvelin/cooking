@@ -25,6 +25,7 @@ categories:
       - tfmc_cooking:meat_hook
       - tfmc_cooking:sausage_maker
       - tfmc_cooking:liquid_container
+      - tfmc_cooking:trough
       - tfmc_cooking:namespace
       - tfmc_cooking:tomato
       - tfmc_cooking:onion
@@ -308,6 +309,5 @@ categories:
       - tfmc_cooking:sunflower_seeds
       - tfmc_cooking:strawberry_jam
       - tfmc_cooking:tomato_sauce
-      - tfmc_cooking:grain
       - tfmc_cooking:bag
       - tfmc_cooking:bag_on_stand
