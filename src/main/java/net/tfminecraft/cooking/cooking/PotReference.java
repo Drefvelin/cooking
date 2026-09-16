@@ -204,6 +204,8 @@ public class PotReference extends CookingReference {
         p.getInventory().setItemInMainHand(output);
         p.swingMainHand();
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
+        org.bukkit.Bukkit.getPluginManager().callEvent(
+                new net.tfminecraft.cooking.events.DishCookedEvent(p, output, "pot"));
         // ---------- CLEAR ----------
         clear();
     }

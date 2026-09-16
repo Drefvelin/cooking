@@ -221,6 +221,8 @@ public class CookingReference {
             item = ItemUpdater.applyItemUpdate(item, fi, f.getId());
             if(item == null) return;
             e.setItem(item);
+            org.bukkit.Bukkit.getPluginManager().callEvent(
+                    new net.tfminecraft.cooking.events.DishCookedEvent(e.getPlayer(), item, "station"));
         }
     }
 
