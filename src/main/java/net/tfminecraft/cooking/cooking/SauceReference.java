@@ -312,6 +312,9 @@ public class SauceReference extends CookingReference {
 
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 2f);
 
+        org.bukkit.Bukkit.getPluginManager().callEvent(
+                new net.tfminecraft.cooking.events.DishCookedEvent(p, output, "sauce"));
+
         clear();
 
     }

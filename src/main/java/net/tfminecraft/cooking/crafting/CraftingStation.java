@@ -282,6 +282,11 @@ public class CraftingStation {
                 output
             ).setVelocity(new Vector(Math.random()*0.2-0.1, 0.1, Math.random()*0.2-0.1));
         }
+
+        if(p != null) {
+            org.bukkit.Bukkit.getPluginManager().callEvent(
+                    new net.tfminecraft.cooking.events.DishCookedEvent(p, output, "craft"));
+        }
     }
 
     public void remove(FurnitureBreakEvent e) {

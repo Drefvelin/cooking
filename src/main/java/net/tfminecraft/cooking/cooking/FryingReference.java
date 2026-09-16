@@ -214,6 +214,8 @@ public class FryingReference extends CookingReference {
 
         clearButterSecondary();
         e.setItem(item);
+        org.bukkit.Bukkit.getPluginManager().callEvent(
+                new net.tfminecraft.cooking.events.DishCookedEvent(e.getPlayer(), item, "station"));
     }
 
     private void clearButterSecondary() {
