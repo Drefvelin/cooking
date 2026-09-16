@@ -53,8 +53,6 @@ public class ItemUpdater {
 
             if (before != null && after != null && !before.getTag().equals(after.getTag())) {
                 changed = true;
-            } else if (newAge != oldValue || scaled.leftover() > 0) {
-                changed = true;
             }
         }
 
