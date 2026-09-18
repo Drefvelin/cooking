@@ -76,6 +76,10 @@ public final class HusbandryLoader {
                 parseAmountBands(config.getMapList("amount-from-genetics")),
                 config.getBoolean("mounts.nerf", true),
                 config.getDouble("mounts.nerf-divisor", 2));
+        HusbandryConfig.setMountSpeedShares(
+                config.getDouble("mounts.speed.min-pct", 0.40),
+                config.getDouble("mounts.speed.genetics-pct", 0.30),
+                config.getDouble("mounts.speed.care-pct", 0.20));
     }
 
     private static Set<EntityType> parseEntityTypes(List<String> raw) {
@@ -118,6 +122,7 @@ public final class HusbandryLoader {
                     section.getString(key + ".egg", ""),
                     section.getString(key + ".shed", ""),
                     parseSpeciesGrowUp(section, key),
+                    parseSpeciesDuration(section, key, "wool-timer"),
                     parseDropTable(section.getConfigurationSection(key + ".drops"))));
         }
         return species;
@@ -131,7 +136,8 @@ public final class HusbandryLoader {
                 parseDropEntries(section.getMapList("common")),
                 parseDropEntries(section.getMapList("rare")),
                 parseDropEntries(section.getMapList("epic")),
-                parseDropEntries(section.getMapList("legendary")));
+                parseDropEntries(section.getMapList("legendary")),
+                "counted".equalsIgnoreCase(section.getString("mode", "")));
     }
 
     private static List<HusbandryDropEntry> parseDropEntries(List<Map<?, ?>> raw) {
@@ -141,22 +147,28 @@ public final class HusbandryLoader {
         }
         for (Map<?, ?> entry : raw) {
             Object pathRaw = entry.get("path");
-            if (pathRaw == null || String.valueOf(pathRaw).isBlank()) {
+            String path = pathRaw == null ? "" : String.valueOf(pathRaw).trim();
+            int weight = intValue(entry.get("weight"), 1);
+            if (weight <= 0) {
                 continue;
             }
             entries.add(new HusbandryDropEntry(
-                    String.valueOf(pathRaw),
+                    path,
                     intValue(entry.get("amount"), 1),
-                    intValue(entry.get("weight"), 1)));
+                    weight));
         }
         return entries;
     }
 
     private static int parseSpeciesGrowUp(ConfigurationSection section, String key) {
-        if (section == null || !section.contains(key + ".grow-up")) {
+        return parseSpeciesDuration(section, key, "grow-up");
+    }
+
+    private static int parseSpeciesDuration(ConfigurationSection section, String key, String field) {
+        if (section == null || !section.contains(key + "." + field)) {
             return 0;
         }
-        return Math.max(1, TimeFormatter.parseSeconds(section.getString(key + ".grow-up")));
+        return Math.max(1, TimeFormatter.parseSeconds(section.getString(key + "." + field)));
     }
 
     private static List<HusbandryQualityBand> parseQualityBands(List<Map<?, ?>> raw) {
@@ -182,7 +194,8 @@ public final class HusbandryLoader {
             bands.add(new HusbandryAmountBand(
                     intValue(entry.get("min"), 0),
                     Math.max(1, intValue(entry.get("roast-cuts"), 1)),
-                    Math.max(1, intValue(entry.get("wool"), 1))));
+                    Math.max(1, intValue(entry.get("wool"), 1)),
+                    intValue(entry.get("secondary-extra"), 0)));
         }
         bands.sort(Comparator.comparingInt(HusbandryAmountBand::minGenetics));
         return bands;
@@ -194,7 +207,8 @@ public final class HusbandryLoader {
             return mounts;
         }
         for (String key : section.getKeys(false)) {
-            if ("nerf".equalsIgnoreCase(key) || "nerf-divisor".equalsIgnoreCase(key)) {
+            if ("nerf".equalsIgnoreCase(key) || "nerf-divisor".equalsIgnoreCase(key)
+                    || "speed".equalsIgnoreCase(key)) {
                 continue;
             }
             EntityType type = parseEntityType(key);
@@ -259,7 +273,7 @@ public final class HusbandryLoader {
                 20,
                 1000,
                 1,
-                28800,
+                1200,
                 3600,
                 28800,
                 0.15,
@@ -284,5 +298,6 @@ public final class HusbandryLoader {
                 List.of(new HusbandryAmountBand(0, 1, 1)),
                 true,
                 2);
+        HusbandryConfig.setMountSpeedShares(0.40, 0.30, 0.20);
     }
 }

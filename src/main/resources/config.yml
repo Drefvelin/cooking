@@ -131,12 +131,32 @@ heat:
 
 liquids:
     - default ia.tfmc_cooking:water
-    - v.potion ia.tfmc_cooking:water
+    - ia.tfmc_cooking:cup_of_water ia.tfmc_cooking:water
     - v.milk_bucket ia.tfmc_cooking:milk
+    - ia.tfmc_cooking:cup_of_milk ia.tfmc_cooking:milk
 colours:
     - v.milk_bucket ffffff
+    - origin.milk ffffff
     - origin.carrot f0801f
     - origin.basil 30ba2b
+    - origin.black_pepper 3d3d3d
+    - origin.cinnamon 8b4513
+    - origin.vanilla f5e6c8
+    - origin.nutmeg 6b3a1f
+    - origin.spice_leaf 2e7d32
+    - origin.mustard c9a227
+    - origin.potato d4a017
+    - origin.tomato c0392b
+    - origin.onion c9a227
+    - origin.lettuce 6aa84f
+    - origin.cucumber 3d8c40
+    - origin.corn f1c232
+    - origin.beetroot 7b1e3c
+    - origin.pumpkin e67e22
+    - origin.olive 808000
+    - origin.pistachio 93c47d
+    - origin.rhubarb c45c6a
+    - origin.garlic f5f0e6
 
 
 dictionary:

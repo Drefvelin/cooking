@@ -32,13 +32,9 @@ public final class HusbandryInspectListener implements Listener {
         if (repository == null) {
             return;
         }
+        HusbandryMounts.enrollIfNeeded(living);
         Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
         if (stored.isEmpty()) {
-            return;
-        }
-
-        if (HusbandryItems.matches(hand, HusbandryConfig.mountStatsItem())) {
-            handleMountStats(player, living, stored.get(), event);
             return;
         }
 
@@ -51,23 +47,6 @@ public final class HusbandryInspectListener implements Listener {
         openInspect(player, living, stored.get(), event);
     }
 
-    private static void handleMountStats(
-            Player player,
-            LivingEntity living,
-            HusbandryAnimal animal,
-            PlayerInteractEntityEvent event) {
-        event.setCancelled(true);
-        if (!HusbandryMounts.isMount(living)) {
-            player.sendMessage("§cThis item only works on mounts.");
-            return;
-        }
-        if (!canView(player, animal)) {
-            player.sendMessage("§cThis is not your animal.");
-            return;
-        }
-        HusbandryInspectGui.open(player, living, animal);
-    }
-
     private static void openInspect(
             Player player,
             LivingEntity living,
@@ -78,6 +57,7 @@ public final class HusbandryInspectListener implements Listener {
             player.sendMessage("§cThis is not your animal.");
             return;
         }
+        HusbandryMounts.applySpeed(living, animal);
         HusbandryInspectGui.open(player, living, animal);
     }
 

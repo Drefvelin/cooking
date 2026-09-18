@@ -14,6 +14,7 @@ public final class HusbandrySpecies {
     private final String egg;
     private final String shed;
     private final int growUpSeconds;
+    private final int woolTimerSeconds;
     private final HusbandryDropTable drops;
 
     public HusbandrySpecies(
@@ -25,6 +26,7 @@ public final class HusbandrySpecies {
             String egg,
             String shed,
             int growUpSeconds,
+            int woolTimerSeconds,
             HusbandryDropTable drops) {
         this.type = type;
         this.harvestModes = Set.copyOf(harvestModes);
@@ -34,6 +36,7 @@ public final class HusbandrySpecies {
         this.egg = egg == null ? "" : egg;
         this.shed = shed == null ? "" : shed;
         this.growUpSeconds = Math.max(0, growUpSeconds);
+        this.woolTimerSeconds = Math.max(0, woolTimerSeconds);
         this.drops = drops == null ? HusbandryDropTable.empty() : drops;
     }
 
@@ -71,6 +74,10 @@ public final class HusbandrySpecies {
 
     public int growUpSeconds() {
         return growUpSeconds;
+    }
+
+    public int woolTimerSeconds() {
+        return woolTimerSeconds;
     }
 
     public HusbandryDropTable drops() {

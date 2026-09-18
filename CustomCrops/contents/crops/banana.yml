@@ -143,5 +143,3 @@ banana:
         condition_1:
           type: moisture-more-than
           value: 6
-        sf_fertility:
-          type: province-fertility

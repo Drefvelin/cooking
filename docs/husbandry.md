@@ -184,7 +184,7 @@ Genetics → stars **and** amount tables both live in YAML (`husbandry.yml`). Do
 
 ## World cleanup
 
-On chunk **load**, for each entity type in `remove-unowned` (cows, pigs, sheep, chickens, goats, horses, camels, llamas, … — **not bees**): if there is **no owner** (no row, or a row with an empty owner list), `remove()` and delete any orphan SQLite row. Spawn-egg and natural animals can be tamed only while that chunk stays loaded.
+On chunk **load**, for each entity type in `remove-unowned` (cows, pigs, sheep, chickens, goats, horses, camels, llamas, … — **not bees**): if there is **no owner**, `remove()` and delete any orphan SQLite row — **except** horse/donkey/mule/camel that already have a SQLite row (first-interact enroll; they stay unowned until tamed). Spawn-egg and natural animals can be tamed only while that chunk stays loaded, unless they were enrolled.
 
 Never delete a row on unload just because `Bukkit.getEntity` is null. If an **owned** row exists but the entity is missing, keep the row (admin / later reconcile). Unowned wipe on load is an explicit despawn, not that Cleanser path.
 
@@ -214,20 +214,24 @@ Applies to entities with a SQLite row. If `other-players` is false, cancel playe
 
 ## GUI
 
-Sneak empty-hand (or configured `items.inspect` TLibs path; blank = sneak-only) on a managed animal. Mounts also open the same GUI when using `items.mount-stats`.
+Sneak empty-hand (or configured `items.inspect` TLibs path; blank = sneak-only) on a managed animal, including mounts.
 
 **54-slot** double-chest inventory for all animals (livestock and mounts).
 
-Layout uses **gray/green concrete bars** (5 centered segments each). One empty row separates the two bars. **Every** bar segment (filled and empty) shows the same three-line text: title (`Care` / `Genetics`), current/max, then yield %.
+Layout uses **gray/green concrete bars** (5 centered segments each). One empty row separates the two bars. Each segment shows title (`Care` / `Genetics`) and current/max only.
 
-- **Row 1 (header):** status, neutered, owners, name, remove-ownership (slot 8, owners only)
+- **Row 1 (header):** status, neutered, owners, **products** (slot 3, if the species has harvest), name, remove-ownership (slot 8, owners only)
 - **Row 2:** empty
-- **Row 3:** **Care bar** (slots 20–24): fill = `care / care-max`; each segment shows title `Care`, lore `care/care-max`, then `Yield X%`
+- **Row 3:** **Care bar** (slots 20–24): fill = `care / care-max`; lore is `care/care-max`
 - **Row 4:** empty separator
-- **Row 5:** **Genetics bar** (slots 38–42): fill = `genetics / max-genetics`; each segment shows title `Genetics`, lore `genetics/max-genetics`, then `Yield X%`
+- **Row 5:** **Genetics bar** (slots 38–42): fill = `genetics / max-genetics`; lore is `genetics/max-genetics`
 - **Row 6 (mounts only):** health, speed, jump (slots 46, 49, 52)
 
-**Yield X%** is the same on both bars: `round(100 × effectiveGenetics / max-genetics)` where `effectiveGenetics = floor(genetics × care / care-max)`.
+**Products** (chest, slot 3) only if the species lists any of `slaughter`, `shear`, `shed`, `milk`, `egg`. Lore is `Yield X%` then mode lines (`On slaughter`, `Shear`, `Shed`, `Milk`, `Eggs`) — no stars or amounts. Pets with no harvest have no icon.
+
+**Yield X%** is `round(100 × effectiveGenetics / max-genetics)` where `effectiveGenetics = floor(genetics × care / care-max)`.
+
+Horse, donkey, and mule slaughter extras are counted leather (same table as cow). Camel is roast only (no extra drop table).
 
 Also shows: status (Happy / Hungry+Dirty + decay line), neutered, owners, growing-up timer on babies, mount stats when relevant, remove-ownership for owners.
 
@@ -242,7 +246,7 @@ Requires `cooking.admin`:
 
 Reload config (including `husbandry.yml`) via `/cooking reload`. This reloads YAML only; it does **not** reopen the SQLite database.
 
-No `/breedingbuddies`. Unowned admin-spawned animals despawn on chunk load until tamed.
+No `/breedingbuddies`. Unowned admin-spawned livestock still despawn on chunk load until tamed. Enrolled or spawned horse/donkey/mule/camel keep their SQLite row without an owner.
 
 ## Architecture
 
@@ -301,7 +305,7 @@ items:
   glove: m.pets.caring_glove
   neuter: v.shears
   inspect: ""
-  mount-stats: m.pets.carrot_on_a_stick
+  mount-stats: ""
 
 initial-genetic-max: 20
 max-genetics: 1000

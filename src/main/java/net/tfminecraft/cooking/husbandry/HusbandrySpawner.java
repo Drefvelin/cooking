@@ -68,6 +68,7 @@ public final class HusbandrySpawner {
         HusbandryHarvest.prepareNewAnimal(animal, living.getType());
         repository.upsertAnimal(animal);
         HusbandryEntities.trackLoaded(living.getUniqueId());
+        HusbandryMounts.applySpeed(living, animal);
         return animal;
     }
 }

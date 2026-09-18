@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +38,11 @@ public final class HusbandryDeathListener implements Listener {
         HusbandryAnimal animal = stored.get();
         HusbandrySpecies species = HusbandryConfig.species(entity.getType());
         long now = System.currentTimeMillis();
-        if (species != null && species.hasHarvest("slaughter") && !species.slaughter().isBlank()) {
+        boolean hasSlaughter = species != null
+                && species.hasHarvest("slaughter")
+                && !species.slaughter().isBlank();
+        boolean mature = HusbandryGrowth.isMature(animal, now);
+        if (HusbandrySlaughterDrops.shouldReplaceVanilla(hasSlaughter, mature)) {
             Iterator<ItemStack> drops = event.getDrops().iterator();
             while (drops.hasNext()) {
                 ItemStack drop = drops.next();
@@ -46,13 +51,16 @@ public final class HusbandryDeathListener implements Listener {
                 }
                 drops.remove();
             }
-            if (HusbandryGrowth.isMature(animal, now)) {
+            if (HusbandrySlaughterDrops.shouldAddRoast(hasSlaughter, mature)) {
                 ItemStack roast = HusbandryHarvest.buildFood(animal, species.slaughter());
                 if (roast != null) {
                     event.getDrops().add(roast);
+                } else {
+                    Bukkit.getLogger().warning("[Cooking] Slaughter roast failed for "
+                            + entity.getType() + " using " + species.slaughter());
                 }
-                HusbandryDropRoller.rollExtras(animal, ThreadLocalRandom.current())
-                        .ifPresent(extra -> event.getDrops().add(extra));
+                HusbandryDropRoller.rollSlaughterExtras(animal, ThreadLocalRandom.current(), now)
+                        .forEach(extra -> event.getDrops().add(extra));
             }
         }
         repository.deleteAnimal(entity.getUniqueId());

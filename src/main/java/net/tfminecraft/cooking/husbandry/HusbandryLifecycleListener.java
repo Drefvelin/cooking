@@ -66,8 +66,11 @@ public final class HusbandryLifecycleListener implements Listener {
         UUID uuid = entity.getUniqueId();
         boolean hasRow = repository.exists(uuid);
 
-        if (HusbandryConfig.isRemoveUnowned(entity.getType())
-                && !HusbandryOwnershipService.hasAnyOwner(uuid)) {
+        if (HusbandryMounts.shouldWipeUnowned(
+                HusbandryConfig.isRemoveUnowned(entity.getType()),
+                HusbandryOwnershipService.hasAnyOwner(uuid),
+                hasRow,
+                HusbandryMounts.hasConfiguredStats(entity))) {
             if (hasRow) {
                 repository.deleteAnimal(uuid);
             }
@@ -91,6 +94,7 @@ public final class HusbandryLifecycleListener implements Listener {
         long now = System.currentTimeMillis();
         HusbandrySimulator.catchUp(animal, now, java.util.concurrent.ThreadLocalRandom.current());
         HusbandryGrowth.applyMaturity(living, animal, now);
+        HusbandryMounts.applySpeed(living, animal);
         animal.setUnloadedAt(null);
         animal.setLoadedVisitStart(now);
         repository.upsertAnimal(animal);

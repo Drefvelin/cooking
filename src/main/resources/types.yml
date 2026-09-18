@@ -6,6 +6,8 @@ roast:
       name: "#d9baa5Whole Chicken"
       model: poultry_roast
       carve-sequence: poultry
+      age:
+        freshness: 54
     BEEF:
       name: "#d9baa5Beef Roast"
       model: red_meat_roast
@@ -49,11 +51,14 @@ roast:
   model: poultry_roast
   food: 26
   nutrition: 8
+  age:
+    freshness: 81
+    warmth: 45
   cooking-options:
     fire_pit:
       tag: 1
-      time: 20
-      burn: 40
+      time: 40
+      burn: 70
 
 meat_poultry:
   name: "#d9baa5{inherit}"
@@ -61,14 +66,19 @@ meat_poultry:
     CHICKEN:
       name: "#d9baa5Chicken"
       model: meat_poultry
+      age:
+        freshness: 40
   model: meat_poultry
   food: 18
   nutrition: 8
+  age:
+    freshness: 40
+    warmth: 30
   cooking-options:
     frying_pan:
       tag: 1
-      time: 12
-      burn: 25
+      time: 60
+      burn: 90
 
 meat_poultry_leg:
   name: "#d9baa5{inherit} Leg"
@@ -76,14 +86,19 @@ meat_poultry_leg:
     CHICKEN:
       name: "#d9baa5Chicken Leg"
       model: meat_poultry_leg
+      age:
+        freshness: 40
   model: meat_poultry_leg
   food: 18
   nutrition: 8
+  age:
+    freshness: 40
+    warmth: 30
   cooking-options:
     frying_pan:
       tag: 1
-      time: 15
-      burn: 30
+      time: 70
+      burn: 105
 
 meat_red_meat:
   name: "#d9baa5Steak"
@@ -97,33 +112,42 @@ meat_red_meat:
   model: meat_red_meat
   food: 18
   nutrition: 8
+  age:
+    freshness: 54
+    warmth: 30
   cooking-options:
     frying_pan:
       tag: 1
-      time: 15
-      burn: 30
+      time: 75
+      burn: 110
 
 meat_pork:
   name: "#d9baa5Pork"
   model: meat_pork
   food: 18
   nutrition: 8
+  age:
+    freshness: 54
+    warmth: 30
   cooking-options:
     frying_pan:
       tag: 1
-      time: 15
-      burn: 30
+      time: 70
+      burn: 105
 
 sausage:
   name: "#d9baa5Sausage"
   model: sausage
   food: 18
   nutrition: 8
+  age:
+    freshness: 108
+    warmth: 30
   cooking-options:
     frying_pan:
       tag: 1
-      time: 15
-      burn: 30
+      time: 60
+      burn: 90
 
 sausage_chain:
   name: "#d9baa5Sausage Chain"
@@ -131,6 +155,8 @@ sausage_chain:
   food: 18
   nutrition: 8
   carve-sequence: sausage
+  age:
+    freshness: 108
 
 ###Veggies — raw (full pipeline: cut → chop)
 vegetable_1:
@@ -138,25 +164,51 @@ vegetable_1:
   overrides:
     CARROT:
       model: carrot
+      age:
+        freshness: 270
     POTATO:
       model: potato
+      age:
+        freshness: 378
     TOMATO:
       model: tomato
+      age:
+        freshness: 108
     ONION:
       model: onion
+      age:
+        freshness: 270
     LETTUCE:
       model: lettuce
+      age:
+        freshness: 54
     CUCUMBER:
       model: cucumber
+      age:
+        freshness: 81
     CORN:
       model: corn
+      age:
+        freshness: 108
     BEETROOT:
       model: beetroot
+      age:
+        freshness: 270
     PUMPKIN:
       model: pumpkin
+      age:
+        freshness: 378
+    RICE:
+      age:
+        freshness: 810
+    NETHER WART:
+      age:
+        freshness: 189
   model: tomato
   food: 8
   nutrition: 6
+  age:
+    freshness: 189
 
 ###Veggies — raw (chop only, no cut step; excludes from cut_vegetables recipe)
 vegetable_chop_only:
@@ -164,15 +216,25 @@ vegetable_chop_only:
   overrides:
     OLIVE:
       model: olive
+      age:
+        freshness: 567
     PISTACHIO:
       model: pistachio
+      age:
+        freshness: 810
     RHUBARB:
       model: rhubarb
+      age:
+        freshness: 135
     GARLIC:
       model: garlic
+      age:
+        freshness: 378
   model: olive
   food: 8
   nutrition: 6
+  age:
+    freshness: 189
 
 ###Veggies — cut (pan + pot)
 vegetable_cut:
@@ -180,34 +242,55 @@ vegetable_cut:
   overrides:
     CARROT:
       model: carrot_cut
+      age:
+        freshness: 189
     POTATO:
       model: potato_cut
+      age:
+        freshness: 270
     TOMATO:
       model: tomato_cut
+      age:
+        freshness: 81
     ONION:
       model: onion_cut
+      age:
+        freshness: 189
     LETTUCE:
       model: lettuce_cut
+      age:
+        freshness: 40
     CUCUMBER:
       model: cucumber_cut
+      age:
+        freshness: 54
     CORN:
       model: corn_cut
+      age:
+        freshness: 81
     BEETROOT:
       model: beetroot_cut
+      age:
+        freshness: 189
     PUMPKIN:
       model: pumpkin_cut
+      age:
+        freshness: 270
   model: carrot_cut
   food: 8
   nutrition: 6
+  age:
+    freshness: 135
+    warmth: 30
   cooking-options:
     frying_pan:
       tag: 1
-      time: 15
-      burn: 30
+      time: 60
+      burn: 90
     pot:
       tag: 3
-      time: 15
-      burn: 30
+      time: 90
+      burn: 150
 
 ###Veggies — chopped garnish (no cooking; cook on cut stage)
 vegetable_chopped:
@@ -215,25 +298,45 @@ vegetable_chopped:
   overrides:
     CARROT:
       model: carrot_chopped
+      age:
+        freshness: 135
     POTATO:
       model: potato_chopped
+      age:
+        freshness: 189
     TOMATO:
       model: tomato_chopped
+      age:
+        freshness: 54
     ONION:
       model: onion_chopped
+      age:
+        freshness: 135
     LETTUCE:
       model: lettuce_chopped
+      age:
+        freshness: 27
     CUCUMBER:
       model: cucumber_chopped
+      age:
+        freshness: 40
     CORN:
       model: corn_chopped
+      age:
+        freshness: 54
     BEETROOT:
       model: beetroot_chopped
+      age:
+        freshness: 135
     PUMPKIN:
       model: pumpkin_chopped
+      age:
+        freshness: 189
   model: carrot_chopped
   food: 8
   nutrition: 6
+  age:
+    freshness: 108
 
 ###Seasoning — does not spoil
 seasoning_1:
@@ -261,19 +364,36 @@ spice_1:
   overrides:
     BASIL:
       model: basil
+      age:
+        freshness: 108
     BLACK PEPPER:
       model: black_pepper
+      age:
+        freshness: 810
     CINNAMON:
       model: cinnamon
+      age:
+        freshness: 810
     VANILLA:
       model: vanilla
+      age:
+        freshness: 810
     NUTMEG:
       model: nutmeg
+      age:
+        freshness: 810
     SPICE LEAF:
       model: spice_leaf
+      age:
+        freshness: 135
+    MUSTARD:
+      age:
+        freshness: 810
   model: basil
   food: 0
   nutrition: 0
+  age:
+    freshness: 810
 
 ###Garnish — chopped (no cooking yet)
 garnish_chopped:
@@ -281,15 +401,25 @@ garnish_chopped:
   overrides:
     OLIVE:
       model: olive_chopped
+      age:
+        freshness: 270
     PISTACHIO:
       model: pistachio_chopped
+      age:
+        freshness: 378
     RHUBARB:
       model: rhubarb_chopped
+      age:
+        freshness: 54
     GARLIC:
       model: garlic_chopped
+      age:
+        freshness: 189
   model: olive_chopped
   food: 8
   nutrition: 6
+  age:
+    freshness: 81
 
 ###Baked goods
 bread:
@@ -297,6 +427,9 @@ bread:
   model: bread
   food: 16
   nutrition: 5
+  age:
+    freshness: 135
+    warmth: 25
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -307,33 +440,64 @@ fruit_1:
   overrides:
     STRAWBERRY:
       model: strawberry
+      age:
+        freshness: 40
     ORANGE:
       model: orange
+      age:
+        freshness: 270
     PLUM:
       model: plum
+      age:
+        freshness: 108
     BANANA:
       model: banana
+      age:
+        freshness: 108
     GRAPE:
       model: grape
+      age:
+        freshness: 108
     LEMON:
       model: lemon
+      age:
+        freshness: 378
     LIME:
       model: lime
+      age:
+        freshness: 378
     PEACH:
       model: peach
+      age:
+        freshness: 81
     PINEAPPLE:
       model: pineapple
+      age:
+        freshness: 189
     CHERRY:
       model: cherry
+      age:
+        freshness: 81
     APPLE:
       model: apple
+      age:
+        freshness: 378
     MELON:
       model: melon
+      age:
+        freshness: 189
     MELON SLICE:
       model: melon_slice
+      age:
+        freshness: 40
+    CACTUS FRUIT:
+      age:
+        freshness: 108
   model: strawberry
   food: 8
   nutrition: 7
+  age:
+    freshness: 189
 
 ##Crops
 wheat:
@@ -341,12 +505,16 @@ wheat:
   model: wheat
   food: 4
   nutrition: 4
+  age:
+    freshness: 810
 
 flour:
   name: "#f5f0e8Flour"
   model: flour
   food: 4
   nutrition: 4
+  age:
+    freshness: 567
   tag-labels:
     freshness:
       rotten: "#8B7355Musty"
@@ -356,6 +524,8 @@ yeast:
   model: yeast
   food: 4
   nutrition: 4
+  age:
+    freshness: 189
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -365,6 +535,8 @@ dough:
   model: dough
   food: 4
   nutrition: 4
+  age:
+    freshness: 54
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -374,12 +546,18 @@ sauce:
   name: "{colour}{prefixes}{fillers}Sauce"
   food: 6
   nutrition: 5
+  age:
+    freshness: 81
+    warmth: 30
 
 ##SOUP
 soup:
   name: "{colour}{prefixes}{fillers}Soup"
   food: 26
   nutrition: 8
+  age:
+    freshness: 54
+    warmth: 40
 
 cup_of_milk:
   name: "#f5f5f5Cup of Milk"
@@ -388,7 +566,7 @@ cup_of_milk:
   food: 10
   nutrition: 6
   age:
-    freshness: 0.25
+    freshness: 40
   tag-labels:
     freshness:
       stale: "#c3db81Sour"
@@ -400,7 +578,7 @@ milk_bucket:
   food: 10
   nutrition: 6
   age:
-    freshness: 0.25
+    freshness: 40
   tag-labels:
     freshness:
       stale: "#c3db81Sour"
@@ -413,7 +591,7 @@ butter:
   food: 10
   nutrition: 6
   age:
-    freshness: 1
+    freshness: 270
   tag-labels:
     freshness:
       stale: "#c3db81Rancid"

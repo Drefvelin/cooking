@@ -1,5 +1,8 @@
 package net.tfminecraft.cooking.crops;
 
+import java.lang.reflect.Field;
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,10 +10,12 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.momirealms.customcrops.api.BukkitCustomCropsPlugin;
-import net.momirealms.customcrops.api.core.world.CustomCropsBlockState;
+import net.momirealms.customcrops.api.core.Registries;
+import net.momirealms.customcrops.api.core.mechanic.crop.CropConfig;
+import net.momirealms.customcrops.api.core.mechanic.crop.GrowCondition;
 import net.momirealms.customcrops.api.event.CustomCropsReloadEvent;
-import net.momirealms.customcrops.api.requirement.RequirementManager;
+import net.momirealms.customcrops.api.requirement.Requirement;
+import net.tfminecraft.cooking.Cooking;
 
 public final class CropCustomCropsBridge implements Listener {
 
@@ -24,7 +29,7 @@ public final class CropCustomCropsBridge implements Listener {
             return;
         }
         registerHarvestListener(plugin);
-        registerFertilityRequirement();
+        scheduleInjectFertility();
     }
 
     private static void registerHarvestListener(JavaPlugin plugin) {
@@ -35,36 +40,63 @@ public final class CropCustomCropsBridge implements Listener {
         harvestListenerRegistered = true;
     }
 
-    private static void registerFertilityRequirement() {
+    private static void scheduleInjectFertility() {
+        if (Cooking.plugin == null) {
+            injectFertility();
+            return;
+        }
+        Cooking.plugin.getServer().getScheduler().runTask(Cooking.plugin, CropCustomCropsBridge::injectFertility);
+    }
+
+    static void injectFertility() {
         try {
-            RequirementManager<CustomCropsBlockState> manager = BukkitCustomCropsPlugin.getInstance()
-                    .getRequirementManager(CustomCropsBlockState.class);
-            manager.unregisterRequirement(ProvinceFertilityRequirement.TYPE);
-            manager.unregisterRequirement(ProvinceFertilityRequirement.ALIAS);
-            boolean registered = manager.registerRequirement(
-                    ProvinceFertilityRequirement.FACTORY,
-                    ProvinceFertilityRequirement.TYPE,
-                    ProvinceFertilityRequirement.ALIAS);
-            if (registered) {
-                Bukkit.getLogger().info(
-                        "[Cooking] Registered CustomCrops requirement: " + ProvinceFertilityRequirement.TYPE);
+            for (CropConfig config : Registries.CROP) {
+                wrapGrowConditions(config);
             }
-        } catch (IllegalArgumentException | IllegalStateException | NoClassDefFoundError exception) {
-            Bukkit.getLogger().warning(
-                    "[Cooking] Failed to register CustomCrops fertility requirement: "
-                            + exception.getMessage());
+        } catch (NoClassDefFoundError | IllegalStateException exception) {
+            Logger logger = Bukkit.getLogger();
+            logger.warning("[Cooking] Failed to inject CustomCrops fertility gate: " + exception.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void wrapGrowConditions(CropConfig config) {
+        if (config == null) {
+            return;
+        }
+        GrowCondition[] conditions = config.growConditions();
+        if (conditions == null || conditions.length == 0) {
+            GrowCondition always = new GrowCondition(new Requirement[0], 1);
+            replaceGrowConditions(config, new GrowCondition[] { new CookingFertilityGrowCondition(always) });
+            return;
+        }
+        for (int i = 0; i < conditions.length; i++) {
+            GrowCondition current = conditions[i];
+            if (current == null || current instanceof CookingFertilityGrowCondition) {
+                continue;
+            }
+            conditions[i] = new CookingFertilityGrowCondition(current);
+        }
+    }
+
+    private static void replaceGrowConditions(CropConfig config, GrowCondition[] next) {
+        try {
+            Field field = config.getClass().getDeclaredField("growConditions");
+            field.setAccessible(true);
+            field.set(config, next);
+        } catch (ReflectiveOperationException ignored) {
         }
     }
 
     @EventHandler
     public void onPluginEnable(PluginEnableEvent event) {
         if ("CustomCrops".equalsIgnoreCase(event.getPlugin().getName())) {
-            tryRegister(net.tfminecraft.cooking.Cooking.plugin);
+            tryRegister(Cooking.plugin);
         }
     }
 
     @EventHandler
     public void onCustomCropsReload(CustomCropsReloadEvent event) {
-        registerFertilityRequirement();
+        scheduleInjectFertility();
     }
 }

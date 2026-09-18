@@ -28,6 +28,10 @@ import me.Plugins.TLibs.Objects.API.SubAPI.StringFormatter;
 
 import net.tfminecraft.cooking.cache.ItemCache;
 
+import net.tfminecraft.cooking.cup.BucketItems;
+
+import net.tfminecraft.cooking.cup.CupItems;
+
 import net.tfminecraft.cooking.enums.Method;
 
 import net.tfminecraft.cooking.heat.HeatSources;
@@ -47,6 +51,8 @@ import net.tfminecraft.cooking.quality.CompositionQualityResolver;
 import net.tfminecraft.cooking.quality.CompositionResult;
 
 import net.tfminecraft.cooking.utils.DisplayUtils;
+
+import net.tfminecraft.cooking.utils.InventoryAdder;
 
 import net.tfminecraft.cooking.utils.FoodParser;
 
@@ -341,9 +347,19 @@ public class SauceReference extends CookingReference {
 
             scoop(p, item);
 
+            return;
+
         }
 
-        if(ItemCache.isLiquid(item) && !secondaries.containsKey("liquid")) {
+        if (!secondaries.containsKey("liquid") && isWrongSaucepanWater(item)) {
+
+            p.sendMessage("Use a cup of water to fill the saucepan.");
+
+            return;
+
+        }
+
+        if(canPourSaucepanLiquid(item) && !secondaries.containsKey("liquid")) {
 
             if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
 
@@ -356,9 +372,13 @@ public class SauceReference extends CookingReference {
 
             secondaries.put("liquid", -1);
 
-            slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(ItemCache.getLiquidModel(item)));
+            String modelPath = saucepanLiquidModel(item);
+
+            slot.forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(modelPath));
 
             addColour(ItemCache.getColour(item));
+
+            consumeSaucepanPour(p, item);
 
             p.swingMainHand();
 
@@ -367,6 +387,8 @@ public class SauceReference extends CookingReference {
             danger = 0;
 
             f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 2f);
+
+            return;
 
         }
 
@@ -408,6 +430,69 @@ public class SauceReference extends CookingReference {
         super.clear();
     }
 
+    private static boolean canPourSaucepanLiquid(ItemStack item) {
+        return ItemCache.isCupOfWater(item)
+                || ItemCache.isCupOfMilk(item)
+                || ItemCache.isMilkBucket(item);
+    }
+
+    private static boolean isWrongSaucepanWater(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false;
+        }
+        if (canPourSaucepanLiquid(item)) {
+            return false;
+        }
+        return item.getType() == Material.POTION
+                || item.getType() == Material.WATER_BUCKET
+                || ItemCache.isWater(item)
+                || ItemCache.isLiquid(item);
+    }
+
+    private static String saucepanLiquidModel(ItemStack item) {
+        String path = ItemCache.getLiquidModel(item);
+        if (path != null && !path.isBlank()) {
+            return path;
+        }
+        if (ItemCache.isCupOfMilk(item) || ItemCache.isMilkBucket(item)) {
+            String milk = ItemCache.getLiquidModel("v.milk_bucket");
+            if (milk != null) {
+                return milk;
+            }
+        }
+        return ItemCache.liquidFallback;
+    }
+
+    private static void consumeSaucepanPour(Player player, ItemStack hand) {
+        boolean waterCup = ItemCache.isCupOfWater(hand);
+        boolean milkCup = ItemCache.isCupOfMilk(hand);
+        boolean milkBucket = ItemCache.isMilkBucket(hand);
+        hand.setAmount(hand.getAmount() - 1);
+        if (waterCup || milkCup) {
+            ItemStack empty = CupItems.emptyCup();
+            if (hand.getAmount() <= 0) {
+                player.getInventory().setItemInMainHand(empty);
+            } else {
+                ItemStack leftover = InventoryAdder.addItem(player, empty);
+                if (leftover != null) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), leftover);
+                }
+            }
+            player.updateInventory();
+            return;
+        }
+        if (milkBucket) {
+            if (hand.getAmount() <= 0) {
+                player.getInventory().setItemInMainHand(BucketItems.empty());
+            } else {
+                ItemStack leftover = InventoryAdder.addItem(player, BucketItems.empty());
+                if (leftover != null) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), leftover);
+                }
+            }
+            player.updateInventory();
+        }
+    }
 }
 
 

@@ -78,7 +78,7 @@ public final class HusbandryBreedListener implements Listener {
                 return;
             }
             repository.getAnimal(child.getUniqueId()).ifPresent(baby -> {
-                baby.setGenetics(HusbandryMounts.geneticsFromStats(child));
+                HusbandryMounts.applySpeed(child, baby);
                 repository.upsertAnimal(baby);
             });
         }, 1L);

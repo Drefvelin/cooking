@@ -25,7 +25,7 @@ public final class HusbandryConfig {
     private static int initialGeneticMax = 20;
     private static int maxGenetics = 1000;
     private static int minRoastCuts = 1;
-    private static int woolTimerSeconds = 28800;
+    private static int woolTimerSeconds = 1200;
     private static int growUpSeconds = 3600;
     private static int shedTimerSeconds = 28800;
     private static double shedChance = 0.15;
@@ -50,6 +50,9 @@ public final class HusbandryConfig {
     private static List<HusbandryAmountBand> amountBands = List.of();
     private static boolean mountNerf = true;
     private static double mountNerfDivisor = 2;
+    private static double mountSpeedMinPct = 0.40;
+    private static double mountSpeedGeneticsPct = 0.30;
+    private static double mountSpeedCarePct = 0.20;
 
     private HusbandryConfig() {}
 
@@ -140,6 +143,24 @@ public final class HusbandryConfig {
         mountNerfDivisor = mountNerfDivisorValue;
     }
 
+    public static void setMountSpeedShares(double minPct, double geneticsPct, double carePct) {
+        mountSpeedMinPct = Math.max(0, minPct);
+        mountSpeedGeneticsPct = Math.max(0, geneticsPct);
+        mountSpeedCarePct = Math.max(0, carePct);
+    }
+
+    public static double mountSpeedMinPct() {
+        return mountSpeedMinPct;
+    }
+
+    public static double mountSpeedGeneticsPct() {
+        return mountSpeedGeneticsPct;
+    }
+
+    public static double mountSpeedCarePct() {
+        return mountSpeedCarePct;
+    }
+
     public static int maxAnimals() {
         return maxAnimals;
     }
@@ -210,6 +231,20 @@ public final class HusbandryConfig {
 
     public static int woolTimerSeconds() {
         return woolTimerSeconds;
+    }
+
+    public static int woolTimerSeconds(EntityType type) {
+        if (type != null) {
+            HusbandrySpecies configured = species.get(type);
+            if (configured != null && configured.woolTimerSeconds() > 0) {
+                return configured.woolTimerSeconds();
+            }
+        }
+        return woolTimerSeconds;
+    }
+
+    public static int resolveWoolTimerSeconds(int speciesOverrideSeconds, int globalSeconds) {
+        return speciesOverrideSeconds > 0 ? speciesOverrideSeconds : Math.max(0, globalSeconds);
     }
 
     public static int growUpSeconds() {
@@ -303,13 +338,14 @@ public final class HusbandryConfig {
     }
 
     public static int starsForGenetics(int genetics) {
-        int stars = 1;
-        for (HusbandryQualityBand band : qualityBands) {
-            if (genetics >= band.minGenetics()) {
-                stars = band.stars();
-            }
+        return HusbandryQualityRange.starsForGenetics(genetics, qualityBands);
+    }
+
+    public static HusbandryQualityRange.Bounds qualityRange(HusbandryAnimal animal) {
+        if (animal == null) {
+            return new HusbandryQualityRange.Bounds(1, 1);
         }
-        return Math.max(1, Math.min(5, stars));
+        return HusbandryQualityRange.of(animal.genetics(), animal.care(), careMax, qualityBands);
     }
 
     public static Map<EntityType, HusbandryMountStats> mounts() {
@@ -347,6 +383,26 @@ public final class HusbandryConfig {
             }
         }
         return Math.max(minRoastCuts, cuts);
+    }
+
+    public static int secondaryExtraFor(int effectiveGenetics) {
+        return secondaryExtraFor(effectiveGenetics, amountBands);
+    }
+
+    public static int secondaryExtraFor(int effectiveGenetics, List<HusbandryAmountBand> bands) {
+        int extra = 0;
+        if (bands != null) {
+            for (HusbandryAmountBand band : bands) {
+                if (effectiveGenetics >= band.minGenetics()) {
+                    extra = band.secondaryExtra();
+                }
+            }
+        }
+        return Math.max(0, Math.min(2, extra));
+    }
+
+    public static int hideCount(int effectiveGenetics) {
+        return 1 + secondaryExtraFor(effectiveGenetics);
     }
 
     public static int woolFor(int effectiveGenetics) {

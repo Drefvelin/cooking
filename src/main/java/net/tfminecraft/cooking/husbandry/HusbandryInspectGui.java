@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -19,6 +20,7 @@ public final class HusbandryInspectGui {
 
     private static final long MILLIS_PER_HOUR = 3_600_000L;
     private static final int INVENTORY_SIZE = 54;
+    private static final int PRODUCTS_SLOT = 3;
     private static final int REMOVE_SLOT = 8;
     private static final int CARE_BAR_START = 20;
     private static final int GENETICS_BAR_START = 38;
@@ -47,10 +49,14 @@ public final class HusbandryInspectGui {
         inv.setItem(4, named(Material.NAME_TAG, "§6" + animal.name(),
                 List.of("§7" + entity.getType().name(), "§7State: " + animal.state().storage(),
                         growingLine(animal))));
+        ItemStack products = productsItem(entity.getType(), yieldPct);
+        if (products != null) {
+            inv.setItem(PRODUCTS_SLOT, products);
+        }
 
-        HusbandryGuiBars.fillBar(inv, CARE_BAR_START, "Care", animal.care(), careMax, yieldPct);
+        HusbandryGuiBars.fillBar(inv, CARE_BAR_START, "Care", animal.care(), careMax);
         HusbandryGuiBars.fillBar(inv, GENETICS_BAR_START, "Genetics", animal.genetics(),
-                HusbandryConfig.maxGenetics(), yieldPct);
+                HusbandryConfig.maxGenetics());
 
         if (mount) {
             inv.setItem(MOUNT_HEALTH_SLOT, named(Material.GOLDEN_APPLE,
@@ -69,6 +75,19 @@ public final class HusbandryInspectGui {
                     List.of("§7Click to stop owning this animal.")));
         }
         player.openInventory(inv);
+    }
+
+    private static ItemStack productsItem(EntityType type, int yieldPct) {
+        HusbandrySpecies species = HusbandryConfig.species(type);
+        if (species == null || !HusbandryProducts.hasProducts(species.harvestModes())) {
+            return null;
+        }
+        List<String> lore = new ArrayList<>();
+        lore.add("§aYield " + yieldPct + "%");
+        for (String line : HusbandryProducts.modeLines(species.harvestModes())) {
+            lore.add("§7" + line);
+        }
+        return named(Material.CHEST, "§6Products", lore);
     }
 
     private static String growingLine(HusbandryAnimal animal) {

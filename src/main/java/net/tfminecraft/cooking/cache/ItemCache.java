@@ -3,6 +3,7 @@ package net.tfminecraft.cooking.cache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.Material;
@@ -151,14 +152,36 @@ public class ItemCache {
         return false;
     }
 
+    public static String normalizeOrigin(String origin) {
+        if (origin == null) {
+            return "";
+        }
+        return origin.toLowerCase(Locale.ROOT).replace("_", "").replace(" ", "");
+    }
+
+    public static boolean originsMatch(String foodOrigin, String keyPart) {
+        if (foodOrigin == null || foodOrigin.isBlank() || keyPart == null || keyPart.isBlank()) {
+            return false;
+        }
+        return normalizeOrigin(foodOrigin).equals(normalizeOrigin(keyPart));
+    }
+
     public static String getColour(ItemStack i) {
+        if (i == null) {
+            return "000000";
+        }
+        FoodItem food = FoodItem.fromItem(i);
         for (String path : colourMap.keySet()) {
-            if(path.split("\\.")[0].equalsIgnoreCase("origin")) {
-                String origin = path.split("\\.")[1];
-                if(origin == null) continue;
-                FoodItem fi = FoodItem.fromItem(i);
-                if(fi == null) return "000000";
-                return colourMap.get(path);
+            int dot = path.indexOf('.');
+            if (dot > 0 && path.substring(0, dot).equalsIgnoreCase("origin")) {
+                if (food == null) {
+                    continue;
+                }
+                String keyPart = path.substring(dot + 1);
+                if (originsMatch(food.getOrigin(), keyPart)) {
+                    return colourMap.get(path);
+                }
+                continue;
             }
             if (TLibs.getItemAPI().getChecker().checkItemWithPath(i, path)) {
                 return colourMap.get(path);

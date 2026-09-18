@@ -37,10 +37,10 @@ Province fertility 0–100  ×  crops.yml affection
 
 ```text
 growth-gate.enabled and SimpleFactions map active
-  → affection from crops.yml (or CC condition value override)
+  → affection from crops.yml
   → growChance = (fertility/100) ^ affection
   → vanilla: cancel BlockGrowEvent on fail
-  → CustomCrops: province-fertility requirement (alias simplefactions-fertility)
+  → CustomCrops: Cooking wraps loaded grow-conditions (no fertility keys in CC YAML)
 ```
 
 Unlisted blocks/ids are not gated. `growth-gate.enabled: false` or map off: all ticks allowed.
@@ -91,11 +91,11 @@ There is no `c.seed` path and no `/cooking crop` / `/cooking cropseed` admin com
 | Nutmeg seed | — | **`ia.playbox_custom_crops:nut_seeds`** (not `nutmeg_seeds`) |
 | Produce drop | Vanilla item (`wheat`, potato, …) | `tfmc_cooking:<id>` (e.g. `tfmc_cooking:tomato`) |
 | Harvest | Hoe harvest: roll H, convert produce, leave seeds | `CropBreakEvent` / mature interact: pending rewrite at H |
-| Growth | `CropGrowthListener` on `BlockGrowEvent` | `province-fertility` in `grow-conditions` |
+| Growth | `CropGrowthListener` on `BlockGrowEvent` | Cooking wraps CC grow-conditions after load; `crops.yml` affection |
 
 CustomCrops one-seed drops stay yield/balance. No plant upsert / harvest SQL.
 
-Cooking registers `province-fertility` (alias `simplefactions-fertility`) on CustomCrops enable and `/customcrops reload`. Optional condition `value:` overrides affection for that condition.
+Cooking injects a fertility check into loaded CustomCrops grow-conditions on enable and `/customcrops reload`. CustomCrops YAML must not mention fertility. Affection comes only from `crops.yml`.
 
 ## Hoe crops in this spec
 

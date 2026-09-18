@@ -1,6 +1,7 @@
 package net.tfminecraft.cooking.husbandry;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +17,12 @@ public final class HusbandryMountListener implements Listener {
         }
         if (!(event.getEntity() instanceof Player player)) {
             return;
+        }
+        if (mount instanceof LivingEntity living) {
+            HusbandryAnimal animal = HusbandryMounts.enrollIfNeeded(living);
+            if (animal != null) {
+                HusbandryMounts.applySpeed(living, animal);
+            }
         }
         if (!HusbandryOwnershipService.hasAnyOwner(mount.getUniqueId())) {
             return;

@@ -4,6 +4,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Tameable;
 import org.bukkit.persistence.PersistentDataType;
@@ -14,6 +15,34 @@ public final class HusbandryMounts {
 
     public static boolean isMount(Entity entity) {
         return entity instanceof AbstractHorse;
+    }
+
+    public static boolean hasConfiguredStats(Entity entity) {
+        return entity != null && HusbandryConfig.mountStats(entity.getType()) != null;
+    }
+
+    public static boolean shouldWipeUnowned(
+            boolean removeUnownedType, boolean hasOwner, boolean hasRow, boolean configuredMount) {
+        return removeUnownedType && !hasOwner && !(hasRow && configuredMount);
+    }
+
+    public static boolean shouldCreateEnrollRow(boolean configuredMount, boolean hasRow) {
+        return configuredMount && !hasRow;
+    }
+
+    public static HusbandryAnimal enrollIfNeeded(LivingEntity entity) {
+        if (entity == null || !hasConfiguredStats(entity)) {
+            return null;
+        }
+        HusbandryRepository repository = HusbandryEntities.repository();
+        if (repository == null) {
+            return null;
+        }
+        boolean hasRow = repository.exists(entity.getUniqueId());
+        if (!shouldCreateEnrollRow(true, hasRow)) {
+            return repository.getAnimal(entity.getUniqueId()).orElse(null);
+        }
+        return HusbandrySpawner.createWildRecord(entity);
     }
 
     public static void setNerfed(Entity entity, boolean nerfed) {
@@ -43,9 +72,61 @@ public final class HusbandryMounts {
 
     public static void setSpeed(LivingEntity entity, double speed) {
         AttributeInstance attr = entity.getAttribute(Attribute.MOVEMENT_SPEED);
-        if (attr != null) {
-            attr.setBaseValue(speed);
+        if (attr == null) {
+            return;
         }
+        if (Math.abs(attr.getBaseValue() - speed) < 0.0000001) {
+            return;
+        }
+        attr.setBaseValue(speed);
+    }
+
+    public static double speedFor(
+            double maxSpeed,
+            int genetics,
+            int care,
+            int maxGenetics,
+            int careMax,
+            double minPct,
+            double geneticsPct,
+            double carePct) {
+        double min = Math.max(0, minPct);
+        double gShare = Math.max(0, geneticsPct);
+        double cShare = Math.max(0, carePct);
+        double g = maxGenetics <= 0 ? 0 : Math.max(0, Math.min(1, genetics / (double) maxGenetics));
+        double c = careMax <= 0 ? 0 : Math.max(0, Math.min(1, care / (double) careMax));
+        double fraction = min + gShare * g + cShare * c;
+        return maxSpeed * fraction;
+    }
+
+    public static double speedFor(HusbandryAnimal animal, EntityType type) {
+        if (animal == null || type == null) {
+            return -1;
+        }
+        HusbandryMountStats stats = HusbandryConfig.mountStats(type);
+        if (stats == null) {
+            return -1;
+        }
+        return speedFor(
+                stats.maxSpeed(),
+                animal.genetics(),
+                animal.care(),
+                HusbandryConfig.maxGenetics(),
+                HusbandryConfig.careMax(),
+                HusbandryConfig.mountSpeedMinPct(),
+                HusbandryConfig.mountSpeedGeneticsPct(),
+                HusbandryConfig.mountSpeedCarePct());
+    }
+
+    public static void applySpeed(LivingEntity entity, HusbandryAnimal animal) {
+        if (entity == null || animal == null || !isMount(entity)) {
+            return;
+        }
+        double speed = speedFor(animal, entity.getType());
+        if (speed < 0) {
+            return;
+        }
+        setSpeed(entity, speed);
     }
 
     public static void setJump(Entity entity, double jump) {
@@ -95,12 +176,6 @@ public final class HusbandryMounts {
         if (stats == null) {
             return;
         }
-        double speed = breedAttribute(
-                Math.min(speed(parent1), stats.maxSpeed()),
-                Math.min(speed(parent2), stats.maxSpeed()),
-                stats.minSpeed(),
-                stats.maxSpeed());
-        setSpeed(child, speed);
 
         double health = breedAttribute(
                 Math.min(maxHealth(parent1), stats.maxHealth()),

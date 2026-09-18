@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.cup.MilkBucketConverter;
 import net.tfminecraft.cooking.item.FoodItem;
-import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.cooking.utils.QualityUtils;
 
 public final class HusbandryHarvestListener implements Listener {
@@ -66,6 +66,42 @@ public final class HusbandryHarvestListener implements Listener {
         Bukkit.getScheduler().runTask(Cooking.plugin, () -> finishMilk(player, animal, species, repository));
     }
 
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onShearsInteract(PlayerInteractEntityEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
+        Player player = event.getPlayer();
+        ItemStack hand = player.getInventory().getItemInMainHand();
+        if (hand == null || hand.getType() != Material.SHEARS) {
+            return;
+        }
+        if (HusbandryItems.matches(hand, HusbandryConfig.neuterItem())) {
+            return;
+        }
+        Entity clicked = event.getRightClicked();
+        if (!(clicked instanceof LivingEntity living)) {
+            return;
+        }
+        if (living.getType() == EntityType.SHEEP) {
+            return;
+        }
+        HusbandrySpecies species = HusbandryConfig.species(living.getType());
+        if (species == null || !species.hasHarvest("shear") || species.shear().isBlank()) {
+            return;
+        }
+        HusbandryRepository repository = HusbandryEntities.repository();
+        if (repository == null) {
+            return;
+        }
+        Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
+        if (stored.isEmpty()) {
+            return;
+        }
+        event.setCancelled(true);
+        HusbandryHarvest.tryShear(player, living, stored.get(), species, repository, System.currentTimeMillis());
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onShear(PlayerShearEntityEvent event) {
         Entity sheared = event.getEntity();
@@ -81,24 +117,17 @@ public final class HusbandryHarvestListener implements Listener {
         if (stored.isEmpty()) {
             return;
         }
-        HusbandryAnimal animal = stored.get();
-        long now = System.currentTimeMillis();
-        if (!HusbandryGrowth.isMature(animal, now)) {
-            event.getPlayer().sendMessage("§cThis animal is still growing up.");
-            event.setCancelled(true);
+        event.setCancelled(true);
+        if (!(sheared instanceof LivingEntity living)) {
             return;
         }
-        if (animal.woolReadyAt() != null && animal.woolReadyAt() > now) {
-            return;
-        }
-        int amount = HusbandryConfig.woolFor(HusbandryConfig.effectiveGenetics(animal));
-        ItemStack extra = HusbandryHarvest.buildTlibs(species.shear(), amount);
-        if (extra != null) {
-            InventoryAdder.addItem(event.getPlayer(), extra);
-        }
-        long wait = HusbandryConfig.woolTimerSeconds() * 1000L;
-        animal.setWoolReadyAt(now + wait);
-        repository.upsertAnimal(animal);
+        HusbandryHarvest.tryShear(
+                event.getPlayer(),
+                living,
+                stored.get(),
+                species,
+                repository,
+                System.currentTimeMillis());
     }
 
     private static boolean onMilkCooldown(HusbandryAnimal animal, long now) {
@@ -124,11 +153,11 @@ public final class HusbandryHarvestListener implements Listener {
             converted = HusbandryHarvest.buildFood(animal, species.milk());
         } else {
             converted = MilkBucketConverter.convert(
-                    player, main, QualityUtils.clamp(HusbandryHarvest.stars(animal)));
+                    player, main, QualityUtils.clamp(HusbandryHarvest.rollQuality(animal, null)));
         }
         if (converted == null) {
             converted = MilkBucketConverter.convert(
-                    player, main, QualityUtils.clamp(HusbandryHarvest.stars(animal)));
+                    player, main, QualityUtils.clamp(HusbandryHarvest.rollQuality(animal, null)));
         }
         if (converted != null && (FoodItem.fromItem(main) == null || converted != main)) {
             converted.setAmount(main.getAmount());

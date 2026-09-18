@@ -1,7 +1,13 @@
 package net.tfminecraft.cooking.husbandry;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.Plugins.TLibs.TLibs;
@@ -11,6 +17,7 @@ import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.model.ModelData;
 import net.tfminecraft.cooking.loader.CarveSequenceLoader;
 import net.tfminecraft.cooking.utils.FoodParser;
+import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.cooking.utils.ItemBuilder;
 import net.tfminecraft.cooking.utils.ItemUpdater;
 import net.tfminecraft.cooking.utils.QualityUtils;
@@ -42,6 +49,50 @@ public final class HusbandryHarvest {
         return HusbandryConfig.starsForGenetics(animal.genetics());
     }
 
+    public static int rollQuality(HusbandryAnimal animal, Random random) {
+        return HusbandryQualityRange.roll(HusbandryConfig.qualityRange(animal), random);
+    }
+
+    public enum ShearResult {
+        IMMATURE,
+        COOLDOWN,
+        DONE
+    }
+
+    public static ShearResult tryShear(
+            Player player,
+            LivingEntity living,
+            HusbandryAnimal animal,
+            HusbandrySpecies species,
+            HusbandryRepository repository,
+            long nowMillis) {
+        if (player == null || animal == null || species == null || species.shear().isBlank()) {
+            return ShearResult.COOLDOWN;
+        }
+        if (!HusbandryGrowth.isMature(animal, nowMillis)) {
+            player.sendMessage("§cThis animal is still growing up.");
+            return ShearResult.IMMATURE;
+        }
+        if (animal.woolReadyAt() != null && animal.woolReadyAt() > nowMillis) {
+            player.sendMessage("§cThis animal is not ready to be sheared.");
+            return ShearResult.COOLDOWN;
+        }
+        int amount = HusbandryConfig.woolFor(HusbandryConfig.effectiveGenetics(animal));
+        ItemStack extra = buildTlibs(species.shear(), amount);
+        if (extra != null) {
+            InventoryAdder.addItem(player, extra);
+        }
+        if (living != null && living.getWorld() != null) {
+            living.getWorld().playSound(living.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1f, 1f);
+        }
+        long wait = HusbandryConfig.woolTimerSeconds(species.type()) * 1000L;
+        animal.setWoolReadyAt(nowMillis + wait);
+        if (repository != null) {
+            repository.upsertAnimal(animal);
+        }
+        return ShearResult.DONE;
+    }
+
     public static ItemStack buildFood(HusbandryAnimal animal, String foodString) {
         if (foodString == null || foodString.isBlank() || animal == null) {
             return null;
@@ -50,7 +101,7 @@ public final class HusbandryHarvest {
         if (parsed == null || parsed.template == null) {
             return null;
         }
-        int quality = QualityUtils.clamp(stars(animal));
+        int quality = QualityUtils.clamp(rollQuality(animal, ThreadLocalRandom.current()));
         ItemStack stack = ItemBuilder.buildSingleWithQuality(parsed.template, null, quality);
         FoodItem item = FoodItem.fromItem(stack);
         if (item == null) {
