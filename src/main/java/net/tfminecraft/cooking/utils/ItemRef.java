@@ -39,6 +39,8 @@ public class ItemRef {
                 outPdc.set(key, PersistentDataType.INTEGER, srcPdc.get(key, PersistentDataType.INTEGER));
             } else if (srcPdc.has(key, PersistentDataType.LONG)) {
                 outPdc.set(key, PersistentDataType.LONG, srcPdc.get(key, PersistentDataType.LONG));
+            } else if (srcPdc.has(key, PersistentDataType.DOUBLE)) {
+                outPdc.set(key, PersistentDataType.DOUBLE, srcPdc.get(key, PersistentDataType.DOUBLE));
             }
         });
 

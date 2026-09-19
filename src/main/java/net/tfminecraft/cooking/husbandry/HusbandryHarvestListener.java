@@ -2,7 +2,7 @@ package net.tfminecraft.cooking.husbandry;
 
 import java.util.Optional;
 
-import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
@@ -13,26 +13,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDropItemEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import net.tfminecraft.cooking.Cooking;
-import net.tfminecraft.cooking.cup.MilkBucketConverter;
-import net.tfminecraft.cooking.item.FoodItem;
-import net.tfminecraft.cooking.utils.QualityUtils;
+import net.tfminecraft.cooking.utils.InventoryAdder;
 
 public final class HusbandryHarvestListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onMilk(PlayerInteractEntityEvent event) {
-        if (event.getHand() != EquipmentSlot.HAND) {
+        EquipmentSlot slot = event.getHand();
+        if (slot != EquipmentSlot.HAND && slot != EquipmentSlot.OFF_HAND) {
             return;
         }
         Player player = event.getPlayer();
-        ItemStack hand = player.getInventory().getItemInMainHand();
-        if (hand == null || hand.getType() != Material.BUCKET) {
+        ItemStack used = player.getInventory().getItem(slot);
+        if (used == null || used.getType() != Material.BUCKET) {
             return;
         }
         Entity clicked = event.getRightClicked();
@@ -42,6 +42,13 @@ public final class HusbandryHarvestListener implements Listener {
         HusbandrySpecies species = HusbandryConfig.species(living.getType());
         if (species == null || !species.canMilk()) {
             return;
+        }
+        event.setCancelled(true);
+        if (slot == EquipmentSlot.OFF_HAND) {
+            ItemStack main = player.getInventory().getItemInMainHand();
+            if (main != null && main.getType() == Material.BUCKET) {
+                return;
+            }
         }
         HusbandryRepository repository = HusbandryEntities.repository();
         if (repository == null) {
@@ -54,17 +61,35 @@ public final class HusbandryHarvestListener implements Listener {
         HusbandryAnimal animal = stored.get();
         long now = System.currentTimeMillis();
         if (!HusbandryGrowth.isMature(animal, now)) {
-            event.setCancelled(true);
             player.sendMessage("§cThis animal is still growing up.");
             return;
         }
-        if (onMilkCooldown(animal, now)) {
-            event.setCancelled(true);
-            player.sendMessage("§cThis animal is not ready to be milked.");
+        if (onMilkCooldown(animal, living.getType(), now)) {
+            if (shouldMessageCooldown(animal, now)) {
+                player.sendMessage("§cThis animal is not ready to be milked.");
+            }
             return;
         }
-        EntityType sourceType = living.getType();
-        Bukkit.getScheduler().runTask(Cooking.plugin, () -> finishMilk(player, animal, sourceType, repository));
+        ItemStack milk = HusbandryHarvest.buildMilk(animal, living.getType());
+        if (milk == null) {
+            return;
+        }
+        milk.setAmount(1);
+        consumeOneBucket(player, slot);
+        giveMilk(player, slot, milk);
+        if (living.getWorld() != null) {
+            living.getWorld().playSound(living.getLocation(), HusbandryHarvest.milkSound(living.getType()), 1f, 1f);
+        }
+        animal.setLastMilkAt(now);
+        repository.upsertAnimal(animal);
+        player.updateInventory();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onVanillaMilkFill(PlayerBucketFillEvent event) {
+        if (event.getBucket() == Material.MILK_BUCKET) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -131,36 +156,47 @@ public final class HusbandryHarvestListener implements Listener {
                 System.currentTimeMillis());
     }
 
-    private static boolean onMilkCooldown(HusbandryAnimal animal, long now) {
+    private static boolean onMilkCooldown(HusbandryAnimal animal, EntityType type, long now) {
         Long last = animal.lastMilkAt();
         if (last == null) {
             return false;
         }
-        long wait = HusbandryConfig.milkCooldownSeconds() * 1000L;
+        long wait = HusbandryConfig.milkTimerSeconds(type) * 1000L;
         return now - last < wait;
     }
 
-    private static void finishMilk(
-            Player player,
-            HusbandryAnimal animal,
-            EntityType sourceType,
-            HusbandryRepository repository) {
-        ItemStack main = player.getInventory().getItemInMainHand();
-        if (main == null || main.getType() != Material.MILK_BUCKET) {
+    private static boolean shouldMessageCooldown(HusbandryAnimal animal, long now) {
+        Long last = animal.lastMilkAt();
+        return last == null || now - last > 1000L;
+    }
+
+    private static void consumeOneBucket(Player player, EquipmentSlot slot) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
-        ItemStack converted = HusbandryHarvest.buildFood(animal, HusbandryHarvest.milkFoodString(sourceType));
-        if (converted == null) {
-            converted = MilkBucketConverter.convert(
-                    player, main, QualityUtils.clamp(HusbandryHarvest.rollQuality(animal, null)));
+        ItemStack used = player.getInventory().getItem(slot);
+        if (used == null || used.getType() != Material.BUCKET) {
+            return;
         }
-        if (converted != null && (FoodItem.fromItem(main) == null || converted != main)) {
-            converted.setAmount(main.getAmount());
-            player.getInventory().setItemInMainHand(converted);
-            player.updateInventory();
+        int amount = used.getAmount();
+        if (amount <= 1) {
+            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+        } else {
+            used.setAmount(amount - 1);
         }
-        animal.setLastMilkAt(System.currentTimeMillis());
-        repository.upsertAnimal(animal);
+    }
+
+    private static void giveMilk(Player player, EquipmentSlot slot, ItemStack milk) {
+        PlayerInventory inv = player.getInventory();
+        ItemStack current = inv.getItem(slot);
+        if (current == null || current.getType().isAir()) {
+            inv.setItem(slot, milk);
+            return;
+        }
+        ItemStack leftover = InventoryAdder.addItem(player, milk);
+        if (leftover != null && leftover.getAmount() > 0 && player.getWorld() != null) {
+            player.getWorld().dropItemNaturally(player.getLocation(), leftover);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -13,6 +13,7 @@ public final class HusbandrySpecies {
     private final String egg;
     private final int growUpSeconds;
     private final int woolTimerSeconds;
+    private final int milkTimerSeconds;
 
     public HusbandrySpecies(
             EntityType type,
@@ -23,7 +24,8 @@ public final class HusbandrySpecies {
             HusbandryDropTable shedDrops,
             String egg,
             int growUpSeconds,
-            int woolTimerSeconds) {
+            int woolTimerSeconds,
+            int milkTimerSeconds) {
         this.type = type;
         this.milk = milk;
         this.slaughterMeat = slaughterMeat == null ? "" : slaughterMeat;
@@ -33,6 +35,7 @@ public final class HusbandrySpecies {
         this.egg = egg == null ? "" : egg;
         this.growUpSeconds = Math.max(0, growUpSeconds);
         this.woolTimerSeconds = Math.max(0, woolTimerSeconds);
+        this.milkTimerSeconds = Math.max(0, milkTimerSeconds);
     }
 
     public EntityType type() {
@@ -85,6 +88,10 @@ public final class HusbandrySpecies {
 
     public int woolTimerSeconds() {
         return woolTimerSeconds;
+    }
+
+    public int milkTimerSeconds() {
+        return milkTimerSeconds;
     }
 
     public boolean vanillaEggs() {

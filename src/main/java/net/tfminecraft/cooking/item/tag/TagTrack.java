@@ -32,6 +32,16 @@ public class TagTrack {
         this.steps.addAll(other.steps);
     }
 
+    public TagTrack(String id, boolean ageable, List<TagStep> steps) {
+        this.id = id;
+        this.value = 0;
+        this.index = 0;
+        this.ageable = ageable;
+        if (steps != null) {
+            this.steps.addAll(steps);
+        }
+    }
+
     public int getIndex() { return index; }
     public String getId() { return id; }
     public int getValue() { return value; }

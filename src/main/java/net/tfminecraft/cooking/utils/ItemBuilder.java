@@ -4,7 +4,6 @@ import net.tfminecraft.cooking.item.CookingPathHandler;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.carve.CarveSequence;
 import net.tfminecraft.cooking.loader.CarveSequenceLoader;
-import net.tfminecraft.cooking.loader.ModelLoader;
 import net.tfminecraft.cooking.item.model.FoodModel;
 import net.tfminecraft.cooking.item.model.ModelData;
 import net.tfminecraft.cooking.item.tag.TagStep;
@@ -12,7 +11,6 @@ import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.item.data.OverrideData;
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -75,7 +73,6 @@ public class ItemBuilder {
             String displayNameOverride) {
 
         FoodItem item = new FoodItem(template);
-        Map<String, Integer> indexMap = new HashMap<>();
 
         item.setQualityRange(quality, quality);
 
@@ -108,176 +105,231 @@ public class ItemBuilder {
         ModelData model = item.getModelData();
 
         ItemStack stack = model.apply(null, new ItemStack(Material.DIRT));
-        ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(displayName);
-
-        List<String> lore = new ArrayList<>();
-        lore.add(CategoryDictionary.getName(item.getCategory()));
-
-        // ORIGIN
-        if(!template.hasTag(Tag.PROCESSED)) lore.add("§7Origin: " + (origin != null ? origin : "§fNone"));
-
-        // QUALITY
-        lore.add(buildStars(item.getQualityMin(), 5));
-
-        // NUTRITION
-        lore.add(StringFormatter.formatHex("#d4ad77Nutrition §f" + item.getFinalNutrition()));
-        indexMap.put("nutrition", lore.size() - 1);
-
-        // FOOD
-        lore.add(StringFormatter.formatHex("#d4ad77Food §f" + item.getFinalFood()));
-        indexMap.put("food", lore.size() - 1);
-
-        if (!item.getIngredients().isEmpty()) {
-            lore.add(StringFormatter.formatHex("#dbb072Ingredients:"));
-
-            StringBuilder line = new StringBuilder("§7");
-            int max = 20; // max characters per line **after formatting codes**
-
-            for (String ing : item.getIngredients()) {
-                // Add ingredient + comma + space
-                String part = ing + ", ";
-
-                // If line would exceed max length → push current line to lore
-                if (line.length() + part.length() > max + 4) { // +4 accounts for "§7- "
-                    lore.add(line.toString());
-                    line = new StringBuilder("§7"); // new line but indented
-                }
-
-                line.append(part);
-            }
-
-            // Add final remaining line
-            if (!line.toString().trim().equals("§7-"))
-                lore.add(line.toString().replaceAll(", $", "")); // remove trailing comma
-        }
-
-        // SAUCE BLOCK (separate from ingredients)
-        if (item.hasSauce()) {
-            lore.add(" "); // spacer
-            FoodItem sauce = item.getSauce();
-            String sauceName = item.hasSauceName()
-                    ? item.getSauceName()
-                    : "Sauce";
-
-            double sFood = sauce.getFinalFood();
-            double sNut = sauce.getFinalNutrition();
-
-            String stats = DisplayUtils.getSauceStatString(sFood, sNut);
-            lore.add("§6" + sauceName + " §8(" + stats + "§8)");
-            indexMap.put("sauce", lore.size() - 1);
-        }
-
-
-
-        lore.add(" ");
-        boolean first = true;
-
-        // TAG TRACKS
-        for (TagTrack t : item.getTagTracks()) {
-            TagStep step = t.getCurrentStep();
-            if (step == null) {
-                continue;
-            }
-            if (!shouldShowTagLore(item, t, step)) {
-                continue;
-            }
-            String display = DisplayUtils.getDisplayString(
-                    TagDisplayNames.resolve(item, t, step),
-                    step.getFoodMultiplier(),
-                    step.getNutritionMultiplier(),
-                    step.getCraftQualityPct());
-            lore.add(display);
-            if (first) indexMap.put("tags", lore.size() - 1);
-            first = false;
-        }
-
-        meta.setLore(lore);
-
-        // ----------------------------
-        // PDC
-        // ----------------------------
-        var pdc = meta.getPersistentDataContainer();
-
-        pdc.set(Keys.FOOD_ID, PersistentDataType.STRING, item.getId());
-        pdc.set(Keys.CATEGORY, PersistentDataType.STRING, item.getCategory());
-
-        if (item.getOrigin() != null)
-            pdc.set(Keys.ORIGIN, PersistentDataType.STRING, item.getOrigin());
-
-        pdc.set(Keys.QUALITY, PersistentDataType.INTEGER, item.getQualityMin());
-
-        if (item.hasBaseOverride()) {
-            pdc.set(Keys.BASE_FOOD, PersistentDataType.DOUBLE, item.getBaseFood());
-            pdc.set(Keys.BASE_NUTRITION, PersistentDataType.DOUBLE, item.getBaseNutrition());
-        }
-
-        pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, System.currentTimeMillis());
-
-        // TAG TRACK VALUES
-        if (!item.getTagTracks().isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            first = true;
-
-            for (TagTrack t : item.getTagTracks()) {
-                if (!first) sb.append(";");
-                sb.append(t.getId()).append(".").append(t.getValue());
-                first = false;
-            }
-            pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
-        }
-
-        String remainder = item.encodeAgeRemainder();
-        if (remainder != null) {
-            pdc.set(Keys.AGE_REMAINDER, PersistentDataType.STRING, remainder);
-        }
-
-        // SAUCE SAVE
-        if (item.hasSauce()) {
-            String nested = FoodParser.toString(item.getSauce(), 1);
-            pdc.set(Keys.SAUCE, PersistentDataType.STRING, nested);
-        }
-
-        if (item.hasSauceName()) {
-            pdc.set(Keys.SAUCE_NAME, PersistentDataType.STRING, item.getSauceName());
-        }
-
-        if (!item.getIngredients().isEmpty()) {
-            StringBuilder ingSb = new StringBuilder();
-            boolean ingFirst = true;
-            for (String ing : item.getIngredients()) {
-                if (!ingFirst) ingSb.append(':');
-                ingSb.append(ing);
-                ingFirst = false;
-            }
-            pdc.set(Keys.INGREDIENTS, PersistentDataType.STRING, ingSb.toString());
-        }
-
-        // STORE INDEX MAP
-        {
-            StringBuilder sb = new StringBuilder();
-            first = true;
-
-            for (var e : indexMap.entrySet()) {
-                if (!first) sb.append(";");
-                sb.append(e.getKey()).append(".").append(e.getValue());
-                first = false;
-            }
-
-            pdc.set(Keys.LORE_INDEX_MAP, PersistentDataType.STRING, sb.toString());
-        }
-
-        // MODEL
-        if (item.getModel() != null)
-            pdc.set(Keys.MODEL, PersistentDataType.STRING, item.getModel().getId());
-
-        stack.setItemMeta(meta);
+        stamp(stack, item, displayName);
 
         if (item.getCarveSequenceId() != null) {
             net.tfminecraft.cooking.carve.CarvableRoastUtils.initCarveState(stack, item);
         }
 
         return stack;
+    }
+
+    public static ItemStack stamp(ItemStack stack, FoodItem item, String displayName) {
+        if (stack == null || item == null) {
+            return stack;
+        }
+        ItemMeta meta = stack.getItemMeta();
+        if (meta == null) {
+            return stack;
+        }
+        if (displayName != null) {
+            meta.setDisplayName(displayName);
+        }
+
+        Map<String, Integer> indexMap = new HashMap<>();
+        meta.setLore(buildLore(item, indexMap));
+
+        var pdc = meta.getPersistentDataContainer();
+        pdc.set(Keys.FOOD_ID, PersistentDataType.STRING, item.getId());
+        pdc.set(Keys.CATEGORY, PersistentDataType.STRING, item.getCategory() != null ? item.getCategory() : "");
+
+        if (item.getOrigin() != null) {
+            pdc.set(Keys.ORIGIN, PersistentDataType.STRING, item.getOrigin());
+        } else {
+            pdc.remove(Keys.ORIGIN);
+        }
+
+        pdc.set(Keys.QUALITY, PersistentDataType.INTEGER, item.getQualityMin());
+
+        if (item.hasBaseOverride()) {
+            pdc.set(Keys.BASE_FOOD, PersistentDataType.DOUBLE, item.getBaseFood());
+            pdc.set(Keys.BASE_NUTRITION, PersistentDataType.DOUBLE, item.getBaseNutrition());
+        } else {
+            pdc.remove(Keys.BASE_FOOD);
+            pdc.remove(Keys.BASE_NUTRITION);
+        }
+
+        long lastUpdate = item.getLastUpdate() > 0 ? item.getLastUpdate() : System.currentTimeMillis();
+        pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, lastUpdate);
+
+        if (!item.getTagTracks().isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            boolean first = true;
+            for (TagTrack t : item.getTagTracks()) {
+                if (!first) {
+                    sb.append(";");
+                }
+                sb.append(t.getId()).append(".").append(t.getValue());
+                first = false;
+            }
+            pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
+        } else {
+            pdc.remove(Keys.TAGS);
+        }
+
+        String remainder = item.encodeAgeRemainder();
+        if (remainder != null) {
+            pdc.set(Keys.AGE_REMAINDER, PersistentDataType.STRING, remainder);
+        } else {
+            pdc.remove(Keys.AGE_REMAINDER);
+        }
+
+        if (item.hasSauce()) {
+            pdc.set(Keys.SAUCE, PersistentDataType.STRING, FoodParser.toString(item.getSauce(), 1));
+        } else {
+            pdc.remove(Keys.SAUCE);
+        }
+        if (item.hasSauceName()) {
+            pdc.set(Keys.SAUCE_NAME, PersistentDataType.STRING, item.getSauceName());
+        } else {
+            pdc.remove(Keys.SAUCE_NAME);
+        }
+
+        if (!item.getIngredients().isEmpty()) {
+            StringBuilder ingSb = new StringBuilder();
+            boolean ingFirst = true;
+            for (String ing : item.getIngredients()) {
+                if (!ingFirst) {
+                    ingSb.append(':');
+                }
+                ingSb.append(ing);
+                ingFirst = false;
+            }
+            pdc.set(Keys.INGREDIENTS, PersistentDataType.STRING, ingSb.toString());
+        } else {
+            pdc.remove(Keys.INGREDIENTS);
+        }
+
+        if (!indexMap.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            boolean first = true;
+            for (var e : indexMap.entrySet()) {
+                if (!first) {
+                    sb.append(";");
+                }
+                sb.append(e.getKey()).append(".").append(e.getValue());
+                first = false;
+            }
+            pdc.set(Keys.LORE_INDEX_MAP, PersistentDataType.STRING, sb.toString());
+        } else {
+            pdc.remove(Keys.LORE_INDEX_MAP);
+        }
+
+        if (item.getModel() != null) {
+            pdc.set(Keys.MODEL, PersistentDataType.STRING, item.getModel().getId());
+        }
+
+        var cookData = item.getCookData();
+        if (cookData != null && cookData.isBeingCooked() && cookData.getCurrentMethod() != null) {
+            pdc.set(Keys.COOK_METHOD, PersistentDataType.STRING, cookData.getCurrentMethod().name());
+            pdc.set(Keys.COOK_TIME, PersistentDataType.INTEGER, cookData.getCurrentTime());
+        } else {
+            pdc.remove(Keys.COOK_METHOD);
+            pdc.remove(Keys.COOK_TIME);
+        }
+
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public static List<String> buildLore(FoodItem item) {
+        return buildLore(item, new HashMap<>());
+    }
+
+    static List<String> buildLore(FoodItem item, Map<String, Integer> indexMap) {
+        String category = CategoryDictionary.getName(item.getCategory() != null ? item.getCategory() : "");
+        String origin = item.hasTag(Tag.PROCESSED)
+                ? null
+                : "§7Origin: " + (item.getOrigin() != null ? item.getOrigin() : "§fNone");
+        String sauceLine = null;
+        if (item.hasSauce()) {
+            FoodItem sauce = item.getSauce();
+            String sauceName = item.hasSauceName() ? item.getSauceName() : "Sauce";
+            sauceLine = "§6" + sauceName + " §8("
+                    + DisplayUtils.getSauceStatString(sauce.getFinalFood(), sauce.getFinalNutrition()) + "§8)";
+        }
+        return assembleLore(
+                category,
+                origin,
+                item.getQualityMin(),
+                StringFormatter.formatHex("#d4ad77Nutrition §f" + item.getFinalNutrition()),
+                StringFormatter.formatHex("#d4ad77Food §f" + item.getFinalFood()),
+                item.getIngredients(),
+                sauceLine,
+                item,
+                item.getTagTracks(),
+                indexMap);
+    }
+
+    static List<String> assembleLore(
+            String categoryLine,
+            String originLine,
+            int quality,
+            String nutritionLine,
+            String foodLine,
+            List<String> ingredients,
+            String sauceLine,
+            FoodItem tagLabels,
+            List<TagTrack> tracks,
+            Map<String, Integer> indexMap) {
+        List<String> lore = new ArrayList<>();
+        Map<String, Integer> indexes = indexMap != null ? indexMap : new HashMap<>();
+        lore.add(categoryLine);
+        if (originLine != null) {
+            lore.add(originLine);
+        }
+        lore.add(buildStars(quality, 5));
+        lore.add(nutritionLine);
+        indexes.put("nutrition", lore.size() - 1);
+        lore.add(foodLine);
+        indexes.put("food", lore.size() - 1);
+
+        if (ingredients != null && !ingredients.isEmpty()) {
+            lore.add(StringFormatter.formatHex("#dbb072Ingredients:"));
+            StringBuilder line = new StringBuilder("§7");
+            int max = 20;
+            for (String ing : ingredients) {
+                String part = ing + ", ";
+                if (line.length() + part.length() > max + 4) {
+                    lore.add(line.toString());
+                    line = new StringBuilder("§7");
+                }
+                line.append(part);
+            }
+            if (!line.toString().trim().equals("§7-")) {
+                lore.add(line.toString().replaceAll(", $", ""));
+            }
+        }
+
+        if (sauceLine != null) {
+            lore.add(" ");
+            lore.add(sauceLine);
+            indexes.put("sauce", lore.size() - 1);
+        }
+
+        lore.add(" ");
+        boolean firstTag = true;
+        if (tracks != null) {
+            for (TagTrack t : tracks) {
+                TagStep step = t.getCurrentStep();
+                if (step == null) {
+                    continue;
+                }
+                if (!shouldShowTagLore(tagLabels, t, step)) {
+                    continue;
+                }
+                lore.add(DisplayUtils.getDisplayString(
+                        TagDisplayNames.resolve(tagLabels, t, step),
+                        step.getFoodMultiplier(),
+                        step.getNutritionMultiplier(),
+                        step.getCraftQualityPct()));
+                if (firstTag) {
+                    indexes.put("tags", lore.size() - 1);
+                    firstTag = false;
+                }
+            }
+        }
+        return lore;
     }
 
     public static String qualityStars(int q) {

@@ -157,6 +157,8 @@ vegetable_1:
   model: tomato
   food: 8
   nutrition: 6
+  age:
+    freshness: 2.33
 
 ###Veggies — raw (chop only, no cut step; excludes from cut_vegetables recipe)
 vegetable_chop_only:
@@ -173,6 +175,8 @@ vegetable_chop_only:
   model: olive
   food: 8
   nutrition: 6
+  age:
+    freshness: 2.33
 
 ###Veggies — cut (pan + pot)
 vegetable_cut:
@@ -208,6 +212,8 @@ vegetable_cut:
       tag: 3
       time: 15
       burn: 30
+  age:
+    freshness: 1.67
 
 ###Veggies — chopped garnish (no cooking; cook on cut stage)
 vegetable_chopped:
@@ -234,6 +240,8 @@ vegetable_chopped:
   model: carrot_chopped
   food: 8
   nutrition: 6
+  age:
+    freshness: 1.33
 
 ###Seasoning — does not spoil
 seasoning_1:
@@ -274,6 +282,8 @@ spice_1:
   model: basil
   food: 0
   nutrition: 0
+  age:
+    freshness: 14
 
 ###Garnish — chopped (no cooking yet)
 garnish_chopped:
@@ -290,6 +300,8 @@ garnish_chopped:
   model: olive_chopped
   food: 8
   nutrition: 6
+  age:
+    freshness: 1.33
 
 ###Baked goods
 bread:
@@ -307,7 +319,7 @@ dry_ration:
   food: 20
   nutrition: 5
   age:
-    freshness: 270
+    freshness: 10
 
 ###Fruits — raw (no cut step)
 fruit_1:
@@ -342,6 +354,8 @@ fruit_1:
   model: strawberry
   food: 8
   nutrition: 7
+  age:
+    freshness: 0.67
 
 ##Crops
 wheat:
@@ -349,12 +363,16 @@ wheat:
   model: wheat
   food: 4
   nutrition: 4
+  age:
+    freshness: 10
 
 flour:
   name: "#f5f0e8Flour"
   model: flour
   food: 4
   nutrition: 4
+  age:
+    freshness: 10
   tag-labels:
     freshness:
       rotten: "#8B7355Musty"
@@ -364,6 +382,8 @@ yeast:
   model: yeast
   food: 4
   nutrition: 4
+  age:
+    freshness: 2
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -373,6 +393,8 @@ dough:
   model: dough
   food: 4
   nutrition: 4
+  age:
+    freshness: 0.5
   tag-labels:
     freshness:
       rotten: "#8B7355Mouldy"
@@ -421,7 +443,7 @@ butter:
   food: 10
   nutrition: 6
   age:
-    freshness: 1
+    freshness: 7
   tag-labels:
     freshness:
       stale: "#c3db81Rancid"

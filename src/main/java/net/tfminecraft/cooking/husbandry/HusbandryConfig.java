@@ -211,6 +211,24 @@ public final class HusbandryConfig {
         return milkCooldownSeconds;
     }
 
+    public static int milkTimerSeconds() {
+        return milkCooldownSeconds;
+    }
+
+    public static int milkTimerSeconds(EntityType type) {
+        if (type != null) {
+            HusbandrySpecies configured = species.get(type);
+            if (configured != null && configured.milkTimerSeconds() > 0) {
+                return configured.milkTimerSeconds();
+            }
+        }
+        return milkCooldownSeconds;
+    }
+
+    public static int resolveMilkTimerSeconds(int speciesOverrideSeconds, int globalSeconds) {
+        return speciesOverrideSeconds > 0 ? speciesOverrideSeconds : Math.max(0, globalSeconds);
+    }
+
     public static int initialGeneticMax() {
         return initialGeneticMax;
     }

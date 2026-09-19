@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Plugins.TLibs.TLibs;
 import me.Plugins.TLibs.Objects.API.SubAPI.StringFormatter;
+import net.tfminecraft.InteractibleFurniture;
 import net.tfminecraft.cooking.Cooking;
 import net.tfminecraft.cooking.cache.ItemCache;
 import net.tfminecraft.cooking.cup.BucketItems;
@@ -42,9 +43,13 @@ import net.tfminecraft.cooking.utils.StationAddonRules;
 import net.tfminecraft.events.FurnitureInteractEvent;
 import net.tfminecraft.furniture.Furniture;
 import net.tfminecraft.furniture.PlacedSlot;
+import net.tfminecraft.furniture.SlotDefinition;
 import net.tfminecraft.furniture.data.DisplayData;
 
 public class PotReference extends CookingReference {
+    private static final int SOUP_SERVINGS = 4;
+    private static final String VAR_SOUP_SERVINGS = "pot.soupServings";
+
     private int temperature = 0;          // 0–20
     private final int MAX_TEMPERATURE = 20;
 
@@ -206,8 +211,13 @@ public class PotReference extends CookingReference {
         f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
         org.bukkit.Bukkit.getPluginManager().callEvent(
                 new net.tfminecraft.cooking.events.DishCookedEvent(p, output, "pot"));
-        // ---------- CLEAR ----------
-        clear();
+        int remaining = remainingSoupServings() - 1;
+        setRemainingSoupServings(remaining);
+        if (remaining <= 0) {
+            clear();
+            return;
+        }
+        applySoupLevel();
     }
 
     private void handleCookingSlots() {
@@ -312,6 +322,7 @@ public class PotReference extends CookingReference {
             found = true;
         }
         if(found) {
+            ensureSoupServings();
             p.swingMainHand();
             f.getLoc().getWorld().playSound(f.getLoc(), Sound.ITEM_BUCKET_FILL, 1f, 1f); //TODO SOUND
         }
@@ -399,6 +410,65 @@ public class PotReference extends CookingReference {
         String path = getLiquidItemPath();
         if (f.getType() == null || f.getType().getSlot("liquid") == null) return;
         f.getOrCreatePlacedSlot("liquid").forceModel(TLibs.getItemAPI().getCreator().getItemFromPath(path));
+        applySoupLevel();
+    }
+
+    @Override
+    public void rebuildFromFurniture() {
+        super.rebuildFromFurniture();
+        if (f != null && f.hasActiveSlot("liquid")) {
+            secondaries.put("liquid", -1);
+        }
+        applySoupLevel();
+    }
+
+    private void ensureSoupServings() {
+        if (!f.getVariables().containsKey(VAR_SOUP_SERVINGS)) {
+            setRemainingSoupServings(SOUP_SERVINGS);
+        }
+    }
+
+    private int remainingSoupServings() {
+        Object value = f.getVariables().get(VAR_SOUP_SERVINGS);
+        if (value instanceof Number number) {
+            return Math.max(0, number.intValue());
+        }
+        if (value instanceof String text) {
+            try {
+                return Math.max(0, Integer.parseInt(text));
+            } catch (NumberFormatException ignored) {
+                return SOUP_SERVINGS;
+            }
+        }
+        return SOUP_SERVINGS;
+    }
+
+    private void setRemainingSoupServings(int remaining) {
+        if (remaining <= 0) {
+            f.getVariables().remove(VAR_SOUP_SERVINGS);
+        } else {
+            f.getVariables().put(VAR_SOUP_SERVINGS, remaining);
+        }
+        InteractibleFurniture.getInstance().getFurnitureManager().markDirty(f);
+    }
+
+    private void applySoupLevel() {
+        if (f == null || f.getType() == null) {
+            return;
+        }
+        int remaining = remainingSoupServings();
+        int scoopsTaken = SOUP_SERVINGS - remaining;
+        if (scoopsTaken <= 0) {
+            return;
+        }
+        SlotDefinition liquid = f.getType().getSlot("liquid");
+        if (liquid == null) {
+            return;
+        }
+        float step = (float) liquid.getDisplayScale().getY() / SOUP_SERVINGS;
+        DisplayData data = new DisplayData();
+        data.setyPos(-step * scoopsTaken);
+        f.getActiveSlot("liquid").ifPresent(slot -> slot.applyDisplayData(data));
     }
 
     private static boolean isWrongPotWaterSource(ItemStack item) {
@@ -412,6 +482,8 @@ public class PotReference extends CookingReference {
     
     @Override
     public void clear() {
+        f.getVariables().remove(VAR_SOUP_SERVINGS);
+        InteractibleFurniture.getInstance().getFurnitureManager().markDirty(f);
         if(isSoup()) super.clear();
         else super.remove();
     }

@@ -17,18 +17,34 @@ public class TagStep {
     private final double craftQualityPct;
 
     public TagStep(String key, ConfigurationSection config) {
+        this(
+                key,
+                StringFormatter.formatHex(config.getString("name", "Tag")),
+                config.getInt("value", 0),
+                config.getDouble("food-mult", 1.0),
+                config.getDouble("nutrition-mult", 1.0),
+                config.getDouble("quality-reduce", 0.0),
+                config.getDouble("craft-quality-pct", 0.0));
+    }
+
+    public TagStep(String key, String name, long requiredValue, double foodMultiplier, double nutritionMultiplier) {
+        this(key, name, requiredValue, foodMultiplier, nutritionMultiplier, 0.0, 0.0);
+    }
+
+    public TagStep(String key, String name, long requiredValue, double foodMultiplier, double nutritionMultiplier,
+            double qualityReduce, double craftQualityPct) {
         this.id = key;
-        this.name = StringFormatter.formatHex(config.getString("name", "Tag"));
+        this.name = name != null ? name : "Tag";
         try {
             this.tag = Tag.valueOf(key.toUpperCase());
         } catch (Exception e) {
             this.tag = Tag.CUSTOM;
         }
-        this.requiredValue = config.getInt("value", 0);
-        this.foodMultiplier = config.getDouble("food-mult", 1.0);
-        this.nutritionMultiplier = config.getDouble("nutrition-mult", 1.0);
-        this.qualityReduce = config.getDouble("quality-reduce", 0.0);
-        this.craftQualityPct = config.getDouble("craft-quality-pct", 0.0);
+        this.requiredValue = requiredValue;
+        this.foodMultiplier = foodMultiplier;
+        this.nutritionMultiplier = nutritionMultiplier;
+        this.qualityReduce = qualityReduce;
+        this.craftQualityPct = craftQualityPct;
     }
 
     public Tag getTag() {

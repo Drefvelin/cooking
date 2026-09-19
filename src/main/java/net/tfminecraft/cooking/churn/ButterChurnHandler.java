@@ -113,7 +113,7 @@ public final class ButterChurnHandler implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            ItemStack hand = ItemUpdater.applyItemUpdate(slotItem.clone(), butter, furniture.getId());
+            ItemStack hand = ItemUpdater.applyItemUpdate(slotItem.clone(), butter, null);
             if (hand != null) {
                 event.setItem(hand);
             }
@@ -123,8 +123,17 @@ public final class ButterChurnHandler implements Listener {
     @EventHandler
     public void onPlateAdd(FurnitureSlotItemAddEvent event) {
         Furniture furniture = event.getFurniture();
-        if (FurnitureCache.isButterPlate(furniture) && !ItemCache.isButter(event.getItem())) {
+        if (!FurnitureCache.isButterPlate(furniture)) {
+            return;
+        }
+        FoodItem butter = FoodItem.fromItem(event.getItem());
+        if (butter == null || !"butter".equalsIgnoreCase(butter.getId())) {
             event.setCancelled(true);
+            return;
+        }
+        ItemStack display = ItemUpdater.applyItemUpdate(event.getItem().clone(), butter, furniture.getId());
+        if (display != null) {
+            event.setItem(display);
         }
     }
 

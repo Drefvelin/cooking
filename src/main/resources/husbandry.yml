@@ -5,6 +5,7 @@ min-loaded: 60s
 decay-grace: 24h
 offline-care: 8h
 long-unload-force: 8h
+milk-timer: 20m
 milk-cooldown: 20m
 wool-timer: 20m
 shed-timer: 8h

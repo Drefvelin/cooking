@@ -1,5 +1,6 @@
 package net.tfminecraft.cooking.nutrition;
 
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,7 +19,8 @@ public final class FoodConsumeListener implements Listener {
             return;
         }
 
-        if (ItemCache.isCupOfWater(stack) || ItemCache.isCupOfMilk(stack)) {
+        if (ItemCache.isCupOfWater(stack) || ItemCache.isCupOfMilk(stack)
+                || stack.getType() == Material.MILK_BUCKET) {
             return;
         }
 

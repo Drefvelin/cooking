@@ -92,13 +92,32 @@ public final class HusbandryHarvest {
     }
 
     public static String milkFoodString(EntityType type) {
-        if (type == EntityType.GOAT) {
+        return milkFoodStringForType(type == null ? null : type.name());
+    }
+
+    static String milkFoodStringForType(String typeName) {
+        if ("GOAT".equalsIgnoreCase(typeName)) {
             return "food(type=milk_bucket;origin=Goat)";
         }
         return "food(type=milk_bucket;origin=Cow)";
     }
 
+    public static Sound milkSound(EntityType type) {
+        if (type == EntityType.GOAT) {
+            return Sound.ENTITY_GOAT_MILK;
+        }
+        return Sound.ENTITY_COW_MILK;
+    }
+
     public static ItemStack buildFood(HusbandryAnimal animal, String foodString) {
+        return buildFood(animal, foodString, null);
+    }
+
+    public static ItemStack buildMilk(HusbandryAnimal animal, EntityType type) {
+        return buildFood(animal, milkFoodString(type), new ItemStack(Material.MILK_BUCKET));
+    }
+
+    public static ItemStack buildFood(HusbandryAnimal animal, String foodString, ItemStack base) {
         if (foodString == null || foodString.isBlank() || animal == null) {
             return null;
         }
@@ -107,7 +126,7 @@ public final class HusbandryHarvest {
             return null;
         }
         int quality = QualityUtils.clamp(rollQuality(animal, ThreadLocalRandom.current()));
-        ItemStack stack = ItemBuilder.buildSingleWithQuality(parsed.template, null, quality);
+        ItemStack stack = ItemBuilder.buildSingleWithQuality(parsed.template, base, quality);
         FoodItem item = FoodItem.fromItem(stack);
         if (item == null) {
             return stack;

@@ -37,6 +37,10 @@ public final class MilkBucketConverter implements Listener {
         if (stack == null || stack.getType() != Material.MILK_BUCKET) {
             return stack;
         }
+        FoodItem existing = FoodItem.fromItem(stack);
+        if (existing != null && "milk_bucket".equalsIgnoreCase(existing.getId())) {
+            return stack;
+        }
 
         String result = ConversionLoader.getByItem(stack);
         if (result == null) {

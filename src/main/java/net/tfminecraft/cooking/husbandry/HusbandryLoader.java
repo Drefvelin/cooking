@@ -46,7 +46,7 @@ public final class HusbandryLoader {
                 HusbandryDuration.parseAfflictionHours(config, "mean", "affliction-mean-hours", 6),
                 HusbandryDuration.parseAfflictionHours(config, "min", "affliction-min-hours", 4),
                 HusbandryDuration.parseAfflictionHours(config, "max", "affliction-max-hours", 8),
-                HusbandryDuration.parseSeconds(config, "milk-cooldown", "milk-cooldown-minutes", 60, 1200),
+                parseMilkTimerSeconds(config),
                 config.getInt("initial-genetic-max", 20),
                 config.getInt("max-genetics", 1000),
                 config.getInt("min-roast-cuts", 1),
@@ -121,7 +121,8 @@ public final class HusbandryLoader {
                             : HusbandryDropTable.empty(),
                     section.getString(key + ".egg", ""),
                     parseSpeciesGrowUp(section, key),
-                    parseSpeciesDuration(section, key, "wool-timer")));
+                    parseSpeciesDuration(section, key, "wool-timer"),
+                    parseSpeciesDuration(section, key, "milk-timer")));
         }
         return species;
     }
@@ -160,6 +161,13 @@ public final class HusbandryLoader {
 
     private static int parseSpeciesGrowUp(ConfigurationSection section, String key) {
         return parseSpeciesDuration(section, key, "grow-up");
+    }
+
+    private static int parseMilkTimerSeconds(FileConfiguration config) {
+        if (config.contains("milk-timer")) {
+            return TimeFormatter.parseSeconds(config.getString("milk-timer"));
+        }
+        return HusbandryDuration.parseSeconds(config, "milk-cooldown", "milk-cooldown-minutes", 60, 1200);
     }
 
     private static int parseSpeciesDuration(ConfigurationSection section, String key, String field) {
