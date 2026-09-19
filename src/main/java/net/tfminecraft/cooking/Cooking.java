@@ -26,7 +26,6 @@ import net.tfminecraft.cooking.husbandry.HusbandryHarvestListener;
 import net.tfminecraft.cooking.husbandry.HusbandryInspectListener;
 import net.tfminecraft.cooking.husbandry.HusbandryLifecycleListener;
 import net.tfminecraft.cooking.husbandry.HusbandryMountListener;
-import net.tfminecraft.cooking.husbandry.HusbandryNerfListener;
 import net.tfminecraft.cooking.husbandry.HusbandryNeuterListener;
 import net.tfminecraft.cooking.husbandry.HusbandryTamingListener;
 import net.tfminecraft.cooking.crops.CropCustomCropsBridge;
@@ -234,7 +233,6 @@ public class Cooking extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HusbandryBreedListener(), this);
         getServer().getPluginManager().registerEvents(new HusbandryNeuterListener(), this);
         getServer().getPluginManager().registerEvents(new HusbandryInspectListener(), this);
-        getServer().getPluginManager().registerEvents(new HusbandryNerfListener(), this);
         getServer().getPluginManager().registerEvents(new HusbandryMountListener(), this);
         getServer().getPluginManager().registerEvents(new HusbandryDamageListener(), this);
         getServer().getPluginManager().registerEvents(new ConversionManager(), this);

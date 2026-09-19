@@ -1,5 +1,7 @@
 package net.tfminecraft.cooking.husbandry;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,7 +23,7 @@ final class HusbandryShed {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(type);
-        if (species == null || !species.hasHarvest("shed") || species.shed().isBlank()) {
+        if (species == null || !species.canShed()) {
             return;
         }
         Long readyAt = animal.shedReadyAt();
@@ -32,9 +34,10 @@ final class HusbandryShed {
             animal.setShedReadyAt(nowMillis + HusbandryConfig.shedTimerSeconds() * 1000L);
             return;
         }
-        ItemStack stack = HusbandryHarvest.buildTlibs(species.shed(), 1);
-        if (stack != null) {
-            entity.getWorld().dropItemNaturally(entity.getLocation(), stack);
+        for (ItemStack stack : HusbandryDropRoller.rollShedDrops(animal, ThreadLocalRandom.current())) {
+            if (stack != null) {
+                entity.getWorld().dropItemNaturally(entity.getLocation(), stack);
+            }
         }
         animal.setShedReadyAt(nowMillis + HusbandryConfig.shedTimerSeconds() * 1000L);
     }

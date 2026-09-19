@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -73,9 +72,7 @@ public final class HusbandryLoader {
                 parseMounts(config.getConfigurationSection("mounts")),
                 config.getDouble("breeding.genetic-variance-multiplier", 1),
                 config.getDouble("breeding.genetic-slowdown-divisor", 1),
-                parseAmountBands(config.getMapList("amount-from-genetics")),
-                config.getBoolean("mounts.nerf", true),
-                config.getDouble("mounts.nerf-divisor", 2));
+                parseAmountBands(config.getMapList("amount-from-genetics")));
         HusbandryConfig.setMountSpeedShares(
                 config.getDouble("mounts.speed.min-pct", 0.40),
                 config.getDouble("mounts.speed.genetics-pct", 0.30),
@@ -106,24 +103,25 @@ public final class HusbandryLoader {
             if (type == null) {
                 continue;
             }
-            Set<String> harvest = new HashSet<>();
-            List<String> modes = section.getStringList(key + ".harvest");
-            for (String mode : modes) {
-                if (mode != null && !mode.isBlank()) {
-                    harvest.add(mode.trim().toLowerCase(Locale.ROOT));
-                }
-            }
+            ConfigurationSection slaughter = section.getConfigurationSection(key + ".slaughter");
+            ConfigurationSection shear = section.getConfigurationSection(key + ".shear");
+            ConfigurationSection shed = section.getConfigurationSection(key + ".shed");
             species.put(type, new HusbandrySpecies(
                     type,
-                    harvest,
-                    section.getString(key + ".slaughter", ""),
-                    section.getString(key + ".milk", ""),
-                    section.getString(key + ".shear", ""),
+                    section.getBoolean(key + ".milk", false),
+                    slaughter != null ? slaughter.getString("meat", "") : "",
+                    slaughter != null
+                            ? parseDropTable(slaughter.getConfigurationSection("drops"))
+                            : HusbandryDropTable.empty(),
+                    shear != null
+                            ? parseDropTable(shear.getConfigurationSection("drops"))
+                            : HusbandryDropTable.empty(),
+                    shed != null
+                            ? parseDropTable(shed.getConfigurationSection("drops"))
+                            : HusbandryDropTable.empty(),
                     section.getString(key + ".egg", ""),
-                    section.getString(key + ".shed", ""),
                     parseSpeciesGrowUp(section, key),
-                    parseSpeciesDuration(section, key, "wool-timer"),
-                    parseDropTable(section.getConfigurationSection(key + ".drops"))));
+                    parseSpeciesDuration(section, key, "wool-timer")));
         }
         return species;
     }
@@ -207,8 +205,9 @@ public final class HusbandryLoader {
             return mounts;
         }
         for (String key : section.getKeys(false)) {
-            if ("nerf".equalsIgnoreCase(key) || "nerf-divisor".equalsIgnoreCase(key)
-                    || "speed".equalsIgnoreCase(key)) {
+            if ("speed".equalsIgnoreCase(key)
+                    || "nerf".equalsIgnoreCase(key)
+                    || "nerf-divisor".equalsIgnoreCase(key)) {
                 continue;
             }
             EntityType type = parseEntityType(key);
@@ -295,9 +294,7 @@ public final class HusbandryLoader {
                 Map.of(),
                 1,
                 1,
-                List.of(new HusbandryAmountBand(0, 1, 1)),
-                true,
-                2);
+                List.of(new HusbandryAmountBand(0, 1, 1)));
         HusbandryConfig.setMountSpeedShares(0.40, 0.30, 0.20);
     }
 }

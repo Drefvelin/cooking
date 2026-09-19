@@ -59,7 +59,7 @@ public final class HusbandryTickTask {
                 HusbandrySimulator.tickLoaded(animal, now);
             }
             HusbandryGrowth.applyMaturity(living, animal, now);
-            HusbandryMounts.applySpeed(living, animal);
+            HusbandryMounts.applyStats(living, animal);
             HusbandryShed.tryShed(living, animal, now);
             HusbandryEggs.tryLay(living, animal, now);
             repository.upsertAnimal(animal);

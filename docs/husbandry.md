@@ -10,7 +10,7 @@ This document is the source of truth. If code and this file disagree, change the
 
 | Stat | What it is | What it is not |
 |------|------------|----------------|
-| **Genetics** | 0–1k, from breeding (wild roll up to `initial-genetic-max`). Mounts also derive it from health/speed/jump. | Not affected by care. Not a food-quality field. |
+| **Genetics** | 0–1k, from breeding (wild roll up to `initial-genetic-max`). Mount health/speed/jump are applied from genetics and care. | Not affected by care. Not a food-quality field. |
 | **Care** | 0–200. Loaded happy time raises it. Neglect lowers it. | Does not change genetics. Does not pick star quality. |
 | **Hungry / Dirty** | Negative states. Stop care-up. After grace, cause decay. Block breeding. | Not friendship. Not “slept outside.” |
 | **Yield** | `care / care-max` (default care/200). Multiplies **amount** (roast cuts, wool count). | Does not change star quality. |
@@ -23,7 +23,7 @@ This document is the source of truth. If code and this file disagree, change the
 - BB-style breeding roll (average + variance + slowdown at high parent genetics), scaled to **0–1k** in TFMC (`max-genetics: 1000`)
 - Ownership + co-ownership (token item)
 - Tame + name (anvil-named tame item)
-- Mount stat ranges, inherit, nerf, owner-only ride
+- Mount stat ranges, genetics-to-stats, owner-only ride
 - Neutering (all species, not only horses)
 - Inspect GUI (care + yield bars, no friendship hearts, no bundle timer)
 
@@ -73,9 +73,8 @@ Owned/managed entities must `setPersistent(true)` and `setRemoveWhenFarAway(fals
 
 Stored on the entity, not in SQLite:
 
-- `managed` — husbandry entity; used with chunk-load wipe logic
-- `nerfed` — idempotent mount nerf marker (natural/spawn-egg horses)
-- `tame_name`, `linked_animal` — tame and co-own item state
+- `managed` - husbandry entity; used with chunk-load wipe logic
+- `tame_name`, `linked_animal` - tame and co-own item state
 
 ### Database migrations
 
@@ -170,13 +169,13 @@ No custom slaughter tool. If an **owned** animal **dies**, it drops configured C
 
 | Action | Rule |
 |--------|------|
-| Death | Owned mature: Cooking roast (primary) + one weighted extra from `species.drops` tiers. Immature: no Cooking roast or extras. Unowned `remove-unowned` types: no drops. |
+| Death | Owned mature: Cooking roast from `slaughter.meat` + extras from `slaughter.drops`. Immature: no Cooking roast or extras. Unowned `remove-unowned` types: no drops. |
 | Quality (stars) | From **raw genetics** via YAML table → 1–5. Apply with `ItemBuilder` / existing quality PDC. Stars gate drop tiers: common always, rare 3★+, epic 4★+, legendary 5★ only. |
-| Amount | From **effective genetics** (care yield). Roast `carve_remaining` (existing carve sequences / roast models 1–8). Wool extra count. Honour `min-roast-cuts`. |
-| Sheep | Vanilla wool **always** on shear. If `wool_ready_at <= now`, also give custom wool, then reset the wool timer. |
-| Milk | Per-animal cooldown (`milk-cooldown`, default 20m). Mature only. Quality from the **animal**. If somehow unowned, fall back to player `OriginQualityResolver` pickup. |
-| Eggs | Chickens with `egg` harvest: when loaded, mature, and happy, drop one egg after `egg-timer` (default 10m) on the 1-minute tick. Item from `species.egg` (`vanilla` → `Material.EGG`; `food(...)` or TLibs path otherwise). Vanilla egg drops from managed chickens are cancelled (`EntityDropItemEvent`). Bees: vanilla, not husbandry. |
-| Shed | Chickens with `shed` harvest: when loaded, mature, and happy, roll `shed-chance` after `shed-timer` (default 8h) on the 1-minute tick. Success drops `species.shed` (e.g. `v.feather`) at the animal's feet and resets the timer. |
+| Amount | From **effective genetics** (care yield). Roast `carve_remaining` (existing carve sequences / roast models 1–8). Counted drop tables use hide/wool yield. Honour `min-roast-cuts`. |
+| Sheep | Vanilla wool **always** on shear. If `wool_ready_at <= now`, also roll `shear.drops`, then reset the wool timer. |
+| Milk | `milk: true` on the species. Per-animal cooldown (`milk-cooldown`, default 20m). Mature only. Empty bucket interact; hand becomes cooking `milk_bucket` with quality from the **animal** (Cow/Goat origin from entity type). |
+| Eggs | Chickens with `egg:` set: when loaded, mature, and happy, drop one egg after `egg-timer` (default 10m) on the 1-minute tick. Item from `egg` (`vanilla` → `Material.EGG`; `food(...)` or TLibs path otherwise). Vanilla egg drops from managed chickens are cancelled (`EntityDropItemEvent`). Bees: vanilla, not husbandry. |
+| Shed | Species with `shed.drops`: when loaded, mature, and happy, roll `shed-chance` after `shed-timer` (default 8h) on the 1-minute tick. Success rolls `shed.drops` at the animal's feet and resets the timer. |
 
 Genetics → stars **and** amount tables both live in YAML (`husbandry.yml`). Do not hardcode thresholds.
 
@@ -192,13 +191,13 @@ Never delete a row on unload just because `Bukkit.getEntity` is null. If an **ow
 
 Mount types in code: all `AbstractHorse` (horse, donkey, mule, camel, llama). Attributes use Paper 1.21.8 names (`MAX_HEALTH`, `MOVEMENT_SPEED`, jump strength API).
 
-**Configured in `husbandry.yml` `mounts:` today:** HORSE, DONKEY, MULE, CAMEL. **LLAMA has no stat block yet** — breed inherit, nerf clamping, and genetics-from-stats fall back to code defaults until `mounts.LLAMA` is added.
+**Configured in `husbandry.yml` `mounts:` today:** HORSE, DONKEY, MULE, CAMEL. **LLAMA has no stat block yet** - enroll and genetics-to-stats fall back to no override until `mounts.LLAMA` is added.
 
 - Per-type min/max health, speed, jump in YAML
-- Stats inherit on breed (applied one tick after birth); foal genetics overwritten from normalized stats when YAML stats exist
-- Natural and spawn-egg spawns nerfed when `mounts.nerf` is true (`nerf-divisor`); idempotent `nerfed` PDC prevents double-nerf
+- Wild/spawn-egg mounts keep vanilla stats until first interact, tame, or inspect enrolls a row (`0 … initial-genetic-max`, care 0)
+- Health, speed, and jump are then written from genetics and care: `max * (min-pct + genetics-pct * genetics/max-genetics + care-pct * care/care-max)`, floored at the type min
+- Bred foals roll genetics from parents, then the same formula is applied one tick after birth (vanilla breed stats are overwritten)
 - Owner/co-owner (or staff) only ride when the mount has owners; untamed mounts stay rideable
-- Genetics from normalized health/speed/jump vs configured mins/maxes (when stats exist)
 
 ## Damage
 
@@ -227,7 +226,7 @@ Layout uses **gray/green concrete bars** (5 centered segments each). One empty r
 - **Row 5:** **Genetics bar** (slots 38–42): fill = `genetics / max-genetics`; lore is `genetics/max-genetics`
 - **Row 6 (mounts only):** health, speed, jump (slots 46, 49, 52)
 
-**Products** (chest, slot 3) only if the species lists any of `slaughter`, `shear`, `shed`, `milk`, `egg`. Lore is `Yield X%` then mode lines (`On slaughter`, `Shear`, `Shed`, `Milk`, `Eggs`) — no stars or amounts. Pets with no harvest have no icon.
+**Products** (chest, slot 3) only if the species has `slaughter`, `shear`, `shed`, `milk: true`, or `egg`. Lore is `Yield X%` then mode lines (`On slaughter`, `Shear`, `Shed`, `Milk`, `Eggs`) - no stars or amounts. Pets with no harvest config have no icon.
 
 **Yield X%** is `round(100 × effectiveGenetics / max-genetics)` where `effectiveGenetics = floor(genetics × care / care-max)`.
 
@@ -262,7 +261,7 @@ No async entity or SQLite access. All husbandry logic runs on the main thread.
 | Ownership | `HusbandryOwnershipService`, `HusbandryTamingListener` |
 | Breed / growth | `HusbandryBreedListener`, `HusbandryNeuterListener`, `HusbandryGrowth`, `HusbandryGenetics` |
 | Harvest | `HusbandryDeathListener`, `HusbandryHarvestListener`, `HusbandryHarvest`, `HusbandryShed`, `HusbandryEggs`, `HusbandryDropRoller` |
-| Mounts / damage | `HusbandryMounts`, `HusbandryNerfListener`, `HusbandryMountListener`, `HusbandryDamageListener` |
+| Mounts / damage | `HusbandryMounts`, `HusbandryMountListener`, `HusbandryDamageListener` |
 | GUI | `HusbandryInspectGui`, `HusbandryInspectListener`, `HusbandryGuiBars` |
 
 ## Configuration
@@ -321,17 +320,17 @@ Durations use TLibs strings (`8h`, `20m`, `60s`). Legacy `*-hours` / `*-minutes`
 
 ### Per-species keys
 
-Under `species.<TYPE>`:
+Under `species.<TYPE>` (presence defines capability; no `harvest` list):
 
 | Key | Purpose |
 |-----|---------|
-| `harvest` | List of modes: `slaughter`, `milk`, `shear`, `egg`, `shed` |
-| `slaughter` | `food(...)` roast string for death drop |
-| `milk` | `food(...)` milk bucket string |
-| `shear` | TLibs path for extra wool |
-| `egg` | `vanilla`, `food(...)`, or TLibs path |
-| `shed` | TLibs/vanilla path for feather shed |
-| `drops` | Star-gated tier tables (`common`, `rare`, `epic`, `legendary`) |
+| `milk` | `true` enables bucket milking (quality from animal; Cow/Goat origin) |
+| `slaughter.meat` | `food(...)` roast string for death drop |
+| `slaughter.drops` | Star-gated extras on slaughter (`common`, `rare`, `epic`, `legendary`; optional `mode: counted`) |
+| `shear.drops` | Star-gated items given on shear (after wool timer) |
+| `shed.drops` | Star-gated items dropped on successful shed tick |
+| `egg` | `vanilla`, `food(...)`, or TLibs path for timed egg lay |
 | `grow-up` | Optional per-species baby duration override |
+| `wool-timer` | Optional per-species shear cooldown override |
 
 Also configured: `remove-unowned` (wipe list), `quality-from-genetics`, `amount-from-genetics`, `breeding.*`, `damage.*`, `mounts.*`.

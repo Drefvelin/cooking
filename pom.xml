@@ -11,13 +11,14 @@
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tfmc.refs>D:/Documents/TFMC/ReferenceLibs</tfmc.refs>
-        <tfmc.builds>D:/Documents/TFMC/Builds/Cooking</tfmc.builds>
-        <tfmc.tlibs>D:/Documents/TFMC/Builds/TLibs</tfmc.tlibs>
-        <tfmc.if>D:/Documents/TFMC/Builds/InteractibleFurniture</tfmc.if>
-        <tfmc.tfmccore>D:/Documents/TFMC/Builds/TFMCCore</tfmc.tfmccore>
-        <tfmc.plugins>D:/Documents/TFMC/Workspace/plugins</tfmc.plugins>
-        <tfmc.sf>D:/Documents/TFMC/Builds/SimpleFactions</tfmc.sf>
+        <tfmc.refs>D:/Dokumenter/My Plugins/Reference Libs</tfmc.refs>
+        <tfmc.builds>D:/Dokumenter/My Plugins/TFMC/Cooking</tfmc.builds>
+        <tfmc.tlibs>D:/Dokumenter/My Plugins/TFMC/TLibs</tfmc.tlibs>
+        <tfmc.if>D:/Dokumenter/My Plugins/TFMC/InteractibleFurniture</tfmc.if>
+        <tfmc.tfmccore>D:/Dokumenter/My Plugins/TFMC/TFMCCore</tfmc.tfmccore>
+        <tfmc.plugins>D:/Dokumenter/My Plugins/Reference Libs</tfmc.plugins>
+        <tfmc.sf>D:/Dokumenter/My Plugins/TFMC/SimpleFactions</tfmc.sf>
+        <tfmc.rpcharacters>D:/Dokumenter/My Plugins/TFMC/RPCharacters</tfmc.rpcharacters>
     </properties>
 
     <dependencies>
@@ -66,9 +67,9 @@
         <dependency>
             <groupId>local</groupId>
             <artifactId>RPCharacters</artifactId>
-            <version>1.1.6</version>
+            <version>1.1.7</version>
             <scope>system</scope>
-            <systemPath>${tfmc.refs}/rpcharacters-1.1.6.jar</systemPath>
+            <systemPath>${tfmc.rpcharacters}/rpcharacters-1.1.7.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>local</groupId>

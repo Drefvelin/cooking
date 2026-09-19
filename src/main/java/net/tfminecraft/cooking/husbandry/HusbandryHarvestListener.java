@@ -40,7 +40,7 @@ public final class HusbandryHarvestListener implements Listener {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(living.getType());
-        if (species == null || !species.hasHarvest("milk")) {
+        if (species == null || !species.canMilk()) {
             return;
         }
         HusbandryRepository repository = HusbandryEntities.repository();
@@ -63,7 +63,8 @@ public final class HusbandryHarvestListener implements Listener {
             player.sendMessage("§cThis animal is not ready to be milked.");
             return;
         }
-        Bukkit.getScheduler().runTask(Cooking.plugin, () -> finishMilk(player, animal, species, repository));
+        EntityType sourceType = living.getType();
+        Bukkit.getScheduler().runTask(Cooking.plugin, () -> finishMilk(player, animal, sourceType, repository));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -87,7 +88,7 @@ public final class HusbandryHarvestListener implements Listener {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(living.getType());
-        if (species == null || !species.hasHarvest("shear") || species.shear().isBlank()) {
+        if (species == null || !species.canShear()) {
             return;
         }
         HusbandryRepository repository = HusbandryEntities.repository();
@@ -106,7 +107,7 @@ public final class HusbandryHarvestListener implements Listener {
     public void onShear(PlayerShearEntityEvent event) {
         Entity sheared = event.getEntity();
         HusbandrySpecies species = HusbandryConfig.species(sheared.getType());
-        if (species == null || !species.hasHarvest("shear") || species.shear().isBlank()) {
+        if (species == null || !species.canShear()) {
             return;
         }
         HusbandryRepository repository = HusbandryEntities.repository();
@@ -142,19 +143,13 @@ public final class HusbandryHarvestListener implements Listener {
     private static void finishMilk(
             Player player,
             HusbandryAnimal animal,
-            HusbandrySpecies species,
+            EntityType sourceType,
             HusbandryRepository repository) {
         ItemStack main = player.getInventory().getItemInMainHand();
         if (main == null || main.getType() != Material.MILK_BUCKET) {
             return;
         }
-        ItemStack converted;
-        if (!species.milk().isBlank()) {
-            converted = HusbandryHarvest.buildFood(animal, species.milk());
-        } else {
-            converted = MilkBucketConverter.convert(
-                    player, main, QualityUtils.clamp(HusbandryHarvest.rollQuality(animal, null)));
-        }
+        ItemStack converted = HusbandryHarvest.buildFood(animal, HusbandryHarvest.milkFoodString(sourceType));
         if (converted == null) {
             converted = MilkBucketConverter.convert(
                     player, main, QualityUtils.clamp(HusbandryHarvest.rollQuality(animal, null)));
@@ -182,7 +177,7 @@ public final class HusbandryHarvestListener implements Listener {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(chicken.getType());
-        if (species != null && species.hasHarvest("egg")) {
+        if (species != null && species.hasEgg()) {
             event.setCancelled(true);
         }
     }

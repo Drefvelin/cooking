@@ -38,9 +38,7 @@ public final class HusbandryDeathListener implements Listener {
         HusbandryAnimal animal = stored.get();
         HusbandrySpecies species = HusbandryConfig.species(entity.getType());
         long now = System.currentTimeMillis();
-        boolean hasSlaughter = species != null
-                && species.hasHarvest("slaughter")
-                && !species.slaughter().isBlank();
+        boolean hasSlaughter = species != null && species.canSlaughter();
         boolean mature = HusbandryGrowth.isMature(animal, now);
         if (HusbandrySlaughterDrops.shouldReplaceVanilla(hasSlaughter, mature)) {
             Iterator<ItemStack> drops = event.getDrops().iterator();
@@ -52,12 +50,12 @@ public final class HusbandryDeathListener implements Listener {
                 drops.remove();
             }
             if (HusbandrySlaughterDrops.shouldAddRoast(hasSlaughter, mature)) {
-                ItemStack roast = HusbandryHarvest.buildFood(animal, species.slaughter());
+                ItemStack roast = HusbandryHarvest.buildFood(animal, species.slaughterMeat());
                 if (roast != null) {
                     event.getDrops().add(roast);
                 } else {
                     Bukkit.getLogger().warning("[Cooking] Slaughter roast failed for "
-                            + entity.getType() + " using " + species.slaughter());
+                            + entity.getType() + " using " + species.slaughterMeat());
                 }
                 HusbandryDropRoller.rollSlaughterExtras(animal, ThreadLocalRandom.current(), now)
                         .forEach(extra -> event.getDrops().add(extra));

@@ -55,7 +55,6 @@ public final class HusbandrySpawner {
         String name = HusbandryEntities.displayName(living.getType());
         HusbandryEntities.applyPersistFlags(living);
         HusbandryEntities.stampManaged(living);
-        HusbandryMounts.setNerfed(living, true);
 
         long now = System.currentTimeMillis();
         HusbandryAnimal animal = new HusbandryAnimal(living.getUniqueId(), living.getType().name(), name);
@@ -68,7 +67,7 @@ public final class HusbandrySpawner {
         HusbandryHarvest.prepareNewAnimal(animal, living.getType());
         repository.upsertAnimal(animal);
         HusbandryEntities.trackLoaded(living.getUniqueId());
-        HusbandryMounts.applySpeed(living, animal);
+        HusbandryMounts.applyStats(living, animal);
         return animal;
     }
 }

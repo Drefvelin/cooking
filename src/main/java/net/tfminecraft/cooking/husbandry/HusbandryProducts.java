@@ -2,41 +2,40 @@ package net.tfminecraft.cooking.husbandry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class HusbandryProducts {
 
     private HusbandryProducts() {}
 
-    public static boolean hasProducts(Set<String> harvestModes) {
-        if (harvestModes == null || harvestModes.isEmpty()) {
+    public static boolean hasProducts(HusbandrySpecies species) {
+        if (species == null) {
             return false;
         }
-        return harvestModes.contains("slaughter")
-                || harvestModes.contains("shear")
-                || harvestModes.contains("shed")
-                || harvestModes.contains("milk")
-                || harvestModes.contains("egg");
+        return species.canSlaughter()
+                || species.canShear()
+                || species.canShed()
+                || species.canMilk()
+                || species.hasEgg();
     }
 
-    public static List<String> modeLines(Set<String> harvestModes) {
+    public static List<String> modeLines(HusbandrySpecies species) {
         List<String> lines = new ArrayList<>();
-        if (harvestModes == null) {
+        if (species == null) {
             return lines;
         }
-        if (harvestModes.contains("slaughter")) {
+        if (species.canSlaughter()) {
             lines.add("On slaughter");
         }
-        if (harvestModes.contains("shear")) {
+        if (species.canShear()) {
             lines.add("Shear");
         }
-        if (harvestModes.contains("shed")) {
+        if (species.canShed()) {
             lines.add("Shed");
         }
-        if (harvestModes.contains("milk")) {
+        if (species.canMilk()) {
             lines.add("Milk");
         }
-        if (harvestModes.contains("egg")) {
+        if (species.hasEgg()) {
             lines.add("Eggs");
         }
         return lines;

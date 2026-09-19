@@ -15,8 +15,5 @@ public final class HusbandryKeys {
     public static final NamespacedKey LINKED_ANIMAL =
             new NamespacedKey(Cooking.plugin, "linked_animal");
 
-    public static final NamespacedKey NERFED =
-            new NamespacedKey(Cooking.plugin, "nerfed");
-
     private HusbandryKeys() {}
 }

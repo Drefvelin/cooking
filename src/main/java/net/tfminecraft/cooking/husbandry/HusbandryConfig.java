@@ -48,8 +48,6 @@ public final class HusbandryConfig {
     private static double geneticVarianceMultiplier = 1;
     private static double geneticSlowdownDivisor = 1;
     private static List<HusbandryAmountBand> amountBands = List.of();
-    private static boolean mountNerf = true;
-    private static double mountNerfDivisor = 2;
     private static double mountSpeedMinPct = 0.40;
     private static double mountSpeedGeneticsPct = 0.30;
     private static double mountSpeedCarePct = 0.20;
@@ -96,9 +94,7 @@ public final class HusbandryConfig {
             Map<EntityType, HusbandryMountStats> mountsValue,
             double geneticVarianceMultiplierValue,
             double geneticSlowdownDivisorValue,
-            List<HusbandryAmountBand> amountBandsValue,
-            boolean mountNerfValue,
-            double mountNerfDivisorValue) {
+            List<HusbandryAmountBand> amountBandsValue) {
         maxAnimals = Math.max(1, maxAnimalsValue);
         careMax = Math.max(1, careMaxValue);
         careUpIntervalSeconds = Math.max(1, careUpIntervalSecondsValue);
@@ -139,8 +135,6 @@ public final class HusbandryConfig {
         geneticVarianceMultiplier = geneticVarianceMultiplierValue;
         geneticSlowdownDivisor = geneticSlowdownDivisorValue;
         amountBands = List.copyOf(amountBandsValue);
-        mountNerf = mountNerfValue;
-        mountNerfDivisor = mountNerfDivisorValue;
     }
 
     public static void setMountSpeedShares(double minPct, double geneticsPct, double carePct) {
@@ -413,13 +407,5 @@ public final class HusbandryConfig {
             }
         }
         return Math.max(1, wool);
-    }
-
-    public static boolean mountNerf() {
-        return mountNerf;
-    }
-
-    public static double mountNerfDivisor() {
-        return mountNerfDivisor;
     }
 }

@@ -94,230 +94,233 @@ remove-unowned:
 
 species:
   COW:
-    harvest:
-      - slaughter
-      - milk
-    slaughter: "food(type=roast;origin=BEEF)"
-    milk: "food(type=milk_bucket;origin=Cow)"
-    drops:
-      mode: counted
-      common:
-        - { path: m.materials.leather, amount: 1, weight: 50 }
-      rare:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      epic:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      legendary:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
+    milk: true
+    slaughter:
+      meat: "food(type=roast;origin=BEEF)"
+      drops:
+        mode: counted
+        common:
+          - { path: m.materials.leather, amount: 1, weight: 100 }
+        rare:
+          - { path: m.materials.leather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_leather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_leather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_leather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 60 }
   PIG:
-    harvest:
-      - slaughter
-    slaughter: "food(type=roast;origin=PORK)"
-    drops:
-      rare:
-        - { path: "", weight: 95 }
-        - { path: m.currency.enchanted_dust, amount: 1, weight: 5 }
-      epic:
-        - { path: "", weight: 95 }
-        - { path: m.currency.enchanted_dust, amount: 1, weight: 5 }
-      legendary:
-        - { path: "", weight: 95 }
-        - { path: m.currency.enchanted_dust, amount: 1, weight: 5 }
+    slaughter:
+      meat: "food(type=roast;origin=PORK)"
+      drops:
+        rare:
+          - { path: "", weight: 97 }
+          - { path: m.currency.enchanted_dust, amount: 1, weight: 3 }
+        epic:
+          - { path: "", weight: 90 }
+          - { path: m.currency.enchanted_dust, amount: 1, weight: 10 }
+        legendary:
+          - { path: "", weight: 80 }
+          - { path: m.currency.enchanted_dust, amount: 1, weight: 20 }
   SHEEP:
-    harvest:
-      - slaughter
-      - shear
     wool-timer: 40m
-    slaughter: "food(type=roast;origin=MUTTON)"
-    shear: ia.tfmc_cooking:wool
-    drops:
-      mode: counted
-      common:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 50 }
-      rare:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 45 }
-        - { path: m.materials.rare_wool, amount: 1, weight: 5 }
-        - { path: m.materials.epic_wool, amount: 1, weight: 5 }
-      epic:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 45 }
-        - { path: m.materials.rare_wool, amount: 1, weight: 5 }
-        - { path: m.materials.epic_wool, amount: 1, weight: 5 }
-      legendary:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 45 }
-        - { path: m.materials.rare_wool, amount: 1, weight: 5 }
-        - { path: m.materials.epic_wool, amount: 1, weight: 5 }
+    slaughter:
+      meat: "food(type=roast;origin=MUTTON)"
+      drops:
+        mode: counted
+        common:
+          - { path: v.white_wool, amount: 1, weight: 100 }
+        rare:
+          - { path: v.white_wool, amount: 2, weight: 20 }
+          - { path: m.materials.rare_wool, amount: 1, weight: 60 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_wool, amount: 2, weight: 20 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_wool, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 60 }
+    shear:
+      drops:
+        mode: counted
+        common:
+          - { path: v.white_wool, amount: 1, weight: 100 }
+        rare:
+          - { path: v.white_wool, amount: 2, weight: 20 }
+          - { path: m.materials.rare_wool, amount: 1, weight: 60 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_wool, amount: 2, weight: 20 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_wool, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 60 }
   CHICKEN:
     grow-up: 45m
-    harvest:
-      - slaughter
-      - egg
-      - shed
-    slaughter: "food(type=roast;origin=CHICKEN)"
     egg: vanilla
-    shed: v.feather
-    drops:
-      mode: counted
-      common:
-        - { path: v.feather, amount: 1, weight: 50 }
-      rare:
-        - { path: v.feather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_feather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_feather, amount: 1, weight: 5 }
-      epic:
-        - { path: v.feather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_feather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_feather, amount: 1, weight: 5 }
-      legendary:
-        - { path: v.feather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_feather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_feather, amount: 1, weight: 5 }
+    slaughter:
+      meat: "food(type=roast;origin=CHICKEN)"
+      drops:
+        mode: counted
+        common:
+          - { path: v.feather, amount: 1, weight: 100 }
+        rare:
+          - { path: v.feather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_feather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_feather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_feather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_feather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_feather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_feather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_feather, amount: 1, weight: 60 }
+    shed:
+      drops:
+        mode: counted
+        common:
+          - { path: v.feather, amount: 1, weight: 100 }
+        rare:
+          - { path: v.feather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_feather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_feather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_feather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_feather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_feather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_feather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_feather, amount: 1, weight: 60 }
   GOAT:
-    harvest:
-      - slaughter
-      - milk
-      - shear
-    slaughter: "food(type=roast;origin=GOAT)"
-    milk: "food(type=milk_bucket;origin=Goat)"
-    shear: ia.tfmc_cooking:wool
-    drops:
-      mode: counted
-      common:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 50 }
-      rare:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 45 }
-        - { path: m.materials.rare_wool, amount: 1, weight: 5 }
-        - { path: m.materials.epic_wool, amount: 1, weight: 5 }
-      epic:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 45 }
-        - { path: m.materials.rare_wool, amount: 1, weight: 5 }
-        - { path: m.materials.epic_wool, amount: 1, weight: 5 }
-      legendary:
-        - { path: ia.tfmc_cooking:wool, amount: 1, weight: 45 }
-        - { path: m.materials.rare_wool, amount: 1, weight: 5 }
-        - { path: m.materials.epic_wool, amount: 1, weight: 5 }
+    milk: true
+    slaughter:
+      meat: "food(type=roast;origin=GOAT)"
+      drops:
+        mode: counted
+        common:
+          - { path: v.white_wool, amount: 1, weight: 100 }
+        rare:
+          - { path: v.white_wool, amount: 2, weight: 20 }
+          - { path: m.materials.rare_wool, amount: 1, weight: 60 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_wool, amount: 2, weight: 20 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_wool, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 60 }
+    shear:
+      drops:
+        mode: counted
+        common:
+          - { path: v.white_wool, amount: 1, weight: 100 }
+        rare:
+          - { path: v.white_wool, amount: 2, weight: 20 }
+          - { path: m.materials.rare_wool, amount: 1, weight: 60 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_wool, amount: 2, weight: 20 }
+          - { path: m.materials.epic_wool, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_wool, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_wool, amount: 1, weight: 60 }
   HORSE:
-    harvest:
-      - slaughter
-    slaughter: "food(type=roast;origin=HORSE)"
-    drops:
-      mode: counted
-      common:
-        - { path: m.materials.leather, amount: 1, weight: 50 }
-      rare:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      epic:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      legendary:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
+    slaughter:
+      meat: "food(type=roast;origin=HORSE)"
+      drops:
+        mode: counted
+        common:
+          - { path: m.materials.leather, amount: 1, weight: 100 }
+        rare:
+          - { path: m.materials.leather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_leather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_leather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_leather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 60 }
   DONKEY:
-    harvest:
-      - slaughter
-    slaughter: "food(type=roast;origin=DONKEY)"
-    drops:
-      mode: counted
-      common:
-        - { path: m.materials.leather, amount: 1, weight: 50 }
-      rare:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      epic:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      legendary:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
+    slaughter:
+      meat: "food(type=roast;origin=DONKEY)"
+      drops:
+        mode: counted
+        common:
+          - { path: m.materials.leather, amount: 1, weight: 100 }
+        rare:
+          - { path: m.materials.leather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_leather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_leather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_leather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 60 }
   MULE:
-    harvest:
-      - slaughter
-    slaughter: "food(type=roast;origin=MULE)"
-    drops:
-      mode: counted
-      common:
-        - { path: m.materials.leather, amount: 1, weight: 50 }
-      rare:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      epic:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
-      legendary:
-        - { path: m.materials.leather, amount: 1, weight: 45 }
-        - { path: m.materials.rare_leather, amount: 1, weight: 5 }
-        - { path: m.materials.epic_leather, amount: 1, weight: 5 }
+    slaughter:
+      meat: "food(type=roast;origin=MULE)"
+      drops:
+        mode: counted
+        common:
+          - { path: m.materials.leather, amount: 1, weight: 100 }
+        rare:
+          - { path: m.materials.leather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_leather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_leather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_leather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 60 }
   CAMEL:
-    harvest:
-      - slaughter
-    slaughter: "food(type=roast;origin=CAMEL)"
+    slaughter:
+      meat: "food(type=roast;origin=CAMEL)"
+      drops:
+        mode: counted
+        common:
+          - { path: m.materials.leather, amount: 1, weight: 100 }
+        rare:
+          - { path: m.materials.leather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_leather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_leather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_leather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_leather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_leather, amount: 1, weight: 60 }
   LLAMA:
-    harvest:
-      - slaughter
-    slaughter: "food(type=roast;origin=LLAMA)"
-    drops:
-      common:
-        - { path: v.leather, amount: 2, weight: 50 }
-        - { path: v.white_wool, amount: 2, weight: 50 }
-      rare:
-        - { path: v.leather, amount: 4, weight: 44 }
-        - { path: v.white_wool, amount: 4, weight: 44 }
-        - { path: v.red_carpet, amount: 1, weight: 1 }
-        - { path: v.lime_carpet, amount: 1, weight: 1 }
-        - { path: v.orange_carpet, amount: 1, weight: 1 }
-        - { path: v.pink_carpet, amount: 1, weight: 1 }
-        - { path: v.cyan_carpet, amount: 1, weight: 1 }
-        - { path: v.light_blue_carpet, amount: 1, weight: 1 }
-        - { path: v.purple_carpet, amount: 1, weight: 1 }
-        - { path: v.green_carpet, amount: 1, weight: 1 }
-        - { path: v.black_carpet, amount: 1, weight: 1 }
-        - { path: v.yellow_carpet, amount: 1, weight: 1 }
-        - { path: v.light_gray_carpet, amount: 1, weight: 1 }
-        - { path: v.gray_carpet, amount: 1, weight: 1 }
-      epic:
-        - { path: v.leather, amount: 6, weight: 44 }
-        - { path: v.white_wool, amount: 6, weight: 44 }
-        - { path: v.red_carpet, amount: 1, weight: 1 }
-        - { path: v.lime_carpet, amount: 1, weight: 1 }
-        - { path: v.orange_carpet, amount: 1, weight: 1 }
-        - { path: v.pink_carpet, amount: 1, weight: 1 }
-        - { path: v.cyan_carpet, amount: 1, weight: 1 }
-        - { path: v.light_blue_carpet, amount: 1, weight: 1 }
-        - { path: v.purple_carpet, amount: 1, weight: 1 }
-        - { path: v.green_carpet, amount: 1, weight: 1 }
-        - { path: v.black_carpet, amount: 1, weight: 1 }
-        - { path: v.yellow_carpet, amount: 1, weight: 1 }
-        - { path: v.light_gray_carpet, amount: 1, weight: 1 }
-        - { path: v.gray_carpet, amount: 1, weight: 1 }
-      legendary:
-        - { path: v.leather, amount: 8, weight: 44 }
-        - { path: v.white_wool, amount: 8, weight: 44 }
-        - { path: v.red_carpet, amount: 1, weight: 1 }
-        - { path: v.lime_carpet, amount: 1, weight: 1 }
-        - { path: v.orange_carpet, amount: 1, weight: 1 }
-        - { path: v.pink_carpet, amount: 1, weight: 1 }
-        - { path: v.cyan_carpet, amount: 1, weight: 1 }
-        - { path: v.light_blue_carpet, amount: 1, weight: 1 }
-        - { path: v.purple_carpet, amount: 1, weight: 1 }
-        - { path: v.green_carpet, amount: 1, weight: 1 }
-        - { path: v.black_carpet, amount: 1, weight: 1 }
-        - { path: v.yellow_carpet, amount: 1, weight: 1 }
-        - { path: v.light_gray_carpet, amount: 1, weight: 1 }
-        - { path: v.gray_carpet, amount: 1, weight: 1 }
+    slaughter:
+      meat: "food(type=roast;origin=LLAMA)"
+      drops:
+        mode: counted
+        common:
+          - { path: v.feather, amount: 1, weight: 100 }
+        rare:
+          - { path: v.feather, amount: 2, weight: 20 }
+          - { path: m.materials.rare_feather, amount: 1, weight: 60 }
+          - { path: m.materials.epic_feather, amount: 1, weight: 20 }
+        epic:
+          - { path: m.materials.rare_feather, amount: 2, weight: 20 }
+          - { path: m.materials.epic_feather, amount: 1, weight: 60 }
+          - { path: m.materials.legendary_feather, amount: 1, weight: 20 }
+        legendary:
+          - { path: m.materials.epic_feather, amount: 2, weight: 40 }
+          - { path: m.materials.legendary_feather, amount: 1, weight: 60 }
 
 damage:
   other-players: true
@@ -338,37 +341,35 @@ quality-from-genetics:
     stars: 5
 
 mounts:
-  nerf: true
-  nerf-divisor: 2
   speed:
     min-pct: 0.40
     genetics-pct: 0.30
     care-pct: 0.20
   HORSE:
-    min-health: 15
-    max-health: 30
-    min-speed: 0.1125
-    max-speed: 0.3375
-    min-jump: 0.4
-    max-jump: 1.0
-  DONKEY:
-    min-health: 15
-    max-health: 30
-    min-speed: 0.1125
-    max-speed: 0.23625
-    min-jump: 0.4
-    max-jump: 1.0
-  MULE:
-    min-health: 15
-    max-health: 30
-    min-speed: 0.1125
-    max-speed: 0.270
-    min-jump: 0.4
-    max-jump: 1.0
-  CAMEL:
-    min-health: 15
-    max-health: 32
-    min-speed: 0.09
-    max-speed: 0.219375
-    min-jump: 0.4
+    min-health: 10
+    max-health: 20
+    min-speed: 0.0675
+    max-speed: 0.2025
+    min-jump: 0.24
     max-jump: 0.6
+  DONKEY:
+    min-health: 10
+    max-health: 20
+    min-speed: 0.0675
+    max-speed: 0.2025
+    min-jump: 0.24
+    max-jump: 0.6
+  MULE:
+    min-health: 10
+    max-health: 20
+    min-speed: 0.0675
+    max-speed: 0.2025
+    min-jump: 0.24
+    max-jump: 0.6
+  CAMEL:
+    min-health: 20
+    max-health: 20
+    min-speed: 0.054
+    max-speed: 0.054
+    min-jump: 0.4
+    max-jump: 0.4

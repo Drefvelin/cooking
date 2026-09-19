@@ -79,12 +79,12 @@ public final class HusbandryInspectGui {
 
     private static ItemStack productsItem(EntityType type, int yieldPct) {
         HusbandrySpecies species = HusbandryConfig.species(type);
-        if (species == null || !HusbandryProducts.hasProducts(species.harvestModes())) {
+        if (species == null || !HusbandryProducts.hasProducts(species)) {
             return null;
         }
         List<String> lore = new ArrayList<>();
         lore.add("§aYield " + yieldPct + "%");
-        for (String line : HusbandryProducts.modeLines(species.harvestModes())) {
+        for (String line : HusbandryProducts.modeLines(species)) {
             lore.add("§7" + line);
         }
         return named(Material.CHEST, "§6Products", lore);

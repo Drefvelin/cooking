@@ -31,13 +31,13 @@ public final class HusbandryHarvest {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(type);
-        if (species != null && species.hasHarvest("shear")) {
+        if (species != null && species.canShear()) {
             animal.setWoolReadyAt(System.currentTimeMillis());
         }
-        if (species != null && species.hasHarvest("shed")) {
+        if (species != null && species.canShed()) {
             animal.setShedReadyAt(System.currentTimeMillis());
         }
-        if (species != null && species.hasHarvest("egg")) {
+        if (species != null && species.hasEgg()) {
             animal.setEggReadyAt(System.currentTimeMillis());
         }
     }
@@ -66,7 +66,7 @@ public final class HusbandryHarvest {
             HusbandrySpecies species,
             HusbandryRepository repository,
             long nowMillis) {
-        if (player == null || animal == null || species == null || species.shear().isBlank()) {
+        if (player == null || animal == null || species == null || !species.canShear()) {
             return ShearResult.COOLDOWN;
         }
         if (!HusbandryGrowth.isMature(animal, nowMillis)) {
@@ -77,10 +77,8 @@ public final class HusbandryHarvest {
             player.sendMessage("§cThis animal is not ready to be sheared.");
             return ShearResult.COOLDOWN;
         }
-        int amount = HusbandryConfig.woolFor(HusbandryConfig.effectiveGenetics(animal));
-        ItemStack extra = buildTlibs(species.shear(), amount);
-        if (extra != null) {
-            InventoryAdder.addItem(player, extra);
+        for (ItemStack drop : HusbandryDropRoller.rollShearDrops(animal, ThreadLocalRandom.current(), nowMillis)) {
+            InventoryAdder.addItem(player, drop);
         }
         if (living != null && living.getWorld() != null) {
             living.getWorld().playSound(living.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1f, 1f);
@@ -91,6 +89,13 @@ public final class HusbandryHarvest {
             repository.upsertAnimal(animal);
         }
         return ShearResult.DONE;
+    }
+
+    public static String milkFoodString(EntityType type) {
+        if (type == EntityType.GOAT) {
+            return "food(type=milk_bucket;origin=Goat)";
+        }
+        return "food(type=milk_bucket;origin=Cow)";
     }
 
     public static ItemStack buildFood(HusbandryAnimal animal, String foodString) {

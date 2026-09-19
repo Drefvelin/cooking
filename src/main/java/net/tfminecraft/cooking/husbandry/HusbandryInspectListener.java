@@ -57,7 +57,7 @@ public final class HusbandryInspectListener implements Listener {
             player.sendMessage("§cThis is not your animal.");
             return;
         }
-        HusbandryMounts.applySpeed(living, animal);
+        HusbandryMounts.applyStats(living, animal);
         HusbandryInspectGui.open(player, living, animal);
     }
 

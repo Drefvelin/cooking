@@ -5,31 +5,66 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 public final class HusbandryDropRoller {
 
+    public enum CountMode {
+        HIDE_COUNT,
+        WOOL_COUNT,
+        SINGLE
+    }
+
     private HusbandryDropRoller() {}
 
     public static List<ItemStack> rollSlaughterExtras(HusbandryAnimal animal, Random random, long nowMillis) {
-        if (animal == null || random == null) {
+        if (animal == null) {
             return List.of();
         }
-        EntityType type = typeOf(animal);
-        if (type == null) {
-            return List.of();
-        }
-        HusbandrySpecies species = HusbandryConfig.species(type);
+        HusbandrySpecies species = speciesOf(animal);
         if (species == null) {
             return List.of();
         }
-        HusbandryDropTable table = species.drops();
-        if (table == null || table.isEmpty()) {
+        return roll(species.slaughterDrops(), animal, random, nowMillis, CountMode.HIDE_COUNT);
+    }
+
+    public static List<ItemStack> rollShearDrops(HusbandryAnimal animal, Random random, long nowMillis) {
+        if (animal == null) {
+            return List.of();
+        }
+        HusbandrySpecies species = speciesOf(animal);
+        if (species == null) {
+            return List.of();
+        }
+        return roll(species.shearDrops(), animal, random, nowMillis, CountMode.WOOL_COUNT);
+    }
+
+    public static List<ItemStack> rollShedDrops(HusbandryAnimal animal, Random random) {
+        if (animal == null) {
+            return List.of();
+        }
+        HusbandrySpecies species = speciesOf(animal);
+        if (species == null) {
+            return List.of();
+        }
+        CountMode countMode = species.shedDrops().counted() ? CountMode.WOOL_COUNT : CountMode.SINGLE;
+        return roll(species.shedDrops(), animal, random, System.currentTimeMillis(), countMode);
+    }
+
+    public static List<ItemStack> roll(
+            HusbandryDropTable table,
+            HusbandryAnimal animal,
+            Random random,
+            long nowMillis,
+            CountMode countMode) {
+        if (animal == null || random == null || table == null || table.isEmpty()) {
             return List.of();
         }
         if (table.counted()) {
-            int count = hideCount(animal, nowMillis);
+            int count = resolveCount(animal, nowMillis, countMode);
+            if (count <= 0) {
+                return List.of();
+            }
             List<HusbandryDropEntry> pool = unlockedPool(table, HusbandryConfig.starsForGenetics(animal.genetics()));
             List<ItemStack> drops = new ArrayList<>();
             for (int i = 0; i < count; i++) {
@@ -37,30 +72,21 @@ public final class HusbandryDropRoller {
                 if (picked == null || picked.path().isBlank()) {
                     continue;
                 }
-                ItemStack stack = HusbandryHarvest.buildTlibs(picked.path(), 1);
+                ItemStack stack = HusbandryHarvest.buildTlibs(picked.path(), Math.max(1, picked.amount()));
                 if (stack != null) {
                     drops.add(stack);
                 }
             }
             return drops;
         }
-        return rollExtras(animal, random).map(List::of).orElse(List.of());
+        return rollExtras(table, animal, random).map(List::of).orElse(List.of());
     }
 
-    public static Optional<ItemStack> rollExtras(HusbandryAnimal animal, Random random) {
-        if (animal == null || random == null) {
-            return Optional.empty();
-        }
-        EntityType type = typeOf(animal);
-        if (type == null) {
-            return Optional.empty();
-        }
-        HusbandrySpecies species = HusbandryConfig.species(type);
-        if (species == null) {
-            return Optional.empty();
-        }
-        HusbandryDropTable table = species.drops();
-        if (table == null || table.isEmpty()) {
+    public static Optional<ItemStack> rollExtras(
+            HusbandryDropTable table,
+            HusbandryAnimal animal,
+            Random random) {
+        if (animal == null || random == null || table == null || table.isEmpty()) {
             return Optional.empty();
         }
         List<HusbandryDropEntry> pool = unlockedPool(table, HusbandryConfig.starsForGenetics(animal.genetics()));
@@ -69,6 +95,14 @@ public final class HusbandryDropRoller {
             return Optional.empty();
         }
         return Optional.ofNullable(HusbandryHarvest.buildTlibs(picked.path(), picked.amount()));
+    }
+
+    private static int resolveCount(HusbandryAnimal animal, long nowMillis, CountMode countMode) {
+        return switch (countMode) {
+            case HIDE_COUNT -> hideCount(animal, nowMillis);
+            case WOOL_COUNT -> HusbandryConfig.woolFor(HusbandryConfig.effectiveGenetics(animal));
+            case SINGLE -> 1;
+        };
     }
 
     public static int hideCount(HusbandryAnimal animal, long nowMillis) {
@@ -128,9 +162,9 @@ public final class HusbandryDropRoller {
         return null;
     }
 
-    private static EntityType typeOf(HusbandryAnimal animal) {
+    private static HusbandrySpecies speciesOf(HusbandryAnimal animal) {
         try {
-            return EntityType.valueOf(animal.type());
+            return HusbandryConfig.species(org.bukkit.entity.EntityType.valueOf(animal.type()));
         } catch (IllegalArgumentException ex) {
             return null;
         }

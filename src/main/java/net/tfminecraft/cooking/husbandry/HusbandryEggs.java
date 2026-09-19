@@ -22,7 +22,7 @@ final class HusbandryEggs {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(type);
-        if (species == null || !species.hasHarvest("egg") || species.egg().isBlank()) {
+        if (species == null || !species.hasEgg()) {
             return;
         }
         Long readyAt = animal.eggReadyAt();

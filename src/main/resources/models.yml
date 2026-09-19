@@ -2872,6 +2872,14 @@ bread:
     display:
       item: ia.tfmc_cooking:bread_rotten
 
+dry_ration:
+  default:
+    weight: 1
+    gui:
+      item: v.dried_kelp
+    display:
+      item: v.dried_kelp
+
 wheat:
   fresh:
     weight: 1

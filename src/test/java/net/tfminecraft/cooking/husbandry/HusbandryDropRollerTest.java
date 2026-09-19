@@ -65,6 +65,15 @@ class HusbandryDropRollerTest {
     }
 
     @Test
+    void rollReturnsEmptyWhenTableMissing() {
+        HusbandryAnimal animal = new HusbandryAnimal(UUID.randomUUID(), "SHEEP", "Test");
+        assertTrue(HusbandryDropRoller.roll(
+                null, animal, new Random(1L), 0L, HusbandryDropRoller.CountMode.WOOL_COUNT).isEmpty());
+        assertTrue(HusbandryDropRoller.roll(
+                HusbandryDropTable.empty(), animal, new Random(1L), 0L, HusbandryDropRoller.CountMode.SINGLE).isEmpty());
+    }
+
+    @Test
     void pigMissPathIsEmptyOptional() {
         HusbandryDropEntry miss = new HusbandryDropEntry("", 1, 95);
         HusbandryDropEntry dust = new HusbandryDropEntry("m.currency.enchanted_dust", 1, 5);

@@ -21,7 +21,7 @@ public final class HusbandryMountListener implements Listener {
         if (mount instanceof LivingEntity living) {
             HusbandryAnimal animal = HusbandryMounts.enrollIfNeeded(living);
             if (animal != null) {
-                HusbandryMounts.applySpeed(living, animal);
+            HusbandryMounts.applyStats(living, animal);
             }
         }
         if (!HusbandryOwnershipService.hasAnyOwner(mount.getUniqueId())) {

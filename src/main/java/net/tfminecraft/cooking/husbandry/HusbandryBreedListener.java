@@ -61,26 +61,23 @@ public final class HusbandryBreedListener implements Listener {
         }
 
         persistBaby(child, mother, father);
-        scheduleMountInherit(child, mother, father);
+        scheduleMountStats(child);
     }
 
-    private static void scheduleMountInherit(LivingEntity child, LivingEntity mother, LivingEntity father) {
-        if (!HusbandryMounts.isMount(child) || !HusbandryMounts.isMount(mother) || !HusbandryMounts.isMount(father)) {
+    private static void scheduleMountStats(LivingEntity child) {
+        if (!HusbandryMounts.isMount(child)) {
             return;
         }
         org.bukkit.Bukkit.getScheduler().runTaskLater(net.tfminecraft.cooking.Cooking.plugin, () -> {
             if (child == null || !child.isValid()) {
                 return;
             }
-            HusbandryMounts.applyInheritedStats(child, mother, father);
             HusbandryRepository repository = HusbandryEntities.repository();
             if (repository == null) {
                 return;
             }
-            repository.getAnimal(child.getUniqueId()).ifPresent(baby -> {
-                HusbandryMounts.applySpeed(child, baby);
-                repository.upsertAnimal(baby);
-            });
+            repository.getAnimal(child.getUniqueId()).ifPresent(baby ->
+                    HusbandryMounts.applyStats(child, baby));
         }, 1L);
     }
 
@@ -155,9 +152,6 @@ public final class HusbandryBreedListener implements Listener {
         child.setCustomNameVisible(false);
         HusbandryEntities.applyPersistFlags(child);
         HusbandryEntities.stampManaged(child);
-        if (HusbandryMounts.isMount(child)) {
-            HusbandryMounts.setNerfed(child, true);
-        }
 
         long now = System.currentTimeMillis();
         HusbandryAnimal baby = new HusbandryAnimal(uuid, child.getType().name(), name);

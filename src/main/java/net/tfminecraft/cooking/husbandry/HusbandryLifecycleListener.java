@@ -94,7 +94,7 @@ public final class HusbandryLifecycleListener implements Listener {
         long now = System.currentTimeMillis();
         HusbandrySimulator.catchUp(animal, now, java.util.concurrent.ThreadLocalRandom.current());
         HusbandryGrowth.applyMaturity(living, animal, now);
-        HusbandryMounts.applySpeed(living, animal);
+        HusbandryMounts.applyStats(living, animal);
         animal.setUnloadedAt(null);
         animal.setLoadedVisitStart(now);
         repository.upsertAnimal(animal);

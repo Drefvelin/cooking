@@ -11,6 +11,6 @@ bread_tray:
     food: bread
     tags: cooked.0:freshness.0
   bake:
-    cook-seconds: 90
-    burn-seconds: 180
+    cook-seconds: 5
+    burn-seconds: 10
     sync: true
