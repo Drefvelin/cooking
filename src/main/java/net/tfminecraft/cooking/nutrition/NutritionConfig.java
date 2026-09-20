@@ -142,12 +142,12 @@ public final class NutritionConfig {
 
     private static List<DietTierDefinition> defaultTiers() {
         List<DietTierDefinition> tiers = new ArrayList<>();
-        tiers.add(new DietTierDefinition("terrible", 0, "<red>Terrible"));
-        tiers.add(new DietTierDefinition("bad", 10, "<gold>Bad"));
-        tiers.add(new DietTierDefinition("decent", 25, "<yellow>Decent"));
-        tiers.add(new DietTierDefinition("good", 45, "<green>Good"));
-        tiers.add(new DietTierDefinition("very_good", 65, "<aqua>Very Good"));
-        tiers.add(new DietTierDefinition("fantastic", 85, "<light_purple>Fantastic"));
+        tiers.add(new DietTierDefinition("terrible", 0, "#ff5555Terrible"));
+        tiers.add(new DietTierDefinition("bad", 10, "#ffaa00Bad"));
+        tiers.add(new DietTierDefinition("decent", 25, "#ffff55Decent"));
+        tiers.add(new DietTierDefinition("good", 45, "#55ff55Good"));
+        tiers.add(new DietTierDefinition("very_good", 65, "#55ffffVery Good"));
+        tiers.add(new DietTierDefinition("fantastic", 85, "#ff55ffFantastic"));
         return Collections.unmodifiableList(tiers);
     }
 }

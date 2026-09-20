@@ -197,19 +197,19 @@ nutrition:
   diet-tiers:
     - id: terrible
       min-percent: 0
-      label: "<red>Terrible"
+      label: "#ff5555Terrible"
     - id: bad
       min-percent: 10
-      label: "<gold>Bad"
+      label: "#ffaa00Bad"
     - id: decent
       min-percent: 25
-      label: "<yellow>Decent"
+      label: "#ffff55Decent"
     - id: good
       min-percent: 45
-      label: "<green>Good"
+      label: "#55ff55Good"
     - id: very_good
       min-percent: 65
-      label: "<aqua>Very Good"
+      label: "#55ffffVery Good"
     - id: fantastic
       min-percent: 85
-      label: "<light_purple>Fantastic"
+      label: "#ff55ffFantastic"
