@@ -1,5 +1,6 @@
 package net.tfminecraft.cooking.trough;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -12,6 +13,7 @@ import me.Plugins.TLibs.TLibs;
 import net.tfminecraft.InteractibleFurniture;
 import net.tfminecraft.cooking.cache.FurnitureCache;
 import net.tfminecraft.cooking.cache.ItemCache;
+import net.tfminecraft.cooking.events.DishCookedEvent;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.utils.InventoryAdder;
 import net.tfminecraft.events.FurnitureInteractEvent;
@@ -89,10 +91,14 @@ public final class TroughHandler implements Listener {
             furniture.removeActiveSlot(slotId);
         }
 
+        // Snapshot before inventory insertion, which may mutate the stack.
+        DishCookedEvent completed = new DishCookedEvent(player, feed, "trough");
         ItemStack leftover = InventoryAdder.addItem(player, feed);
         if (leftover != null) {
             furniture.getLoc().getWorld().dropItemNaturally(furniture.getLoc(), leftover);
         }
+        markDirty(furniture);
+        Bukkit.getPluginManager().callEvent(completed);
 
         player.swingMainHand();
         furniture.getLoc().getWorld().playSound(furniture.getLoc(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
@@ -102,7 +108,6 @@ public final class TroughHandler implements Listener {
                 10,
                 0.25, 0.1, 0.25,
                 0.02);
-        markDirty(furniture);
     }
 
     private static ItemStack mintFeed() {
