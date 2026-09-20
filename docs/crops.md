@@ -92,7 +92,7 @@ There is no `c.seed` path and no `/cooking crop` / `/cooking cropseed` admin com
 | Seed path | `v.wheat_seeds`, `v.potato`, … | `ia.playbox_custom_crops:tomato_seeds` |
 | Nutmeg seed | — | **`ia.playbox_custom_crops:nut_seeds`** (not `nutmeg_seeds`) |
 | Produce drop | Vanilla item (`wheat`, potato, …) | `tfmc_cooking:<id>` (e.g. `tfmc_cooking:tomato`) |
-| Harvest | Hoe harvest: roll H, convert produce, leave seeds | `CropBreakEvent` / mature interact: pending rewrite at H |
+| Harvest | Hoe harvest: roll H, convert produce, leave seeds. Fires a drop-less `BlockBreakEvent` per plant so MMOCore crop XP still applies. | `CropBreakEvent` / mature interact: pending rewrite at H |
 | Growth | `CropGrowthListener` on `BlockGrowEvent` | Cooking wraps CC grow-conditions after load; `crops.yml` affection |
 
 CustomCrops one-seed drops stay yield/balance. No plant upsert / harvest SQL.

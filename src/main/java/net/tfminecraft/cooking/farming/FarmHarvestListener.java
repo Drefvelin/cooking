@@ -10,9 +10,14 @@ import org.bukkit.inventory.ItemStack;
 
 public final class FarmHarvestListener implements Listener {
 
+    private static final ThreadLocal<Boolean> HOE_HARVEST = ThreadLocal.withInitial(() -> false);
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCropBreak(BlockBreakEvent event) {
         if (!FarmingConfig.enabled()) {
+            return;
+        }
+        if (Boolean.TRUE.equals(HOE_HARVEST.get())) {
             return;
         }
 
@@ -31,6 +36,11 @@ public final class FarmHarvestListener implements Listener {
 
         event.setCancelled(true);
         FarmingEffects.toolSwing(player);
-        FarmHarvestService.harvestArea(player, tool, hoe, block);
+        HOE_HARVEST.set(true);
+        try {
+            FarmHarvestService.harvestArea(player, tool, hoe, block);
+        } finally {
+            HOE_HARVEST.set(false);
+        }
     }
 }

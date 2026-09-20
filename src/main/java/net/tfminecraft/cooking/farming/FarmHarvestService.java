@@ -11,6 +11,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -71,6 +72,14 @@ public final class FarmHarvestService {
             return false;
         }
         if (FarmingConfig.onlyHarvestMature() && !isMature(block)) {
+            return false;
+        }
+
+        BlockBreakEvent notify = new BlockBreakEvent(block, player);
+        notify.setDropItems(false);
+        notify.setExpToDrop(0);
+        Cooking.plugin.getServer().getPluginManager().callEvent(notify);
+        if (notify.isCancelled()) {
             return false;
         }
 
