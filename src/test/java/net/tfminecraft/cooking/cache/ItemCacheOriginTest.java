@@ -27,4 +27,11 @@ class ItemCacheOriginTest {
         assertFalse(ItemCache.originsMatch("", "carrot"));
         assertFalse(ItemCache.originsMatch(null, "carrot"));
     }
+
+    @Test
+    void goatMatchesUnderscoreKey() {
+        assertTrue(ItemCache.originsMatch("Goat", "goat"));
+        assertTrue(ItemCache.originsMatch("Cow", "cow"));
+        assertFalse(ItemCache.originsMatch("Goat", "milk"));
+    }
 }

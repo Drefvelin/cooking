@@ -1,5 +1,6 @@
 package net.tfminecraft.cooking.liquid;
 
+import net.tfminecraft.cooking.cup.DairyOrigin;
 import net.tfminecraft.cooking.item.tag.AgeScale;
 import net.tfminecraft.furniture.Furniture;
 
@@ -7,6 +8,7 @@ public final class LiquidContainerState {
     public static final String VAR_TYPE = "liquid.type";
     public static final String VAR_BLOCKS = "liquid.blocks";
     public static final String VAR_MILK_QUALITY = "liquid.milkQuality";
+    public static final String VAR_MILK_ORIGIN = "liquid.milkOrigin";
     public static final String VAR_DAIRY_FRESHNESS = "liquid.dairyFreshness";
     public static final String VAR_FRESHNESS_REMAINDER = "liquid.freshnessRemainder";
     public static final String VAR_LAST_UPDATE = "liquid.lastUpdate";
@@ -35,6 +37,14 @@ public final class LiquidContainerState {
             return number.intValue();
         }
         return 1;
+    }
+
+    public static String getMilkOrigin(Furniture furniture) {
+        Object value = furniture.getVariables().get(VAR_MILK_ORIGIN);
+        if (value instanceof String origin) {
+            return DairyOrigin.orCow(origin);
+        }
+        return DairyOrigin.COW;
     }
 
     public static int getDairyFreshness(Furniture furniture) {
@@ -92,8 +102,9 @@ public final class LiquidContainerState {
         return blocks;
     }
 
-    public static void setMilkSnapshot(Furniture furniture, int quality, int dairyFreshness) {
+    public static void setMilkSnapshot(Furniture furniture, int quality, int dairyFreshness, String origin) {
         furniture.getVariables().put(VAR_MILK_QUALITY, quality);
+        furniture.getVariables().put(VAR_MILK_ORIGIN, DairyOrigin.orCow(origin));
         furniture.getVariables().put(VAR_DAIRY_FRESHNESS, Math.max(0, dairyFreshness));
         touchLastUpdate(furniture);
     }
@@ -138,6 +149,7 @@ public final class LiquidContainerState {
         furniture.getVariables().remove(VAR_TYPE);
         furniture.getVariables().remove(VAR_BLOCKS);
         furniture.getVariables().remove(VAR_MILK_QUALITY);
+        furniture.getVariables().remove(VAR_MILK_ORIGIN);
         furniture.getVariables().remove(VAR_DAIRY_FRESHNESS);
         furniture.getVariables().remove(VAR_FRESHNESS_REMAINDER);
         furniture.getVariables().remove(VAR_LAST_UPDATE);

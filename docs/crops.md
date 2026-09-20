@@ -30,7 +30,9 @@ Province fertility 0–100  ×  crops.yml affection
   → sample H in 1–5 (every star weight > 0)
   → OriginQualityResolver.applyPickupPermissions
   → (hoe) HoeQualityBonus
-  → convert produce via conversions.yml at H; leave seed drops unchanged
+  → convert produce via conversions.yml at H; leave **seed-only** drops unchanged
+    (wheat/beetroot/melon/pumpkin seeds). Potato, carrot, and nether wart are produce:
+    hoe harvest reserves one vanilla stack for replant, then converts leftover drops.
 ```
 
 ## Growth pipeline
@@ -101,7 +103,9 @@ Cooking injects a fertility check into loaded CustomCrops grow-conditions on ena
 
 Vanilla harvest (from `farming.yml`): wheat, potatoes, carrots, beetroots, nether wart. Melon/pumpkin **fruit** harvest is out of scope; **stems** are growth-gated.
 
-CustomCrops: every id listed under `crops:` with `source: customcrops`.
+Potato/carrot/nether wart `seed:` in `crops.yml` is the same vanilla item as produce. Hoe harvest still takes **one** untagged stack to replant. Remaining drops convert to Cooking food. Do not skip conversion just because the drop matches `seed:`.
+
+CustomCrops: every id listed under `crops:` with `source: customcrops`. CustomCrops harvest still leaves configured IA seed paths unchanged (`rewriteCustomDrop`).
 
 ## Out of scope
 

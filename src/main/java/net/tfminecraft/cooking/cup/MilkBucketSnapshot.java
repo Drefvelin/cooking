@@ -36,6 +36,18 @@ public final class MilkBucketSnapshot {
         return track == null ? 0 : Math.max(0, track.getValue());
     }
 
+    public static String readOrigin(ItemStack stack) {
+        return readOrigin(null, stack);
+    }
+
+    public static String readOrigin(Player player, ItemStack stack) {
+        FoodItem food = foodFromStack(player, stack);
+        if (food == null) {
+            return DairyOrigin.COW;
+        }
+        return DairyOrigin.orCow(food.getOrigin());
+    }
+
     private static FoodItem foodFromStack(Player player, ItemStack stack) {
         if (stack == null || !ItemCache.isMilkBucket(stack)) {
             return null;

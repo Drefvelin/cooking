@@ -13,6 +13,8 @@ trough-feed: m.pets.universal_feed
 trough-items-per-click: 4
 
 butter: ia.tfmc_cooking:butter
+butter-pan: ia.tfmc_cooking:butter_pan
+butter-piece: ia.tfmc_cooking:butter_piece
 butter-churn: butter_churn
 butter-churn-count: 3
 butter-plate: butter_plate
@@ -44,6 +46,8 @@ liquid-blocks-per-cup: 1
 
 pot-water-input: v.water_bucket
 pot-liquid-display: ia.tfmc_cooking:water
+pot-soup-scoops: 3
+pot-soup-height-divisor: 4
 
 ladle: ia.tfmc_cooking:ladle
 masher: ia.tfmc_cooking:masher
@@ -137,6 +141,8 @@ liquids:
 colours:
     - v.milk_bucket ffffff
     - origin.milk ffffff
+    - origin.cow ffffff
+    - origin.goat ffffff
     - origin.carrot f0801f
     - origin.basil 30ba2b
     - origin.black_pepper 3d3d3d

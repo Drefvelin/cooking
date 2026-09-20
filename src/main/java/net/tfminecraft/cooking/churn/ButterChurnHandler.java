@@ -89,7 +89,8 @@ public final class ButterChurnHandler implements Listener {
         ButterChurnState.setMilkSnapshot(
                 furniture,
                 MilkBucketSnapshot.readQuality(player, milkItem),
-                MilkBucketSnapshot.readDairyFreshness(player, milkItem));
+                MilkBucketSnapshot.readDairyFreshness(player, milkItem),
+                MilkBucketSnapshot.readOrigin(player, milkItem));
         ButterChurnState.setChurnCount(furniture, 0);
         ButterChurnAging.start(furniture);
         markDirty(furniture);
@@ -217,7 +218,7 @@ public final class ButterChurnHandler implements Listener {
         markDirty(furniture);
 
         if (count >= required) {
-            player.sendMessage("Butter ready — use a butter plate to collect.");
+            player.sendMessage("Butter ready - use a butter plate to collect.");
         } else {
             player.sendMessage("Churn " + count + "/" + required);
         }
@@ -236,6 +237,7 @@ public final class ButterChurnHandler implements Listener {
                 player,
                 milkQuality,
                 dairyFreshness,
+                ButterChurnState.getMilkOrigin(churn),
                 ButterChurnState.hasSalt(churn),
                 ButterChurnState.getSaltQuality(churn),
                 ButterChurnState.getSpiceOrigin(churn),

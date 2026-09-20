@@ -47,6 +47,8 @@ public class ConfigLoader {
         FurnitureCache.trough = config.getString("trough", "none");
 
         ItemCache.butter = config.getString("butter", "none");
+        ItemCache.butterPan = config.getString("butter-pan", "ia.tfmc_cooking:butter_pan");
+        ItemCache.butterPiece = config.getString("butter-piece", "ia.tfmc_cooking:butter_piece");
         ItemCache.firePitTurner = config.getString("fire-pit-turner", "ia.tfmc_cooking:fire_pit_turner");
         ItemCache.firePitVisualY = (float) config.getDouble("fire-pit-visual-y", 0.5);
         ItemCache.firePitPivotY = (float) config.getDouble("fire-pit-pivot-y", 0.5);
@@ -65,6 +67,8 @@ public class ConfigLoader {
         ItemCache.blocksPerCup = config.getInt("liquid-blocks-per-cup", 1);
         ItemCache.potWaterInput = config.getString("pot-water-input", "v.water_bucket");
         ItemCache.potLiquidDisplay = config.getString("pot-liquid-display", "ia.tfmc_cooking:water");
+        ItemCache.potSoupScoops = Math.max(1, config.getInt("pot-soup-scoops", 3));
+        ItemCache.potSoupHeightDivisor = Math.max(1, config.getInt("pot-soup-height-divisor", 4));
 
         ItemCache.ladle = config.getString("ladle", "none");
         ItemCache.masher = config.getString("masher", "none");

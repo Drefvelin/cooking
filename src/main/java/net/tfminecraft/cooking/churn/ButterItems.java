@@ -7,6 +7,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import net.tfminecraft.cooking.cup.DairyOrigin;
 import net.tfminecraft.cooking.item.FoodItem;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.FoodLoader;
@@ -22,13 +23,14 @@ public final class ButterItems {
     private ButterItems() {}
 
     public static ItemStack fromMilkSnapshot(Player player, int milkQuality, int dairyFreshness) {
-        return fromMilkSnapshot(player, milkQuality, dairyFreshness, false, 1, null, 1, 0);
+        return fromMilkSnapshot(player, milkQuality, dairyFreshness, DairyOrigin.COW, false, 1, null, 1, 0);
     }
 
     public static ItemStack fromMilkSnapshot(
             Player player,
             int milkQuality,
             int dairyFreshness,
+            String milkOrigin,
             boolean hasSalt,
             int saltQuality,
             String spiceOrigin,
@@ -39,8 +41,9 @@ public final class ButterItems {
             return null;
         }
 
+        String origin = DairyOrigin.orCow(milkOrigin);
         List<FoodItem> inputs = new ArrayList<>();
-        inputs.add(buildMilkStub(milkQuality, dairyFreshness));
+        inputs.add(buildMilkStub(milkQuality, dairyFreshness, origin));
 
         if (hasSalt) {
             inputs.add(buildSaltStub(saltQuality));
@@ -63,7 +66,7 @@ public final class ButterItems {
 
         FoodItem butter = new FoodItem(butterTemplate);
         butter.setCategory("dairy");
-        butter.setOrigin("Milk");
+        butter.setOrigin(origin);
 
         CompositionFreshnessApplier.applyTracks(
                 butter,
@@ -83,10 +86,11 @@ public final class ButterItems {
         return ItemBuilder.buildComposedWithQuality(butter, composed.getFinalQuality());
     }
 
-    private static FoodItem buildMilkStub(int milkQuality, int dairyFreshness) {
+    private static FoodItem buildMilkStub(int milkQuality, int dairyFreshness, String origin) {
         FoodItem milkTemplate = FoodLoader.getByString("milk_bucket");
         FoodItem milkStub = new FoodItem(milkTemplate);
         milkStub.setCategory("dairy");
+        milkStub.setOrigin(origin);
         milkStub.setQualityRange(QualityUtils.clamp(milkQuality), QualityUtils.clamp(milkQuality));
 
         TagTrack freshness = new TagTrack(TrackLoader.getByString("freshness"));

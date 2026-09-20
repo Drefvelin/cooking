@@ -143,7 +143,8 @@ public final class LiquidContainerHandler implements Listener {
         if (firstMilk) {
             int quality = MilkBucketSnapshot.readQuality(player, converted);
             int freshness = MilkBucketSnapshot.readDairyFreshness(player, converted);
-            LiquidContainerState.setMilkSnapshot(furniture, quality, freshness);
+            String origin = MilkBucketSnapshot.readOrigin(player, converted);
+            LiquidContainerState.setMilkSnapshot(furniture, quality, freshness, origin);
         } else {
             LiquidContainerState.tickAge(furniture);
         }
@@ -177,7 +178,8 @@ public final class LiquidContainerHandler implements Listener {
             cup = CupItems.cupOfMilk(
                     player,
                     LiquidContainerState.getMilkQuality(furniture),
-                    LiquidContainerState.getDairyFreshness(furniture));
+                    LiquidContainerState.getDairyFreshness(furniture),
+                    LiquidContainerState.getMilkOrigin(furniture));
         } else {
             cup = CupItems.cupOfWater();
         }

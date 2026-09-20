@@ -14,6 +14,8 @@ import me.Plugins.TLibs.TLibs;
 
 public class ItemCache {
     public static String butter;
+    public static String butterPan;
+    public static String butterPiece;
     public static String firePitTurner;
     public static float firePitVisualY;
     public static float firePitPivotY;
@@ -34,6 +36,8 @@ public class ItemCache {
 
     public static String potWaterInput;
     public static String potLiquidDisplay;
+    public static int potSoupScoops = 3;
+    public static int potSoupHeightDivisor = 4;
 
     public static String flour;
     public static String bag;

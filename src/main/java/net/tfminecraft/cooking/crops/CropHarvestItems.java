@@ -14,11 +14,12 @@ public final class CropHarvestItems {
 
     private CropHarvestItems() {}
 
+    /**
+     * Hoe harvest: convert produce at quality H. Wheat/beetroot/melon/pumpkin seeds stay vanilla.
+     * Potato, carrot, and nether wart are produce even when they are also the replant item.
+     */
     public static ItemStack convertDrop(ItemStack drop, CropDefinition crop, int quality) {
         if (drop == null || drop.getType().isAir()) {
-            return drop;
-        }
-        if (crop != null && (isSeedOnly(drop.getType()) || isConfiguredSeed(drop, crop))) {
             return drop;
         }
         if (isSeedOnly(drop.getType())) {

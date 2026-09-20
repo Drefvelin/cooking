@@ -21,7 +21,13 @@ public final class CupItems {
     }
 
     public static ItemStack cupOfMilk(Player player, int quality, int dairyFreshnessValue) {
-        String itemString = "ingredient(type=cup_of_milk;origin=Milk;tags=freshness."
+        return cupOfMilk(player, quality, dairyFreshnessValue, DairyOrigin.COW);
+    }
+
+    public static ItemStack cupOfMilk(Player player, int quality, int dairyFreshnessValue, String origin) {
+        String itemString = "ingredient(type=cup_of_milk;origin="
+                + DairyOrigin.orCow(origin)
+                + ";tags=freshness."
                 + dairyFreshnessValue + ")";
         FoodParser.Result parsed = FoodParser.parse(itemString);
         if (parsed == null || parsed.template == null) {
@@ -31,12 +37,16 @@ public final class CupItems {
     }
 
     public static ItemStack cupOfMilk(Player player, int dairyFreshnessValue) {
+        return cupOfMilk(player, dairyFreshnessValue, DairyOrigin.COW);
+    }
+
+    public static ItemStack cupOfMilk(Player player, int dairyFreshnessValue, String origin) {
         FoodParser.Result parsed = FoodParser.parse(
-                "ingredient(type=cup_of_milk;origin=Milk;tags=freshness.0)");
+                "ingredient(type=cup_of_milk;origin=" + DairyOrigin.orCow(origin) + ";tags=freshness.0)");
         if (parsed == null || parsed.template == null) {
             return null;
         }
         int quality = OriginQualityResolver.resolve(player, parsed.template);
-        return cupOfMilk(player, quality, dairyFreshnessValue);
+        return cupOfMilk(player, quality, dairyFreshnessValue, origin);
     }
 }

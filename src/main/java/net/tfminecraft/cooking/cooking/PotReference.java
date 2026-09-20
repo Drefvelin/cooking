@@ -47,7 +47,6 @@ import net.tfminecraft.furniture.SlotDefinition;
 import net.tfminecraft.furniture.data.DisplayData;
 
 public class PotReference extends CookingReference {
-    private static final int SOUP_SERVINGS = 4;
     private static final String VAR_SOUP_SERVINGS = "pot.soupServings";
 
     private int temperature = 0;          // 0–20
@@ -422,9 +421,17 @@ public class PotReference extends CookingReference {
         applySoupLevel();
     }
 
+    private static int soupScoops() {
+        return Math.max(1, ItemCache.potSoupScoops);
+    }
+
+    private static int soupHeightDivisor() {
+        return Math.max(1, ItemCache.potSoupHeightDivisor);
+    }
+
     private void ensureSoupServings() {
         if (!f.getVariables().containsKey(VAR_SOUP_SERVINGS)) {
-            setRemainingSoupServings(SOUP_SERVINGS);
+            setRemainingSoupServings(soupScoops());
         }
     }
 
@@ -437,10 +444,10 @@ public class PotReference extends CookingReference {
             try {
                 return Math.max(0, Integer.parseInt(text));
             } catch (NumberFormatException ignored) {
-                return SOUP_SERVINGS;
+                return soupScoops();
             }
         }
-        return SOUP_SERVINGS;
+        return soupScoops();
     }
 
     private void setRemainingSoupServings(int remaining) {
@@ -457,7 +464,7 @@ public class PotReference extends CookingReference {
             return;
         }
         int remaining = remainingSoupServings();
-        int scoopsTaken = SOUP_SERVINGS - remaining;
+        int scoopsTaken = soupScoops() - remaining;
         if (scoopsTaken <= 0) {
             return;
         }
@@ -465,7 +472,7 @@ public class PotReference extends CookingReference {
         if (liquid == null) {
             return;
         }
-        float step = (float) liquid.getDisplayScale().getY() / SOUP_SERVINGS;
+        float step = (float) liquid.getDisplayScale().getY() / soupHeightDivisor();
         DisplayData data = new DisplayData();
         data.setyPos(-step * scoopsTaken);
         f.getActiveSlot("liquid").ifPresent(slot -> slot.applyDisplayData(data));
