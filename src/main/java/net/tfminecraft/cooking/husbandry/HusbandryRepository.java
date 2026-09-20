@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import me.Plugins.TLibs.database.SqliteDatabase;
 import me.Plugins.TLibs.database.SqliteDatabaseException;
@@ -36,7 +39,10 @@ public final class HusbandryRepository {
                 loaded_visit_start INTEGER,
                 mature_at INTEGER,
                 shed_ready_at INTEGER,
-                egg_ready_at INTEGER
+                egg_ready_at INTEGER,
+                care_up_remainder INTEGER NOT NULL DEFAULT 0,
+                care_down_remainder INTEGER NOT NULL DEFAULT 0,
+                stats_revision TEXT
             )
             """;
 
@@ -60,8 +66,9 @@ public final class HusbandryRepository {
                 uuid, type, name, state, genetics, care,
                 hungry_since, dirty_since, last_processed_at, unloaded_at,
                 affliction_elapsed, affliction_at, last_milk_at, wool_ready_at,
-                neutered, loaded_visit_start, mature_at, shed_ready_at, egg_ready_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                neutered, loaded_visit_start, mature_at, shed_ready_at, egg_ready_at,
+                care_up_remainder, care_down_remainder, stats_revision
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(uuid) DO UPDATE SET
                 type = excluded.type,
                 name = excluded.name,
@@ -80,7 +87,10 @@ public final class HusbandryRepository {
                 loaded_visit_start = excluded.loaded_visit_start,
                 mature_at = excluded.mature_at,
                 shed_ready_at = excluded.shed_ready_at,
-                egg_ready_at = excluded.egg_ready_at
+                egg_ready_at = excluded.egg_ready_at,
+                care_up_remainder = excluded.care_up_remainder,
+                care_down_remainder = excluded.care_down_remainder,
+                stats_revision = excluded.stats_revision
             """;
 
     private static final String SELECT_ANIMAL = "SELECT * FROM animals WHERE uuid = ?";
@@ -153,6 +163,22 @@ public final class HusbandryRepository {
                 database.execute("ALTER TABLE animals ADD COLUMN egg_ready_at INTEGER");
             }
             database.execute("PRAGMA user_version = 5");
+            version = 5;
+        }
+        if (version < 6) {
+            if (!hasColumn("animals", "care_up_remainder")) {
+                database.execute("ALTER TABLE animals ADD COLUMN care_up_remainder INTEGER NOT NULL DEFAULT 0");
+            }
+            if (!hasColumn("animals", "care_down_remainder")) {
+                database.execute("ALTER TABLE animals ADD COLUMN care_down_remainder INTEGER NOT NULL DEFAULT 0");
+            }
+            database.execute("PRAGMA user_version = 6");
+        }
+        if (version < 7) {
+            if (!hasColumn("animals", "stats_revision")) {
+                database.execute("ALTER TABLE animals ADD COLUMN stats_revision TEXT");
+            }
+            database.execute("PRAGMA user_version = 7");
         }
     }
 
@@ -161,36 +187,68 @@ public final class HusbandryRepository {
                 .contains(column);
     }
 
+    public int resetStaleStats(String revision, Random random) {
+        if (revision == null || revision.isBlank()) {
+            return 0;
+        }
+        String current = revision.trim();
+        List<HusbandryAnimal> stale = queryList(
+                """
+                SELECT * FROM animals
+                WHERE stats_revision IS NULL
+                   OR TRIM(stats_revision) = ''
+                   OR stats_revision != ?
+                """,
+                HusbandryRepository::mapAnimal,
+                current);
+        if (stale.isEmpty()) {
+            return 0;
+        }
+        Random rng = random == null ? ThreadLocalRandom.current() : random;
+        int max = HusbandryConfig.initialGeneticMax();
+        for (HusbandryAnimal animal : stale) {
+            animal.setGenetics(max <= 0 ? 0 : rng.nextInt(max + 1));
+            animal.setCare(0);
+            animal.setCareUpRemainderSeconds(0);
+            animal.setCareDownRemainderSeconds(0);
+            animal.setStatsRevision(current);
+        }
+        upsertAnimals(stale);
+        return stale.size();
+    }
+
     public void upsertAnimal(HusbandryAnimal animal) {
         if (animal == null || animal.uuid() == null) {
             return;
         }
-        String name = animal.name() == null ? "" : animal.name();
-        if ("???".equals(name.trim())) {
-            name = "";
-            animal.setName("");
+        upsertAnimals(List.of(animal));
+    }
+
+    public void upsertAnimals(Collection<HusbandryAnimal> animals) {
+        if (animals == null || animals.isEmpty()) {
+            return;
         }
-        executeUpdate(
-                UPSERT_ANIMAL,
-                animal.uuid().toString(),
-                animal.type() == null ? "" : animal.type(),
-                name,
-                animal.state().storage(),
-                animal.genetics(),
-                animal.care(),
-                animal.hungrySince(),
-                animal.dirtySince(),
-                animal.lastProcessedAt(),
-                animal.unloadedAt(),
-                animal.afflictionElapsed(),
-                animal.afflictionAt(),
-                animal.lastMilkAt(),
-                animal.woolReadyAt(),
-                animal.neutered() ? 1 : 0,
-                animal.loadedVisitStart(),
-                animal.matureAt(),
-                animal.shedReadyAt(),
-                animal.eggReadyAt());
+        List<HusbandryAnimal> valid = new ArrayList<>();
+        for (HusbandryAnimal animal : animals) {
+            if (animal == null || animal.uuid() == null) {
+                continue;
+            }
+            sanitizeName(animal);
+            valid.add(animal);
+        }
+        if (valid.isEmpty()) {
+            return;
+        }
+        database.runTransaction(connection -> {
+            try (PreparedStatement statement = connection.prepareStatement(UPSERT_ANIMAL)) {
+                for (HusbandryAnimal animal : valid) {
+                    bindAnimal(statement, animal);
+                    statement.executeUpdate();
+                }
+            } catch (SQLException e) {
+                throw new SqliteDatabaseException("Failed to upsert animals", e);
+            }
+        });
     }
 
     public Optional<HusbandryAnimal> getAnimal(UUID uuid) {
@@ -266,6 +324,40 @@ public final class HusbandryRepository {
         database.close();
     }
 
+    private static void sanitizeName(HusbandryAnimal animal) {
+        String name = animal.name() == null ? "" : animal.name();
+        if ("???".equals(name.trim())) {
+            animal.setName("");
+        }
+    }
+
+    private static void bindAnimal(PreparedStatement statement, HusbandryAnimal animal) throws SQLException {
+        bindParams(
+                statement,
+                animal.uuid().toString(),
+                animal.type() == null ? "" : animal.type(),
+                animal.name() == null ? "" : animal.name(),
+                animal.state().storage(),
+                animal.genetics(),
+                animal.care(),
+                animal.hungrySince(),
+                animal.dirtySince(),
+                animal.lastProcessedAt(),
+                animal.unloadedAt(),
+                animal.afflictionElapsed(),
+                animal.afflictionAt(),
+                animal.lastMilkAt(),
+                animal.woolReadyAt(),
+                animal.neutered() ? 1 : 0,
+                animal.loadedVisitStart(),
+                animal.matureAt(),
+                animal.shedReadyAt(),
+                animal.eggReadyAt(),
+                animal.careUpRemainderSeconds(),
+                animal.careDownRemainderSeconds(),
+                blankToNull(animal.statsRevision()));
+    }
+
     private static HusbandryAnimal mapAnimal(ResultSet result) throws SQLException {
         HusbandryAnimal animal = new HusbandryAnimal(
                 UUID.fromString(result.getString("uuid")),
@@ -287,12 +379,43 @@ public final class HusbandryRepository {
         animal.setMatureAt(nullableLong(result, "mature_at"));
         animal.setShedReadyAt(nullableLong(result, "shed_ready_at"));
         animal.setEggReadyAt(nullableLong(result, "egg_ready_at"));
+        animal.setCareUpRemainderSeconds(intOrZero(result, "care_up_remainder"));
+        animal.setCareDownRemainderSeconds(intOrZero(result, "care_down_remainder"));
+        animal.setStatsRevision(nullableString(result, "stats_revision"));
         return animal;
     }
 
     private static Long nullableLong(ResultSet result, String column) throws SQLException {
         long value = result.getLong(column);
         return result.wasNull() ? null : value;
+    }
+
+    private static String blankToNull(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value;
+    }
+
+    private static String nullableString(ResultSet result, String column) throws SQLException {
+        try {
+            String value = result.getString(column);
+            if (value == null || value.isBlank()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+
+    private static int intOrZero(ResultSet result, String column) throws SQLException {
+        try {
+            int value = result.getInt(column);
+            return result.wasNull() ? 0 : value;
+        } catch (SQLException ex) {
+            return 0;
+        }
     }
 
     private int executeUpdate(String sql, Object... params) {

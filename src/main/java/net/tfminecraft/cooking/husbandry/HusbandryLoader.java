@@ -77,6 +77,11 @@ public final class HusbandryLoader {
                 config.getDouble("mounts.speed.min-pct", 0.40),
                 config.getDouble("mounts.speed.genetics-pct", 0.30),
                 config.getDouble("mounts.speed.care-pct", 0.20));
+        HusbandryConfig.setBreeding(
+                config.getDouble("breeding.genetic-variance-multiplier", 0.4),
+                config.getDouble("breeding.genetic-slowdown-divisor", 0.4),
+                config.getDouble("breeding.care-influence", 0.02));
+        HusbandryConfig.setStatsRevision(config.getString("stats-revision", "1"));
     }
 
     private static Set<EntityType> parseEntityTypes(List<String> raw) {
@@ -304,5 +309,7 @@ public final class HusbandryLoader {
                 1,
                 List.of(new HusbandryAmountBand(0, 1, 1)));
         HusbandryConfig.setMountSpeedShares(0.40, 0.30, 0.20);
+        HusbandryConfig.setBreeding(0.4, 0.4, 0.02);
+        HusbandryConfig.setStatsRevision("1");
     }
 }

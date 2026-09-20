@@ -2,13 +2,12 @@ package net.tfminecraft.cooking.husbandry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
+import me.Plugins.TLibs.database.SqliteDatabaseException;
 import net.tfminecraft.cooking.Cooking;
 
 public final class HusbandryTickTask {
@@ -41,19 +40,13 @@ public final class HusbandryTickTask {
             return;
         }
         long now = System.currentTimeMillis();
-        List<UUID> snapshot = new ArrayList<>(HusbandryEntities.loadedIds());
-        for (UUID uuid : snapshot) {
-            Entity entity = Bukkit.getEntity(uuid);
+        List<HusbandryAnimal> dirty = new ArrayList<>();
+        for (HusbandryAnimal animal : HusbandryEntities.snapshotLoaded()) {
+            Entity entity = Bukkit.getEntity(animal.uuid());
             if (!(entity instanceof LivingEntity) || entity.isDead()) {
-                HusbandryEntities.untrack(uuid);
+                HusbandryEntities.evict(animal.uuid());
                 continue;
             }
-            Optional<HusbandryAnimal> stored = repository.getAnimal(uuid);
-            if (stored.isEmpty()) {
-                HusbandryEntities.untrack(uuid);
-                continue;
-            }
-            HusbandryAnimal animal = stored.get();
             LivingEntity living = (LivingEntity) entity;
             if (HusbandrySimulator.visitLongEnough(animal, now)) {
                 HusbandrySimulator.tickLoaded(animal, now);
@@ -62,8 +55,16 @@ public final class HusbandryTickTask {
             HusbandryMounts.applyStats(living, animal);
             HusbandryShed.tryShed(living, animal, now);
             HusbandryEggs.tryLay(living, animal, now);
-            repository.upsertAnimal(animal);
+            dirty.add(animal);
             HusbandryStateDisplay.sync(living, animal);
+        }
+        if (dirty.isEmpty()) {
+            return;
+        }
+        try {
+            repository.upsertAnimals(dirty);
+        } catch (SqliteDatabaseException ex) {
+            Bukkit.getLogger().severe("[Cooking] Failed to persist husbandry tick: " + ex.getMessage());
         }
     }
 }

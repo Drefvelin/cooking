@@ -1,5 +1,7 @@
 package net.tfminecraft.cooking.husbandry;
 
+import java.util.Optional;
+
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractHorse;
@@ -36,9 +38,10 @@ public final class HusbandryMounts {
         if (repository == null) {
             return null;
         }
-        boolean hasRow = repository.exists(entity.getUniqueId());
+        Optional<HusbandryAnimal> loaded = HusbandryEntities.getLoaded(entity.getUniqueId());
+        boolean hasRow = loaded.isPresent() || repository.exists(entity.getUniqueId());
         if (!shouldCreateEnrollRow(true, hasRow)) {
-            return repository.getAnimal(entity.getUniqueId()).orElse(null);
+            return loaded.orElseGet(() -> repository.getAnimal(entity.getUniqueId()).orElse(null));
         }
         return HusbandrySpawner.createWildRecord(entity);
     }

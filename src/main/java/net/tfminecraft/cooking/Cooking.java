@@ -126,6 +126,7 @@ public class Cooking extends JavaPlugin {
         loadConfigs();
         TLibs.getItemAPI().registerPathHandler("c", CookingPathHandler.INSTANCE);
         openHusbandryDatabase();
+        HusbandryLifecycleListener.applyStatsRevision();
         registerListeners();
 
         cookingManager.start();
@@ -194,6 +195,7 @@ public class Cooking extends JavaPlugin {
 
     public void reloadAll() {
         loadConfigs();
+        HusbandryLifecycleListener.applyStatsRevision();
         craftingManager.rebuildStations();
         NutritionDrainTask.stop();
         NutritionDrainTask.start();

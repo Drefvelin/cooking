@@ -59,6 +59,22 @@ public final class HusbandryHarvest {
         DONE
     }
 
+    public static ShearResult shearReadiness(
+            HusbandryAnimal animal,
+            HusbandrySpecies species,
+            long nowMillis) {
+        if (animal == null || species == null || !species.canShear()) {
+            return ShearResult.COOLDOWN;
+        }
+        if (!HusbandryGrowth.isMature(animal, nowMillis)) {
+            return ShearResult.IMMATURE;
+        }
+        if (animal.woolReadyAt() != null && animal.woolReadyAt() > nowMillis) {
+            return ShearResult.COOLDOWN;
+        }
+        return ShearResult.DONE;
+    }
+
     public static ShearResult tryShear(
             Player player,
             LivingEntity living,
@@ -66,29 +82,61 @@ public final class HusbandryHarvest {
             HusbandrySpecies species,
             HusbandryRepository repository,
             long nowMillis) {
-        if (player == null || animal == null || species == null || !species.canShear()) {
-            return ShearResult.COOLDOWN;
-        }
-        if (!HusbandryGrowth.isMature(animal, nowMillis)) {
-            player.sendMessage("§cThis animal is still growing up.");
+        ShearResult readiness = shearReadiness(animal, species, nowMillis);
+        if (readiness == ShearResult.IMMATURE) {
+            if (player != null) {
+                player.sendMessage("§cThis animal is still growing up.");
+            }
             return ShearResult.IMMATURE;
         }
-        if (animal.woolReadyAt() != null && animal.woolReadyAt() > nowMillis) {
-            player.sendMessage("§cThis animal is not ready to be sheared.");
+        if (readiness != ShearResult.DONE) {
+            if (player != null) {
+                player.sendMessage("§cThis animal is not ready to be sheared.");
+            }
             return ShearResult.COOLDOWN;
+        }
+        grantShearExtras(player, animal, nowMillis);
+        if (living != null && living.getWorld() != null) {
+            living.getWorld().playSound(living.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1f, 1f);
+        }
+        startWoolTimer(animal, species, repository, nowMillis);
+        return ShearResult.DONE;
+    }
+
+    public static ShearResult trySheepBonusShear(
+            Player player,
+            HusbandryAnimal animal,
+            HusbandrySpecies species,
+            HusbandryRepository repository,
+            long nowMillis) {
+        ShearResult readiness = shearReadiness(animal, species, nowMillis);
+        if (readiness != ShearResult.DONE) {
+            return readiness;
+        }
+        grantShearExtras(player, animal, nowMillis);
+        startWoolTimer(animal, species, repository, nowMillis);
+        return ShearResult.DONE;
+    }
+
+    private static void grantShearExtras(Player player, HusbandryAnimal animal, long nowMillis) {
+        if (player == null) {
+            return;
         }
         for (ItemStack drop : HusbandryDropRoller.rollShearDrops(animal, ThreadLocalRandom.current(), nowMillis)) {
             InventoryAdder.addItem(player, drop);
         }
-        if (living != null && living.getWorld() != null) {
-            living.getWorld().playSound(living.getLocation(), Sound.ENTITY_SHEEP_SHEAR, 1f, 1f);
-        }
-        long wait = HusbandryConfig.woolTimerSeconds(species.type()) * 1000L;
+    }
+
+    private static void startWoolTimer(
+            HusbandryAnimal animal,
+            HusbandrySpecies species,
+            HusbandryRepository repository,
+            long nowMillis) {
+        long wait = HusbandryConfig.woolTimerSeconds(species == null ? null : species.type()) * 1000L;
         animal.setWoolReadyAt(nowMillis + wait);
         if (repository != null) {
             repository.upsertAnimal(animal);
         }
-        return ShearResult.DONE;
     }
 
     public static String milkFoodString(EntityType type) {

@@ -6,13 +6,26 @@ public final class HusbandryGenetics {
 
     private HusbandryGenetics() {}
 
-    public static int roll(int motherGenetics, int fatherGenetics, Random random) {
+    public static int roll(
+            int motherGenetics,
+            int fatherGenetics,
+            int motherCare,
+            int fatherCare,
+            Random random) {
+        int maxGenetics = HusbandryConfig.maxGenetics();
         int avg = (motherGenetics + fatherGenetics) / 2;
+        double varianceBase = maxGenetics / 10.0;
+        int minVariance = Math.max(1, maxGenetics / 100);
         double divider = 10.0 * Math.max(0.0001, HusbandryConfig.geneticSlowdownDivisor());
         int variance = Math.max(
-                100,
-                (int) (HusbandryConfig.geneticVarianceMultiplier() * (1000 - avg / divider)));
-        int rolled = avg + random.nextInt(variance);
-        return Math.max(0, Math.min(HusbandryConfig.maxGenetics(), rolled));
+                minVariance,
+                (int) (HusbandryConfig.geneticVarianceMultiplier() * (varianceBase - avg / divider)));
+        int bonus = random == null || variance <= 0 ? 0 : random.nextInt(variance);
+        int careMax = HusbandryConfig.careMax();
+        double careAvg = (motherCare + fatherCare) / 2.0;
+        double careRatio = careMax <= 0 ? 0 : Math.max(0, Math.min(1, careAvg / careMax));
+        int careExtra = (int) (HusbandryConfig.careInfluence() * maxGenetics * careRatio);
+        int rolled = avg + (int) (bonus * careRatio) + careExtra;
+        return Math.max(0, Math.min(maxGenetics, rolled));
     }
 }

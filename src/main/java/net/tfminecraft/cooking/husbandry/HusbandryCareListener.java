@@ -27,7 +27,7 @@ public final class HusbandryCareListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(living.getUniqueId());
         if (stored.isEmpty()) {
             return;
         }

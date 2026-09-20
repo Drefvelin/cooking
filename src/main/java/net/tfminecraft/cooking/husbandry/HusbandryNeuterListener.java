@@ -32,7 +32,7 @@ public final class HusbandryNeuterListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(living.getUniqueId());
         if (stored.isEmpty()) {
             player.sendMessage("§cThis animal cannot be neutered.");
             return;

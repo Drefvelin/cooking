@@ -105,7 +105,7 @@ public final class HusbandryTamingListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(entity.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(entity.getUniqueId());
         HusbandryAnimal animal;
         if (stored.isEmpty()) {
             if (!HusbandryOwnershipService.canAccept(player)) {
@@ -145,7 +145,7 @@ public final class HusbandryTamingListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(entity.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(entity.getUniqueId());
         if (stored.isEmpty()) {
             player.sendMessage("§cThis animal cannot be shared.");
             return;
@@ -182,7 +182,7 @@ public final class HusbandryTamingListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(animalUuid);
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(animalUuid);
         if (stored.isEmpty()) {
             actor.sendMessage("§cThat animal no longer exists.");
             return;

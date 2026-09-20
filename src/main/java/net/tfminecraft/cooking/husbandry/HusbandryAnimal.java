@@ -23,6 +23,9 @@ public final class HusbandryAnimal {
     private Long matureAt;
     private Long shedReadyAt;
     private Long eggReadyAt;
+    private long careUpRemainderSeconds;
+    private long careDownRemainderSeconds;
+    private String statsRevision;
 
     public HusbandryAnimal(UUID uuid, String type, String name) {
         this.uuid = uuid;
@@ -182,6 +185,34 @@ public final class HusbandryAnimal {
 
     public void setEggReadyAt(Long eggReadyAt) {
         this.eggReadyAt = eggReadyAt;
+    }
+
+    public long careUpRemainderSeconds() {
+        return careUpRemainderSeconds;
+    }
+
+    public void setCareUpRemainderSeconds(long careUpRemainderSeconds) {
+        this.careUpRemainderSeconds = Math.max(0, careUpRemainderSeconds);
+    }
+
+    public long careDownRemainderSeconds() {
+        return careDownRemainderSeconds;
+    }
+
+    public void setCareDownRemainderSeconds(long careDownRemainderSeconds) {
+        this.careDownRemainderSeconds = Math.max(0, careDownRemainderSeconds);
+    }
+
+    public String statsRevision() {
+        return statsRevision;
+    }
+
+    public void setStatsRevision(String statsRevision) {
+        if (statsRevision == null || statsRevision.isBlank()) {
+            this.statsRevision = null;
+            return;
+        }
+        this.statsRevision = statsRevision.trim();
     }
 
     private static String sanitizeName(String name) {

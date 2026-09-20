@@ -84,7 +84,6 @@ public final class HusbandrySimulator {
         long loadedMillis = Math.max(0L, elapsedMillis - unloadedMillis);
         double loadedHours = loadedMillis / (double) MILLIS_PER_HOUR;
 
-        applyDecay(animal, animal.lastProcessedAt(), nowMillis);
         if (happyAtStart && unloadedMillis > 0) {
             long cappedSeconds = Math.min(unloadedMillis / 1000L, HusbandryConfig.offlineCareSeconds());
             applyCareJumps(animal, cappedSeconds, HusbandryConfig.careUpIntervalSeconds(), HusbandryConfig.careUpAmount());
@@ -92,10 +91,11 @@ public final class HusbandrySimulator {
         if (unloadedMillis / 1000L > HusbandryConfig.longUnloadForceSeconds()) {
             applyLongUnloadForce(animal, nowMillis, rng);
         }
-        applyAffliction(animal, loadedHours, nowMillis, rng);
-        if (isHappy(animal) && loadedMillis > 0) {
+        if (happyAtStart && loadedMillis > 0) {
             applyCareJumps(animal, loadedMillis / 1000L, HusbandryConfig.careUpIntervalSeconds(), HusbandryConfig.careUpAmount());
         }
+        applyAffliction(animal, loadedHours, nowMillis, rng);
+        applyDecay(animal, animal.lastProcessedAt(), nowMillis);
         animal.setLastProcessedAt(nowMillis);
     }
 
@@ -120,7 +120,16 @@ public final class HusbandrySimulator {
         if (elapsedSeconds <= 0 || intervalSeconds <= 0 || amount == 0) {
             return;
         }
-        long jumps = elapsedSeconds / intervalSeconds;
+        boolean up = amount > 0;
+        long remainder = up ? animal.careUpRemainderSeconds() : animal.careDownRemainderSeconds();
+        remainder += elapsedSeconds;
+        long jumps = remainder / intervalSeconds;
+        remainder = remainder % intervalSeconds;
+        if (up) {
+            animal.setCareUpRemainderSeconds(remainder);
+        } else {
+            animal.setCareDownRemainderSeconds(remainder);
+        }
         if (jumps <= 0) {
             return;
         }

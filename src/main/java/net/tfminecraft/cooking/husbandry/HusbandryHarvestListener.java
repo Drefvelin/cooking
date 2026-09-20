@@ -54,7 +54,7 @@ public final class HusbandryHarvestListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(living.getUniqueId());
         if (stored.isEmpty()) {
             return;
         }
@@ -120,7 +120,7 @@ public final class HusbandryHarvestListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(living.getUniqueId());
         if (stored.isEmpty()) {
             return;
         }
@@ -139,8 +139,17 @@ public final class HusbandryHarvestListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(sheared.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(sheared.getUniqueId());
         if (stored.isEmpty()) {
+            return;
+        }
+        if (sheared.getType() == EntityType.SHEEP) {
+            HusbandryHarvest.trySheepBonusShear(
+                    event.getPlayer(),
+                    stored.get(),
+                    species,
+                    repository,
+                    System.currentTimeMillis());
             return;
         }
         event.setCancelled(true);
@@ -209,7 +218,11 @@ public final class HusbandryHarvestListener implements Listener {
             return;
         }
         HusbandryRepository repository = HusbandryEntities.repository();
-        if (repository == null || !repository.exists(chicken.getUniqueId())) {
+        if (repository == null) {
+            return;
+        }
+        if (HusbandryEntities.getLoaded(chicken.getUniqueId()).isEmpty()
+                && !repository.exists(chicken.getUniqueId())) {
             return;
         }
         HusbandrySpecies species = HusbandryConfig.species(chicken.getType());

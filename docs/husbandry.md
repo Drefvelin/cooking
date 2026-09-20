@@ -10,8 +10,8 @@ This document is the source of truth. If code and this file disagree, change the
 
 | Stat | What it is | What it is not |
 |------|------------|----------------|
-| **Genetics** | 0–1k, from breeding (wild roll up to `initial-genetic-max`). Mount health/speed/jump are applied from genetics and care. | Not affected by care. Not a food-quality field. |
-| **Care** | 0–200. Loaded happy time raises it. Neglect lowers it. | Does not change genetics. Does not pick star quality. |
+| **Genetics** | 0-1k, from breeding (wild roll up to `initial-genetic-max`). Mount health/speed/jump use genetics and care. An animal's stored genes do not drift from its own care. | Not a food-quality field. Parent **care** only scales the **offspring** gene bonus. |
+| **Care** | 0-200. Loaded happy time raises it. Neglect lowers it. Neglected parents produce weaker babies. | Does not rewrite this animal's genes. Does not pick star quality. |
 | **Hungry / Dirty** | Negative states. Stop care-up. After grace, cause decay. Block breeding. | Not friendship. Not “slept outside.” |
 | **Yield** | `care / care-max` (default care/200). Multiplies **amount** (roast cuts, wool count). | Does not change star quality. |
 | **Stars** | Cooking `food_quality` 1–5 from **raw genetics** via a YAML table. | Not averaged with care. |
@@ -20,7 +20,7 @@ This document is the source of truth. If code and this file disagree, change the
 
 ## What we keep from BreedingBuddies
 
-- BB-style breeding roll (average + variance + slowdown at high parent genetics), scaled to **0–1k** in TFMC (`max-genetics: 1000`)
+- BB-style breeding roll (parent average + variance + slowdown at high parent genetics), scaled to **0-1k** (`max-genetics: 1000`). Variance base is `max/10`, min variance is `max/100`. Defaults: `genetic-variance-multiplier` / `genetic-slowdown-divisor` `0.4`. Parent **care** replaces BB friendship (`care-influence`, default `0.02`).
 - Ownership + co-ownership (token item)
 - Tame + name (anvil-named tame item)
 - Mount stat ranges, genetics-to-stats, owner-only ride
@@ -54,6 +54,7 @@ Owned/managed entities must `setPersistent(true)` and `setRemoveWhenFarAway(fals
 - `uuid` PK
 - `type`, `name`
 - `genetics`, `care`
+- `stats_revision` (text; null on old rows)
 - `hungry_since`, `dirty_since` (epoch millis, null if clear)
 - `last_processed_at`
 - `unloaded_at` (set on unload / disable; null while loaded)
@@ -86,6 +87,12 @@ Migrations run once when the plugin opens `husbandry.db` (`PRAGMA user_version`)
 | 2 → 3 | Add `mature_at` column (null on existing rows = adult) |
 | 3 → 4 | Add `shed_ready_at` column |
 | 4 → 5 | Add `egg_ready_at` column |
+| 5 → 6 | Add `care_up_remainder` and `care_down_remainder` |
+| 6 → 7 | Add `stats_revision` |
+
+### Stats revision
+
+YAML `stats-revision` (string, default `"1"`). Blank skips the wipe. On plugin enable (after the DB opens) and on `/cooking reload`, every row whose `stats_revision` is null, blank, or not equal to the config id is reset: wild genetics (`0 … initial-genetic-max`), care 0, care remainders 0, then stamp the current id. Keep owners, name, state, neuter, `mature_at`, harvest timers, hungry/dirty. New tame/breed/spawn rows stamp the current id. Bump the id in config when gene rules change so live stock is wild-reset.
 
 Bred-but-not-tamed animals get an UNTAMED row in the **same loaded visit** so tame uses parent genetics. They are **not** protected across chunk load: no owner → despawn.
 
@@ -157,8 +164,15 @@ Owner online/offline does not matter. What matters is whether the **entity chunk
 
 ## Breeding
 
-- Genetics only (BB-style average + variance + high-parent slowdown). **No care influence** on the baby.
-- Cancel if either parent is Hungry, Dirty, neutered, or **still growing up**.
+- Child genes from parent average plus a random bonus, scaled by parent care:
+
+```
+avg = (mother + father) / 2
+child = clamp(avg + bonus * careRatio + careExtra, 0, maxGenetics)
+```
+
+  `careRatio` is average parent care / `care-max`. Care 0: child stays at the average (no climb). Care max: full bump plus `care-influence * maxGenetics` (default +20 at cap 1000). Baby's own care is 0 at birth.
+- Cancel if either parent is Hungry, Dirty, neutered, or **still growing up**. Hungry/dirty block breed; they do not replace the care ratio.
 - Offspring get an UNTAMED SQLite row with rolled genetics for **same-session** tame. If the chunk unloads/loads before anyone owns them, they despawn and the row is deleted.
 - **Baby growth:** global `grow-up` (default `1h`); optional per-species override (e.g. `CHICKEN: 45m`). Stored as `mature_at` in SQLite; `NULL` = adult. Immature animals can be tamed but cannot breed, milk, shear, lay eggs, or drop Cooking roast on death. When maturity is reached, the entity is set adult if loaded.
 - Neutering: all husbandry species, owner (or staff). Neutered animals cannot breed.
@@ -309,6 +323,12 @@ items:
 initial-genetic-max: 20
 max-genetics: 1000
 min-roast-cuts: 1
+stats-revision: "1"
+
+breeding:
+  genetic-variance-multiplier: 0.4
+  genetic-slowdown-divisor: 0.4
+  care-influence: 0.02
 
 # Per-species grow-up override example:
 # species:

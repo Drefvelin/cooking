@@ -19,7 +19,7 @@ affliction:
 
 care:
   up:
-    interval: 1h
+    interval: 10m
     amount: 1
   down:
     interval: 1h
@@ -30,10 +30,16 @@ grow-up: 1h
 initial-genetic-max: 20
 max-genetics: 1000
 min-roast-cuts: 1
+# Bump this string to wild-reset animals with a missing or old id (genetics + care).
+stats-revision: "1"
 
 breeding:
-  genetic-variance-multiplier: 1.0
-  genetic-slowdown-divisor: 1.0
+  # Bigger = larger gene bump per generation.
+  genetic-variance-multiplier: 0.4
+  # Bigger = slower climb when parents already have high genetics.
+  genetic-slowdown-divisor: 0.4
+  # Extra gene points at full parent care: this * max-genetics (0.02 -> +20 at 1000).
+  care-influence: 0.02
 
 amount-from-genetics:
   - min: 0

@@ -72,11 +72,7 @@ public final class HusbandryBreedListener implements Listener {
             if (child == null || !child.isValid()) {
                 return;
             }
-            HusbandryRepository repository = HusbandryEntities.repository();
-            if (repository == null) {
-                return;
-            }
-            repository.getAnimal(child.getUniqueId()).ifPresent(baby ->
+            HusbandryEntities.lookup(child.getUniqueId()).ifPresent(baby ->
                     HusbandryMounts.applyStats(child, baby));
         }, 1L);
     }
@@ -111,11 +107,10 @@ public final class HusbandryBreedListener implements Listener {
         if (entity == null || !HusbandryConfig.isHusbandryType(entity.getType())) {
             return BlockReason.NONE;
         }
-        HusbandryRepository repository = HusbandryEntities.repository();
-        if (repository == null) {
+        if (HusbandryEntities.repository() == null) {
             return BlockReason.UNAVAILABLE;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(entity.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(entity.getUniqueId());
         if (stored.isEmpty()) {
             return BlockReason.NO_RECORD;
         }
@@ -144,9 +139,14 @@ public final class HusbandryBreedListener implements Listener {
         if (repository.exists(uuid)) {
             return;
         }
-        int motherGenetics = repository.getAnimal(mother.getUniqueId()).map(HusbandryAnimal::genetics).orElse(0);
-        int fatherGenetics = repository.getAnimal(father.getUniqueId()).map(HusbandryAnimal::genetics).orElse(0);
-        int genetics = HusbandryGenetics.roll(motherGenetics, fatherGenetics, ThreadLocalRandom.current());
+        HusbandryAnimal motherAnimal = HusbandryEntities.lookup(mother.getUniqueId()).orElse(null);
+        HusbandryAnimal fatherAnimal = HusbandryEntities.lookup(father.getUniqueId()).orElse(null);
+        int motherGenetics = motherAnimal == null ? 0 : motherAnimal.genetics();
+        int fatherGenetics = fatherAnimal == null ? 0 : fatherAnimal.genetics();
+        int motherCare = motherAnimal == null ? 0 : motherAnimal.care();
+        int fatherCare = fatherAnimal == null ? 0 : fatherAnimal.care();
+        int genetics = HusbandryGenetics.roll(
+                motherGenetics, fatherGenetics, motherCare, fatherCare, ThreadLocalRandom.current());
         String name = HusbandryEntities.displayName(child.getType());
         child.setCustomName(name);
         child.setCustomNameVisible(false);
@@ -158,13 +158,14 @@ public final class HusbandryBreedListener implements Listener {
         baby.setState(HusbandryAnimalState.UNTAMED);
         baby.setGenetics(genetics);
         baby.setCare(0);
+        baby.setStatsRevision(HusbandryConfig.statsRevision());
         baby.setLastProcessedAt(now);
         baby.setLoadedVisitStart(now);
         baby.setUnloadedAt(null);
         baby.setMatureAt(HusbandryGrowth.computeMatureAt(child.getType(), now));
         HusbandryHarvest.prepareNewAnimal(baby, child.getType());
         repository.upsertAnimal(baby);
-        HusbandryEntities.trackLoaded(uuid);
+        HusbandryEntities.putLoaded(baby);
     }
 
     private static void clearLove(Entity entity) {

@@ -61,12 +61,13 @@ public final class HusbandrySpawner {
         animal.setState(HusbandryAnimalState.UNTAMED);
         animal.setGenetics(clampedGenetics);
         animal.setCare(clampedCare);
+        animal.setStatsRevision(HusbandryConfig.statsRevision());
         animal.setLastProcessedAt(now);
         animal.setLoadedVisitStart(now);
         animal.setUnloadedAt(null);
         HusbandryHarvest.prepareNewAnimal(animal, living.getType());
         repository.upsertAnimal(animal);
-        HusbandryEntities.trackLoaded(living.getUniqueId());
+        HusbandryEntities.putLoaded(animal);
         HusbandryMounts.applyStats(living, animal);
         return animal;
     }

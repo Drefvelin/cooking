@@ -26,12 +26,12 @@ public final class HusbandryDeathListener implements Listener {
             event.getDrops().clear();
             event.setDroppedExp(0);
             repository.deleteAnimal(entity.getUniqueId());
-            HusbandryEntities.untrack(entity.getUniqueId());
+            HusbandryEntities.evict(entity.getUniqueId());
             HusbandryStateDisplay.removeAll(entity);
             return;
         }
 
-        Optional<HusbandryAnimal> stored = repository.getAnimal(entity.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(entity.getUniqueId());
         if (stored.isEmpty()) {
             return;
         }
@@ -62,7 +62,7 @@ public final class HusbandryDeathListener implements Listener {
             }
         }
         repository.deleteAnimal(entity.getUniqueId());
-        HusbandryEntities.untrack(entity.getUniqueId());
+        HusbandryEntities.evict(entity.getUniqueId());
         HusbandryStateDisplay.removeAll(entity);
     }
 }

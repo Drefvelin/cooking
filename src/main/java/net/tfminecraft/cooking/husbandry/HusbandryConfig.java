@@ -47,6 +47,8 @@ public final class HusbandryConfig {
     private static Map<EntityType, HusbandryMountStats> mounts = Map.of();
     private static double geneticVarianceMultiplier = 1;
     private static double geneticSlowdownDivisor = 1;
+    private static double careInfluence = 0.02;
+    private static String statsRevision = "1";
     private static List<HusbandryAmountBand> amountBands = List.of();
     private static double mountSpeedMinPct = 0.40;
     private static double mountSpeedGeneticsPct = 0.30;
@@ -141,6 +143,20 @@ public final class HusbandryConfig {
         mountSpeedMinPct = Math.max(0, minPct);
         mountSpeedGeneticsPct = Math.max(0, geneticsPct);
         mountSpeedCarePct = Math.max(0, carePct);
+    }
+
+    public static void setBreeding(double multiplier, double slowdown, double careInfluenceValue) {
+        geneticVarianceMultiplier = Math.max(0, multiplier);
+        geneticSlowdownDivisor = slowdown;
+        careInfluence = Math.max(0, careInfluenceValue);
+    }
+
+    public static void setStatsRevision(String revision) {
+        statsRevision = revision == null ? "" : revision.trim();
+    }
+
+    public static String statsRevision() {
+        return statsRevision;
     }
 
     public static double mountSpeedMinPct() {
@@ -374,6 +390,10 @@ public final class HusbandryConfig {
 
     public static double geneticSlowdownDivisor() {
         return geneticSlowdownDivisor;
+    }
+
+    public static double careInfluence() {
+        return careInfluence;
     }
 
     public static boolean isHusbandryType(EntityType type) {

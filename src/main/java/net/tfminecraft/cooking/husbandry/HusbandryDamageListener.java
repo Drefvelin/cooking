@@ -16,7 +16,7 @@ public final class HusbandryDamageListener implements Listener {
     public void onDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         HusbandryRepository repository = HusbandryEntities.repository();
-        if (repository == null || repository.getAnimal(entity.getUniqueId()).isEmpty()) {
+        if (repository == null || HusbandryEntities.lookup(entity.getUniqueId()).isEmpty()) {
             return;
         }
         if (event instanceof EntityDamageByEntityEvent byEntity) {

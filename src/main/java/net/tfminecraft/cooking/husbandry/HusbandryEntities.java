@@ -1,7 +1,11 @@
 package net.tfminecraft.cooking.husbandry;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,28 +18,60 @@ import net.tfminecraft.cooking.Cooking;
 
 public final class HusbandryEntities {
 
-    private static final Set<UUID> LOADED = ConcurrentHashMap.newKeySet();
+    private static final Map<UUID, HusbandryAnimal> LOADED = new ConcurrentHashMap<>();
 
     private HusbandryEntities() {}
 
     public static Set<UUID> loadedIds() {
-        return Collections.unmodifiableSet(LOADED);
+        return Collections.unmodifiableSet(LOADED.keySet());
     }
 
-    public static void trackLoaded(UUID uuid) {
-        if (uuid != null) {
-            LOADED.add(uuid);
+    public static List<HusbandryAnimal> snapshotLoaded() {
+        return new ArrayList<>(LOADED.values());
+    }
+
+    public static Optional<HusbandryAnimal> getLoaded(UUID uuid) {
+        if (uuid == null) {
+            return Optional.empty();
         }
+        return Optional.ofNullable(LOADED.get(uuid));
     }
 
-    public static void untrack(UUID uuid) {
+    public static void putLoaded(HusbandryAnimal animal) {
+        if (animal == null || animal.uuid() == null) {
+            return;
+        }
+        LOADED.put(animal.uuid(), animal);
+    }
+
+    public static void evict(UUID uuid) {
         if (uuid != null) {
             LOADED.remove(uuid);
         }
     }
 
+    public static void untrack(UUID uuid) {
+        evict(uuid);
+    }
+
     public static void clearLoaded() {
         LOADED.clear();
+    }
+
+    /**
+     * Cache-first lookup, then SQLite for unloaded or offline animals.
+     * Loaded animals always return the canonical in-memory instance.
+     */
+    public static Optional<HusbandryAnimal> lookup(UUID uuid) {
+        Optional<HusbandryAnimal> loaded = getLoaded(uuid);
+        if (loaded.isPresent()) {
+            return loaded;
+        }
+        HusbandryRepository repository = repository();
+        if (repository == null || uuid == null) {
+            return Optional.empty();
+        }
+        return repository.getAnimal(uuid);
     }
 
     public static boolean isManaged(Entity entity) {

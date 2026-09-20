@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -263,17 +262,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cHusbandry database is not open.");
             return true;
         }
-        int saved = 0;
-        for (UUID uuid : HusbandryEntities.loadedIds()) {
-            Optional<HusbandryAnimal> stored = repository.getAnimal(uuid);
-            if (stored.isEmpty()) {
-                continue;
-            }
-            repository.upsertAnimal(stored.get());
-            saved++;
+        List<HusbandryAnimal> loaded = HusbandryEntities.snapshotLoaded();
+        if (!loaded.isEmpty()) {
+            repository.upsertAnimals(loaded);
         }
         repository.checkpointWal(false);
-        sender.sendMessage("§aSaved " + saved + " loaded animals.");
+        sender.sendMessage("§aSaved " + loaded.size() + " loaded animals.");
         return true;
     }
 

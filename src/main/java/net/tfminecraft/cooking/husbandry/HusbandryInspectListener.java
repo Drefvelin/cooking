@@ -33,7 +33,7 @@ public final class HusbandryInspectListener implements Listener {
             return;
         }
         HusbandryMounts.enrollIfNeeded(living);
-        Optional<HusbandryAnimal> stored = repository.getAnimal(living.getUniqueId());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(living.getUniqueId());
         if (stored.isEmpty()) {
             return;
         }
@@ -85,7 +85,7 @@ public final class HusbandryInspectListener implements Listener {
         if (repository == null) {
             return;
         }
-        Optional<HusbandryAnimal> stored = repository.getAnimal(inspect.animalUuid());
+        Optional<HusbandryAnimal> stored = HusbandryEntities.lookup(inspect.animalUuid());
         if (stored.isEmpty()) {
             player.closeInventory();
             return;
