@@ -57,8 +57,25 @@ public final class NutritionLifecycleListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         RPCharacter character = net.tfminecraft.RPCharacters.RPCharacters.getActiveCharacter(player);
+        if (character == null) {
+            NutritionLog.append("DEATH", player, null, "action=skip cause=no-active-character");
+            return;
+        }
+        if (BattleFoodGate.inStartedBattle(player)) {
+            NutritionLog.append("DEATH", player, character,
+                    "hud=" + player.getFoodLevel() + " saturation=" + player.getSaturation()
+                    + " food=" + character.getFoodValue()
+                    + " action=preserve-battle");
+            return;
+        }
+        int before = character.getFoodValue();
+        int after = NutritionService.foodAfterDeath(before, NutritionConfig.respawnFood(), false);
+        character.setFoodValue(after);
         NutritionLog.append("DEATH", player, character,
                 "hud=" + player.getFoodLevel() + " saturation=" + player.getSaturation()
-                + " action=preserve");
+                + " foodBefore=" + before
+                + " foodAfter=" + after
+                + " action=respawn-food");
+        net.tfminecraft.RPCharacters.RPCharacters.getPlayerManager().savePlayer(player);
     }
 }

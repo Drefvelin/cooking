@@ -99,4 +99,11 @@ public final class NutritionService {
         character.setDietScore(newDiet);
         return true;
     }
+
+    static int foodAfterDeath(int current, int respawnFood, boolean inBattle) {
+        if (inBattle) {
+            return current;
+        }
+        return NutritionConfig.clampFood(respawnFood);
+    }
 }

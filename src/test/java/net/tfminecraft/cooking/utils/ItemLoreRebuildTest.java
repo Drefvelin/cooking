@@ -69,4 +69,26 @@ class ItemLoreRebuildTest {
         assertEquals(Integer.valueOf(4), indexMap.get("food"));
         assertFalse(ItemUpdater.needsLoreRebuild(lore, true));
     }
+
+    @Test
+    void heldSilentDoesNotWrite() {
+        assertFalse(ItemUpdater.shouldWriteToSlot(true, false, true));
+    }
+
+    @Test
+    void heldVisualWrites() {
+        assertTrue(ItemUpdater.shouldWriteToSlot(true, true, false));
+        assertTrue(ItemUpdater.shouldWriteToSlot(true, true, true));
+    }
+
+    @Test
+    void notHeldSilentWrites() {
+        assertTrue(ItemUpdater.shouldWriteToSlot(false, false, true));
+    }
+
+    @Test
+    void nothingToWriteSkips() {
+        assertFalse(ItemUpdater.shouldWriteToSlot(false, false, false));
+        assertFalse(ItemUpdater.shouldWriteToSlot(true, false, false));
+    }
 }

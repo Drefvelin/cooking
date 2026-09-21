@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public final class NutritionConfig {
 
     private static final int DEFAULT_MAX_FOOD = 200;
+    private static final int DEFAULT_RESPAWN_FOOD = 80;
     private static final int DEFAULT_MAX_DIET = 40;
     private static final String DEFAULT_ATTRIBUTE_NAME = "nutrition";
     private static final int DEFAULT_DRAIN_AMOUNT = 1;
@@ -20,6 +21,7 @@ public final class NutritionConfig {
     private static final double DEFAULT_LERP_STEP_RATE = 1.0;
 
     private static int maxFood = DEFAULT_MAX_FOOD;
+    private static int respawnFood = DEFAULT_RESPAWN_FOOD;
     private static int maxDiet = DEFAULT_MAX_DIET;
     private static String attributeName = DEFAULT_ATTRIBUTE_NAME;
     private static int drainAmount = DEFAULT_DRAIN_AMOUNT;
@@ -37,6 +39,7 @@ public final class NutritionConfig {
         }
 
         maxFood = section.getInt("max-food", DEFAULT_MAX_FOOD);
+        respawnFood = clampFood(section.getInt("respawn-food", DEFAULT_RESPAWN_FOOD));
         maxDiet = section.getInt("max-diet", DEFAULT_MAX_DIET);
         attributeName = section.getString("attribute-name", DEFAULT_ATTRIBUTE_NAME);
         drainAmount = section.getInt("drain-amount", DEFAULT_DRAIN_AMOUNT);
@@ -47,6 +50,10 @@ public final class NutritionConfig {
 
     public static int maxFood() {
         return maxFood;
+    }
+
+    public static int respawnFood() {
+        return respawnFood;
     }
 
     public static int maxDiet() {
@@ -95,8 +102,13 @@ public final class NutritionConfig {
         return best != null ? best : dietTiers.get(0);
     }
 
+    static int clampFood(int value) {
+        return Math.max(0, Math.min(value, maxFood));
+    }
+
     private static void applyDefaults() {
         maxFood = DEFAULT_MAX_FOOD;
+        respawnFood = clampFood(DEFAULT_RESPAWN_FOOD);
         maxDiet = DEFAULT_MAX_DIET;
         attributeName = DEFAULT_ATTRIBUTE_NAME;
         drainAmount = DEFAULT_DRAIN_AMOUNT;

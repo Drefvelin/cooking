@@ -85,6 +85,10 @@ public class ItemUpdater {
     }
 
     public static ItemStack updateItem(ItemStack stack, FoodItem fi, String furniture) {
+        return updateItem(stack, fi, furniture, false);
+    }
+
+    public static ItemStack updateItem(ItemStack stack, FoodItem fi, String furniture, boolean held) {
         if (stack == null || fi == null) {
             return null;
         }
@@ -101,6 +105,9 @@ public class ItemUpdater {
 
         if (!fi.shouldUpdate()) {
             if (!broken) {
+                return null;
+            }
+            if (!shouldWriteToSlot(held, true, false)) {
                 return null;
             }
             return applyItemUpdate(stack, fi, furniture);
@@ -121,14 +128,26 @@ public class ItemUpdater {
         if (deltaSeconds > 0) {
             changed = applyAging(fi, deltaSeconds);
         }
+        boolean visual = changed || expired || broken;
         boolean normalizeNeeded = StackNormalizer.needsNormalize(fi);
-        StackNormalizer.normalize(fi);
         boolean clockOff = fi.getLastUpdate() != now;
-        if (!changed && !expired && !broken && !normalizeNeeded && !clockOff) {
+        boolean silent = normalizeNeeded || clockOff;
+        if (!shouldWriteToSlot(held, visual, silent)) {
             return null;
         }
+        StackNormalizer.normalize(fi);
         fi.setLastUpdate(now);
         return applyItemUpdate(stack, fi, furniture);
+    }
+
+    static boolean shouldWriteToSlot(boolean held, boolean visual, boolean silent) {
+        if (visual) {
+            return true;
+        }
+        if (held) {
+            return false;
+        }
+        return silent;
     }
 
     public static boolean needsLoreRebuild(List<String> lore, boolean hasLoreIndex) {

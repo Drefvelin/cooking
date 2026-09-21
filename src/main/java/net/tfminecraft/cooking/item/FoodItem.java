@@ -649,21 +649,13 @@ public class FoodItem {
         out.decodeAgeRemainder(pdc.get(Keys.AGE_REMAINDER, PersistentDataType.STRING));
 
         if (!out.shouldUpdate()) {
-            if (pdc.has(Keys.LAST_UPDATE, PersistentDataType.LONG)
-                    || pdc.has(Keys.AGE_REMAINDER, PersistentDataType.STRING)) {
-                pdc.remove(Keys.LAST_UPDATE);
-                pdc.remove(Keys.AGE_REMAINDER);
-                stack.setItemMeta(meta);
-            }
+            out.setLastUpdate(0);
         } else {
             Long lastUpdate = pdc.get(Keys.LAST_UPDATE, PersistentDataType.LONG);
-            if (lastUpdate != null)
+            if (lastUpdate != null) {
                 out.setLastUpdate(lastUpdate);
-            else {
-                long now = System.currentTimeMillis();
-                out.setLastUpdate(now);
-                pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, now);
-                stack.setItemMeta(meta);
+            } else {
+                out.setLastUpdate(System.currentTimeMillis());
             }
         }
 

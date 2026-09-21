@@ -189,6 +189,7 @@ sauce-dict:
 
 nutrition:
   max-food: 200
+  respawn-food: 80
   max-diet: 40
   attribute-name: nutrition
   drain-amount: 1

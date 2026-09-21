@@ -201,6 +201,10 @@ public class FoodParser {
         }
 
         // ---------------- FINALIZE ---------------------
+        if (item == null) {
+            return null;
+        }
+
         Result r = new Result();
         r.unique = unique;
         r.explicitQuality = explicitQuality;
