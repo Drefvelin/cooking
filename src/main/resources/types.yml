@@ -252,6 +252,7 @@ seasoning_1:
   model: salt
   food: 0
   nutrition: 0
+  update: false
 
 ###Sweetener — does not spoil
 sweetener_1:
@@ -262,6 +263,7 @@ sweetener_1:
   model: sugar
   food: 0
   nutrition: 0
+  update: false
 
 ###Spices — raw
 spice_1:

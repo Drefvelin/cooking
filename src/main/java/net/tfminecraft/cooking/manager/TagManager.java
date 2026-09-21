@@ -29,6 +29,14 @@ public class TagManager implements ItemScanHandler {
         if (food == null) {
             return;
         }
+        if (!food.shouldUpdate()) {
+            ItemMeta meta = stack.getItemMeta();
+            if (meta != null && !ItemUpdater.needsLoreRebuild(
+                    meta.getLore(),
+                    meta.getPersistentDataContainer().has(Keys.LORE_INDEX_MAP, PersistentDataType.STRING))) {
+                return;
+            }
+        }
         ItemStack updated = ItemUpdater.updateItem(stack, food, null);
         if (updated != null && inventory != null && slot >= 0) {
             inventory.setItem(slot, updated);

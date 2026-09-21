@@ -89,7 +89,7 @@ public class ItemUpdater {
             return null;
         }
 
-        long now = System.currentTimeMillis();
+        long now = StackNormalizer.quantizedNow();
 
         ItemMeta meta = stack.getItemMeta();
         if (meta == null) {
@@ -97,6 +97,14 @@ public class ItemUpdater {
         }
 
         var pdc = meta.getPersistentDataContainer();
+        boolean broken = needsLoreRebuild(meta.getLore(), pdc.has(Keys.LORE_INDEX_MAP, PersistentDataType.STRING));
+
+        if (!fi.shouldUpdate()) {
+            if (!broken) {
+                return null;
+            }
+            return applyItemUpdate(stack, fi, furniture);
+        }
 
         Long lastUpdate = pdc.get(Keys.LAST_UPDATE, PersistentDataType.LONG);
         if (lastUpdate == null) {
@@ -113,15 +121,17 @@ public class ItemUpdater {
         if (deltaSeconds > 0) {
             changed = applyAging(fi, deltaSeconds);
         }
-        boolean broken = needsLoreRebuild(meta.getLore(), pdc.has(Keys.LORE_INDEX_MAP, PersistentDataType.STRING));
-        if (!changed && !expired && !broken) {
+        boolean normalizeNeeded = StackNormalizer.needsNormalize(fi);
+        StackNormalizer.normalize(fi);
+        boolean clockOff = fi.getLastUpdate() != now;
+        if (!changed && !expired && !broken && !normalizeNeeded && !clockOff) {
             return null;
         }
         fi.setLastUpdate(now);
         return applyItemUpdate(stack, fi, furniture);
     }
 
-    static boolean needsLoreRebuild(List<String> lore, boolean hasLoreIndex) {
+    public static boolean needsLoreRebuild(List<String> lore, boolean hasLoreIndex) {
         if (lore == null || lore.isEmpty()) {
             return true;
         }

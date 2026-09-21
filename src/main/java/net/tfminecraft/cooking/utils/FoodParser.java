@@ -30,7 +30,7 @@ public class FoodParser {
     /**
      * Extracts key=value pairs from inside (...) while preserving nested parentheses.
      */
-    private static Map<String, String> extractFields(String inside) {
+    public static Map<String, String> extractFields(String inside) {
         Map<String, String> map = new LinkedHashMap<>();
 
         int i = 0;

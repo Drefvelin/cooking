@@ -114,6 +114,10 @@ public class ItemBuilder {
         return stack;
     }
 
+    static boolean writesAgeClock(FoodItem item) {
+        return item != null && item.shouldUpdate();
+    }
+
     public static ItemStack stamp(ItemStack stack, FoodItem item, String displayName) {
         if (stack == null || item == null) {
             return stack;
@@ -149,8 +153,20 @@ public class ItemBuilder {
             pdc.remove(Keys.BASE_NUTRITION);
         }
 
-        long lastUpdate = item.getLastUpdate() > 0 ? item.getLastUpdate() : System.currentTimeMillis();
-        pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, lastUpdate);
+        if (!writesAgeClock(item)) {
+            pdc.remove(Keys.LAST_UPDATE);
+            pdc.remove(Keys.AGE_REMAINDER);
+        } else {
+            long lastUpdate = item.getLastUpdate() > 0 ? item.getLastUpdate() : System.currentTimeMillis();
+            pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, lastUpdate);
+
+            String remainder = item.encodeAgeRemainder();
+            if (remainder != null) {
+                pdc.set(Keys.AGE_REMAINDER, PersistentDataType.STRING, remainder);
+            } else {
+                pdc.remove(Keys.AGE_REMAINDER);
+            }
+        }
 
         if (!item.getTagTracks().isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -165,13 +181,6 @@ public class ItemBuilder {
             pdc.set(Keys.TAGS, PersistentDataType.STRING, sb.toString());
         } else {
             pdc.remove(Keys.TAGS);
-        }
-
-        String remainder = item.encodeAgeRemainder();
-        if (remainder != null) {
-            pdc.set(Keys.AGE_REMAINDER, PersistentDataType.STRING, remainder);
-        } else {
-            pdc.remove(Keys.AGE_REMAINDER);
         }
 
         if (item.hasSauce()) {

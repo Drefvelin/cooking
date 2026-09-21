@@ -29,6 +29,7 @@ public class FoodItem {
     private final String id;
     private final String name;
     private long lastUpdate;
+    private boolean update = true;
     private String category = "";
 
     private Map<String, TagTrack> tags = new HashMap<>();
@@ -71,6 +72,7 @@ public class FoodItem {
 
         this.baseFood = config.getDouble("food", 1.0);
         this.baseNutrition = config.getDouble("nutrition", 1.0);
+        this.update = config.getBoolean("update", true);
         this.typeLevelCarveSequence = config.getString("carve-sequence", null);
 
         String modelId = config.getString("model", null);
@@ -125,6 +127,12 @@ public class FoodItem {
         }
     }
 
+    FoodItem(String key, String displayName, boolean update) {
+        this.id = key;
+        this.name = displayName;
+        this.update = update;
+        this.cookData = new CookData();
+    }
 
     // --------------------------------------------------------------
     // DEEP COPY
@@ -133,6 +141,7 @@ public class FoodItem {
         this.id = other.id;
         this.name = other.name;
         this.category = other.category;
+        this.update = other.update;
 
         this.origin = other.origin;
 
@@ -180,6 +189,16 @@ public class FoodItem {
     // AGE UPDATE
     // --------------------------------------------------------------
     public ItemStack updateAge(ItemStack item) {
+        if (!shouldUpdate()) {
+            ItemMeta m = item.getItemMeta();
+            if (m != null) {
+                var pdc = m.getPersistentDataContainer();
+                pdc.remove(Keys.LAST_UPDATE);
+                pdc.remove(Keys.AGE_REMAINDER);
+                item.setItemMeta(m);
+            }
+            return item;
+        }
         updateAge();
         ItemMeta m = item.getItemMeta();
         var pdc = m.getPersistentDataContainer();
@@ -188,6 +207,9 @@ public class FoodItem {
         return item;
     }
     public void updateAge() {
+        if (!shouldUpdate()) {
+            return;
+        }
         long now = System.currentTimeMillis();
 
         long elapsed = now - lastUpdate;
@@ -223,6 +245,7 @@ public class FoodItem {
     // --------------------------------------------------------------
     public String getId() { return id; }
     public String getName() { return name; }
+    public boolean shouldUpdate() { return update; }
 
     public String getTagLabel(String trackId, String stepId) {
         if (trackId == null || stepId == null) return null;
@@ -344,6 +367,14 @@ public class FoodItem {
             return;
         }
         ageRemainder.put(trackId.toLowerCase(), leftover);
+    }
+
+    public boolean hasAgeRemainder() {
+        return !ageRemainder.isEmpty();
+    }
+
+    public void clearAgeRemainders() {
+        ageRemainder.clear();
     }
 
     public String encodeAgeRemainder() {
@@ -617,14 +648,23 @@ public class FoodItem {
 
         out.decodeAgeRemainder(pdc.get(Keys.AGE_REMAINDER, PersistentDataType.STRING));
 
-        Long lastUpdate = pdc.get(Keys.LAST_UPDATE, PersistentDataType.LONG);
-        if (lastUpdate != null)
-            out.setLastUpdate(lastUpdate);
-        else {
-            long now = System.currentTimeMillis();
-            out.setLastUpdate(now);
-            pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, now);
-            stack.setItemMeta(meta);
+        if (!out.shouldUpdate()) {
+            if (pdc.has(Keys.LAST_UPDATE, PersistentDataType.LONG)
+                    || pdc.has(Keys.AGE_REMAINDER, PersistentDataType.STRING)) {
+                pdc.remove(Keys.LAST_UPDATE);
+                pdc.remove(Keys.AGE_REMAINDER);
+                stack.setItemMeta(meta);
+            }
+        } else {
+            Long lastUpdate = pdc.get(Keys.LAST_UPDATE, PersistentDataType.LONG);
+            if (lastUpdate != null)
+                out.setLastUpdate(lastUpdate);
+            else {
+                long now = System.currentTimeMillis();
+                out.setLastUpdate(now);
+                pdc.set(Keys.LAST_UPDATE, PersistentDataType.LONG, now);
+                stack.setItemMeta(meta);
+            }
         }
 
         // --- Load sauce ---
