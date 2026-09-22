@@ -28,7 +28,7 @@ import net.tfminecraft.cooking.item.data.CookData;
 import net.tfminecraft.cooking.item.tag.TagTrack;
 import net.tfminecraft.cooking.loader.TrackLoader;
 import net.tfminecraft.cooking.quality.CompositionContext;
-import net.tfminecraft.cooking.quality.CompositionFreshnessApplier;
+import net.tfminecraft.cooking.quality.CompositionApplier;
 import net.tfminecraft.cooking.quality.CompositionQualityResolver;
 import net.tfminecraft.cooking.quality.CompositionResult;
 import net.tfminecraft.cooking.utils.DisplayUtils;
@@ -185,6 +185,7 @@ public class PotReference extends CookingReference {
 
         StationAddonRules.applySeasoningTag(soup, slots);
         StationAddonRules.applyAddonTags(soup, slots);
+        StationAddonRules.applyFlavourfulTag(soup, slots);
         FoodItem mi = getMain();
         if(mi != null && mi.hasTagTrack("soup_thickness")) {
             soup.addOrModifyTrack(mi.getTagTrack("soup_thickness"));
@@ -193,7 +194,8 @@ public class PotReference extends CookingReference {
 
         // ---------- BUILD RESULT ----------
         CompositionResult composed = CompositionQualityResolver.compose(p, slots.values(), CompositionContext.SOUP_SCOOP);
-        CompositionFreshnessApplier.applyTracks(soup, composed.getFreshnessTracks());
+        CompositionApplier.apply(soup, composed);
+        soup.setBaseFood(scoopFood(soup.getBaseFood(), soupScoops()));
         int quality = composed.getFinalQuality();
 
         ItemStack output = ItemBuilder.buildSingleWithQuality(soup, ladle, quality);
@@ -303,11 +305,17 @@ public class PotReference extends CookingReference {
         }
     }
 
+    public static boolean canMash(FoodItem item) {
+        if (item == null || !item.isMashable()) return false;
+        TagTrack cooked = item.getTagTrack("cooked");
+        return cooked != null && cooked.getValue() == 3;
+    }
+
     public void mash(Player p) {
         boolean found = false;
         for(Map.Entry<String, FoodItem> entry : slots.entrySet()) {
             FoodItem item = entry.getValue();
-            if(!item.getCategory().equalsIgnoreCase("vegetable")) continue;
+            if(!canMash(item)) continue;
             item.addOrModifyTrack(new TagTrack(TrackLoader.getByString("mashed")));
             updateModel();
             DisplayData mashed = new DisplayData();
@@ -419,6 +427,11 @@ public class PotReference extends CookingReference {
             secondaries.put("liquid", -1);
         }
         applySoupLevel();
+    }
+
+    /** Whole-pot food split across scoops. Nutrition stays the template level. */
+    public static double scoopFood(double templateFood, int scoops) {
+        return templateFood / Math.max(1, scoops);
     }
 
     private static int soupScoops() {
