@@ -16,7 +16,7 @@ A roast, sausage chain, or pot is one prepared batch. Players take pieces or sco
 - Food splits across portions. Nutrition stays the batch level on every portion and on what remains.
 - A carved edible piece copies the roast lineage, then composition records the same origins on the piece.
 - Soup food per scoop is template food divided by `pot-soup-scoops`. Soup nutrition stays the template level. `pot-soup-height-divisor` is visual only.
-- A cut whole seafood item splits food by size: `clamp(sizeCm * food-per-cm, min-total, max-total)` across `clamp(ceil(sizeCm / cm-per-portion), 1, max-portions)` pieces. Starting rules are 0.25 food per cm, total 4 to 40, 25 cm per piece, and at most 6 pieces. Nutrition stays 6 for a fish filet, 5 for jellyfish cubes, and 7 for octopus.
+- One whole seafood item becomes one portion. Food and nutrition stay the portion type levels: 6 and 6 for a fish filet, 5 and 5 for jellyfish, and 7 and 7 for octopus. Size stays on the item and does not change the stack or the food.
 - Sauce scoops still copy the full sauce template food and nutrition. A valuable ingredient adds the Flavourful tag there too.
 - A plain roast (no stored base) shows remaining food as the sum of cut `food` values still on it. Its nutrition is the roast type level, not that sum. The cut piece uses the piece type's own food and nutrition.
 - A roast with a stored base splits food by edible cuts still left. Bones stay in the sequence and do not take a share of the food. Piece nutrition and leftover nutrition are `getBaseNutrition()`.
@@ -32,7 +32,7 @@ See [../decisions/0001-food-vs-nutrition.md](../decisions/0001-food-vs-nutrition
 | Ladle sauce | full `sauce` food | full `sauce` nutrition |
 | Carve, no override | piece type food; roast shows sum of remaining cut food | piece type nutrition; roast shows its type level |
 | Carve, override | stored food times edible cuts left / edible cuts | stored nutrition, on the piece and on the leftover |
-| Cut seafood | size total / portion count | portion type nutrition |
+| Cut seafood | portion type food, one piece | portion type nutrition |
 
 ## State and persistence
 

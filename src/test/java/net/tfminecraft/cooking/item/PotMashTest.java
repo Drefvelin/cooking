@@ -1,5 +1,6 @@
 package net.tfminecraft.cooking.item;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,13 +14,20 @@ import net.tfminecraft.cooking.item.tag.TagTrack;
 class PotMashTest {
 
     @Test
-    void mashAcceptsOnlyMashableBoiledFood() {
+    void mashAcceptsMashableFoodAtAnyCookState() {
+        assertTrue(PotReference.canMash(food(true, 0)));
+        assertTrue(PotReference.canMash(food(true, 1)));
+        assertTrue(PotReference.canMash(food(true, 2)));
         assertTrue(PotReference.canMash(food(true, 3)));
-        assertFalse(PotReference.canMash(food(true, 0)));
-        assertFalse(PotReference.canMash(food(true, 1)));
-        assertFalse(PotReference.canMash(food(true, 2)));
         assertFalse(PotReference.canMash(food(false, 3)));
         assertFalse(PotReference.canMash(null));
+    }
+
+    @Test
+    void markBoiledForcesCookedTrackToBoiled() {
+        FoodItem raw = food(true, 0);
+        PotReference.markBoiled(raw);
+        assertEquals(3, raw.getTagTrack("cooked").getValue());
     }
 
     private static FoodItem food(boolean mashable, int cooked) {

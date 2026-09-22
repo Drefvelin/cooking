@@ -27,6 +27,12 @@ care:
 
 grow-up: 1h
 
+profession: farming
+
+exp:
+  min: 6
+  max: 8
+
 initial-genetic-max: 20
 max-genetics: 1000
 min-roast-cuts: 1

@@ -11,11 +11,6 @@ public final class SeafoodCutting {
         if (rule == null) {
             return null;
         }
-        double total = sizeCm * rule.foodPerCm();
-        total = Math.max(rule.minTotal(), Math.min(rule.maxTotal(), total));
-        int portions = (int) Math.ceil(sizeCm / rule.cmPerPortion());
-        portions = Math.max(1, Math.min(rule.maxPortions(), portions));
-        double each = Math.round((total / portions) * 10.0) / 10.0;
-        return new SeafoodYield(rule.outputType(), portions, each);
+        return new SeafoodYield(rule.outputType(), 1, 0);
     }
 }

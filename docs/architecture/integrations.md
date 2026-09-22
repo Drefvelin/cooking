@@ -60,8 +60,8 @@ Those trees are content, not generated class files. `target/` is generated.
 - A configured catch with a missing, non-finite, or non-positive size is logged and left unchanged. Stored centimetres use `Math.round`.
 - Rod quality bands are in `custom-fishing.yml`: basic 1-2, steel 2-3, abyssalite 3-4, mythril 4-5. An unknown rod uses the `unknown-rod` band (1-5), then the normal pickup permission adjustment.
 - A leftover `COD` already in an inventory is converted on item scan, and a dropped one on pickup. Cooking reads the `CustomFishing` item tags `id` and `size` when that plugin is enabled. Otherwise it uses `model-data` in `custom-fishing.yml`. A stack that already has `food_id` is left alone. Lore is not read. An unknown loot id is left alone. Silver and golden model numbers map to the same species and do not set Cooking quality. A missing size uses `legacy-size-cm` (45). Quality is the normal pickup roll.
-- Plain vanilla cod, salmon, tropical fish, and pufferfish become `seafood_whole` on pickup using the `vanilla` sizes in `custom-fishing.yml` and the normal pickup-quality roll. A stack with custom model data is not treated as vanilla cod.
-- Cutting a whole seafood item uses the `cutting` rules in `custom-fishing.yml`. Size sets total food and portion count. Nutrition stays the portion type's level.
+- Plain vanilla cod, salmon, tropical fish, and pufferfish become `seafood_whole` on pickup using the `vanilla` sizes in `custom-fishing.yml` and the normal pickup-quality roll. A stack with custom model data is not treated as vanilla cod. The whole item stays edible and keeps the type food and nutrition.
+- Cutting a whole seafood item uses the `cutting` output type in `custom-fishing.yml`. One whole item becomes one portion. Food and nutrition stay the portion type's levels: 6 and 6 for a fish filet, 5 and 5 for jellyfish, 7 and 7 for octopus. Size is still stored on the item.
 - Nutmeg seeds are `ia.playbox_custom_crops:nut_seeds`, not `nutmeg_seeds`.
 
 ## Source map

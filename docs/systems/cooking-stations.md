@@ -15,7 +15,8 @@ Heated furniture turns ingredients into cooked food: frying pan, saucepan, pot, 
 - Cooking time in station config is real seconds, ticked about once per second by `CookingManager`.
 - Frying burns when left past the method's burn time.
 - Soup exists only after a pot slot is mashed (`Tag.MASHED`). Ladle before that does nothing useful (`scoop` returns immediately).
-- A mash applies only to a `mashable` item whose `cooked` track is `3` (boiled). Raw, fried, and burnt pieces stay whole. Burn replaces boiled with value `2`, so a burnt pot item does not mash.
+- A mash applies to any `mashable` item already in the pot. It sets that item's `cooked` track to `3` (boiled), stops the pot timer so burn cannot replace it, and the ladle copies every visible pot ingredient, including mashed ones, onto the bowl.
+- The pot has five main slots (`input_1` through `input_5`). A sixth main is refused. After the pot is soup, one garnish, one spice, one salt, and one pepper are stored on the pot with no visible slot (`pot.extras`). They still season the scoop. They are not copied onto the bowl model.
 - Each soup scoop clones the `soup` type, then sets food to template food / `pot-soup-scoops`. Nutrition stays the template level. A valuable ingredient adds Flavourful (+10% nutrition, food unchanged). See portions.
 - Sauce scoops clone the `sauce` type: full template food and nutrition, quality from composition. A valuable ingredient adds Flavourful the same way as soup. Soup and sauce store the slot origins as lineage. A nested sauce keeps that lineage on the plated food.
 - Oven fuel and burn rates are `config.yml` oven keys, not `cookware.yml`.

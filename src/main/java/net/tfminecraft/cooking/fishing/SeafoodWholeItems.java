@@ -17,7 +17,6 @@ public final class SeafoodWholeItems {
     public static FoodItem describe(FoodItem template, String origin, String cut, int sizeCm, int quality,
             String customFishingId) {
         FoodItem item = new FoodItem(template);
-        item.setEdible(false);
         item.setCategory("seafood");
         item.setOrigin(origin);
         item.setLineage(IngredientLineage.ofMain(origin));

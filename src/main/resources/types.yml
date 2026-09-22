@@ -504,11 +504,11 @@ milk_bucket:
       rotten: "#8B7355Spoiled"
 
 seafood_whole:
-  name: "{inherit}"
-  edible: false
-  update: false
-  food: 0
-  nutrition: 0
+  name: "#6fa8dc{inherit}"
+  food: 6
+  nutrition: 6
+  age:
+    freshness: 2.33
 
 seafood_fish_filet:
   name: "#6fa8dc{inherit} Filet"

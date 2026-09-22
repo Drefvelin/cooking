@@ -3335,13 +3335,6 @@ seafood_fish_filet:
       item: ia.tfmc_cooking:fish_filet_raw
     display:
       item: ia.tfmc_cooking:fish_filet_raw
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   stale:
     weight: 1
     tags:
@@ -3350,13 +3343,6 @@ seafood_fish_filet:
       item: ia.tfmc_cooking:fish_filet_raw
     display:
       item: ia.tfmc_cooking:fish_filet_raw
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   cooked:
     weight: 2
     tags:
@@ -3365,13 +3351,6 @@ seafood_fish_filet:
       item: ia.tfmc_cooking:fish_filet_cooked
     display:
       item: ia.tfmc_cooking:fish_filet_cooked
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   burnt:
     weight: 2
     tags:
@@ -3380,13 +3359,6 @@ seafood_fish_filet:
       item: ia.tfmc_cooking:fish_filet_burnt
     display:
       item: ia.tfmc_cooking:fish_filet_burnt
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   boiled:
     weight: 2
     tags:
@@ -3395,13 +3367,6 @@ seafood_fish_filet:
       item: ia.tfmc_cooking:fish_filet_boiled
     display:
       item: ia.tfmc_cooking:fish_filet_boiled
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   rotten:
     weight: 3
     tags:
@@ -3410,13 +3375,6 @@ seafood_fish_filet:
       item: ia.tfmc_cooking:fish_filet_rotten
     display:
       item: ia.tfmc_cooking:fish_filet_rotten
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
 
 seafood_jellyfish:
   fresh:
@@ -3427,13 +3385,6 @@ seafood_jellyfish:
       item: ia.tfmc_cooking:jellyfish_cubes_raw
     display:
       item: ia.tfmc_cooking:jellyfish_cubes_raw
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   stale:
     weight: 1
     tags:
@@ -3442,13 +3393,6 @@ seafood_jellyfish:
       item: ia.tfmc_cooking:jellyfish_cubes_raw
     display:
       item: ia.tfmc_cooking:jellyfish_cubes_raw
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   cooked:
     weight: 2
     tags:
@@ -3457,13 +3401,6 @@ seafood_jellyfish:
       item: ia.tfmc_cooking:jellyfish_cubes_cooked
     display:
       item: ia.tfmc_cooking:jellyfish_cubes_cooked
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   burnt:
     weight: 2
     tags:
@@ -3472,13 +3409,6 @@ seafood_jellyfish:
       item: ia.tfmc_cooking:jellyfish_cubes_burnt
     display:
       item: ia.tfmc_cooking:jellyfish_cubes_burnt
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   boiled:
     weight: 2
     tags:
@@ -3487,13 +3417,6 @@ seafood_jellyfish:
       item: ia.tfmc_cooking:jellyfish_cubes_boiled
     display:
       item: ia.tfmc_cooking:jellyfish_cubes_boiled
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   rotten:
     weight: 3
     tags:
@@ -3502,13 +3425,6 @@ seafood_jellyfish:
       item: ia.tfmc_cooking:jellyfish_cubes_rotten
     display:
       item: ia.tfmc_cooking:jellyfish_cubes_rotten
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
 
 seafood_octopus:
   fresh:
@@ -3519,13 +3435,6 @@ seafood_octopus:
       item: ia.tfmc_cooking:octopus_raw
     display:
       item: ia.tfmc_cooking:octopus_raw
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   stale:
     weight: 1
     tags:
@@ -3534,13 +3443,6 @@ seafood_octopus:
       item: ia.tfmc_cooking:octopus_raw
     display:
       item: ia.tfmc_cooking:octopus_raw
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   cooked:
     weight: 2
     tags:
@@ -3549,13 +3451,6 @@ seafood_octopus:
       item: ia.tfmc_cooking:octopus_cooked
     display:
       item: ia.tfmc_cooking:octopus_cooked
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   burnt:
     weight: 2
     tags:
@@ -3564,13 +3459,6 @@ seafood_octopus:
       item: ia.tfmc_cooking:octopus_burnt
     display:
       item: ia.tfmc_cooking:octopus_burnt
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   boiled:
     weight: 2
     tags:
@@ -3579,13 +3467,6 @@ seafood_octopus:
       item: ia.tfmc_cooking:octopus_boiled
     display:
       item: ia.tfmc_cooking:octopus_boiled
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25
   rotten:
     weight: 3
     tags:
@@ -3594,10 +3475,3 @@ seafood_octopus:
       item: ia.tfmc_cooking:octopus_rotten
     display:
       item: ia.tfmc_cooking:octopus_rotten
-    display-data:
-      rotation:
-        x: 90
-        y: 0
-        z: 90
-      position:
-        y: -0.25

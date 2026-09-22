@@ -13,7 +13,7 @@ These stations transform items without the frying/pot heat loop: cutting board, 
 ## Invariants
 
 - Cutting-board slots that share a recipe must be the same ingredient. Vanilla vegetables use `cut_vegetables` / `chop_vegetables`. CustomCrops vegetables use `cut_vegetables_2` / `chop_vegetables_2`, which keep `valuable: true` on `vegetable_cut_2` and `vegetable_chopped_2`. The output lineage is the composed input origins.
-- `cut_seafood` cuts one `seafood_whole` per knife use. A stack larger than one is decremented in place. Other slots stay. The piece count and per-piece food come from the catch size. Nutrition stays the portion type level. Quality, origin, lineage, size, cut class, and CustomFishing id are copied.
+- `cut_seafood` cuts one `seafood_whole` per knife use into one portion. A stack larger than one is decremented in place. Other slots stay. Food and nutrition stay the portion type levels. Quality, origin, lineage, size, cut class, and CustomFishing id are copied.
 - Dough, flour, butter, and sausage keep main and extra origins through their station state. A loaf copies the dough lineage. The display ingredient list stays the short name phrase.
 - Milling recipes are data in `milling-recipes.yml`, not Java switches.
 - Mixing dough needs the configured flour, water, and yeast inputs, then `mixing-stir-count` stirs (committed value 3).
@@ -26,7 +26,7 @@ These stations transform items without the frying/pot heat loop: cutting board, 
 
 | Station | Config | Output |
 | --- | --- | --- |
-| Cutting board | `crafting-stations.yml` | cut or chopped food, composition stars. Seafood uses size-based portions |
+| Cutting board | `crafting-stations.yml` | cut or chopped food, composition stars. Seafood is one portion per whole item |
 | Baking tray | `baking-trays.yml` | bread while oven heat is present |
 | Milling stone | `milling-recipes.yml` | flour or other mill output |
 | Mixing bowl | `config.yml` `mixing-*` | dough |

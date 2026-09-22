@@ -27,7 +27,7 @@ Eating a Cooking food raises the active character's food value and moves their d
 
 ## Inputs and outputs
 
-`FoodConsumeListener` and `DrinkConsumeListener` call `NutritionService.tryApplyEat`. Bowls go through `BowlEatHandler`. A Cooking item with `edible: false`, including a whole CustomFishing catch, cancels consumption and tells the player it needs to be prepared.
+`FoodConsumeListener` and `DrinkConsumeListener` call `NutritionService.tryApplyEat`. Bowls go through `BowlEatHandler`. An empty-hand click drinks soup in a bowl. A sneaking click does not, so the bowl can be carried. A Cooking item with `edible: false` cancels consumption and tells the player it needs to be prepared. `seafood_whole` is edible and applies its type food and nutrition.
 
 Death/respawn handling is `NutritionLifecycleListener` (see `NutritionDeathFoodTest`).
 

@@ -129,7 +129,9 @@ World cleanup: on chunk load, `remove-unowned` types with no owner are removed a
 
 Keys are the tables above. Durations are TLibs strings (`4h`, `20m`, `60s`). Legacy `*-hours` keys still load with a warning.
 
-Per species: `milk`, `slaughter.meat`, `slaughter.drops`, `shear.drops`, `shed.drops`, `egg`, `grow-up`, `wool-timer`.
+Per species: `milk`, `slaughter.meat`, `slaughter.drops`, `shear.drops`, `shed.drops`, `egg`, `grow-up`, `wool-timer`, optional `exp.min` and `exp.max`.
+
+A successful feed or clean grants a random integer of MMOCore profession experience. `profession` is the profession id (committed `farming`). `exp.min` and `exp.max` are the default bracket (committed 6 and 8), inclusive. A species `exp` block replaces that bracket. A blank profession id, a missing profession, or MMOCore disabled grants nothing.
 
 Also `remove-unowned`, `quality-from-genetics`, `amount-from-genetics`, `breeding`, `damage`, `mounts`.
 

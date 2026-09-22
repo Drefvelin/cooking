@@ -27,9 +27,8 @@ public final class SeafoodPortions {
         item.setCatchSizeCm(whole.getCatchSizeCm());
         item.setSeafoodCutType(whole.getSeafoodCutType());
         item.setCustomFishingId(whole.getCustomFishingId());
-        item.setBaseFood(yield.foodPerPortion());
         item.setBaseNutrition(template.getBaseNutrition());
-        item.setAmount(yield.portionCount());
+        item.setAmount(1);
         TagTrack freshness = TrackLoader.getByString("freshness");
         if (freshness != null) {
             TagTrack track = new TagTrack(freshness);
@@ -49,7 +48,7 @@ public final class SeafoodPortions {
         }
         FoodItem portion = describe(template, whole, yield);
         ItemStack stack = ItemBuilder.buildSingleWithQuality(portion, null, portion.getQualityMin());
-        stack.setAmount(yield.portionCount());
+        stack.setAmount(1);
         return stack;
     }
 }

@@ -79,4 +79,4 @@ Permissions are Bukkit permission nodes. Crop permission `tfmc.cooking.better_cr
 ## Change checklist
 
 - New compose context: add an enum value, a `context-overrides` block if roles differ, and this doc.
-- New conversion line: `conversions.yml` only, unless matching rules change. CustomCrops produce uses `vegetable_2` and `fruit_2`. Vanilla carrot, potato, beetroot, pumpkin, nether wart, apple, and melon stay on type 1.
+- New conversion line: `conversions.yml` only, unless matching rules change. CustomCrops produce uses `vegetable_2` and `fruit_2`. Vanilla carrot, potato, beetroot, pumpkin, apple, and melon stay on type 1. Nether wart is not converted.

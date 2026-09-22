@@ -54,7 +54,7 @@ Province fertility 0-100 x crops.yml affection
      (wheat, beetroot, melon, pumpkin seeds)
 ```
 
-Potato, carrot, and nether wart are produce. Hoe harvest reserves one vanilla stack for replant, then converts leftover drops.
+Potato and carrot are produce. Hoe harvest reserves one vanilla stack for replant, then converts leftover drops. Nether wart is still harvested and replanted, and the drop stays vanilla.
 
 Growth:
 
@@ -100,7 +100,7 @@ TLibs `c` paths: see [food-items.md](food-items.md). There is no `c.seed` path a
 
 ## Edge cases
 
-- Potato, carrot, and nether wart `seed:` is the same vanilla item as produce. Do not skip conversion just because the drop matches `seed:`.
+- Potato and carrot `seed:` is the same vanilla item as produce. Do not skip conversion just because the drop matches `seed:`. Nether wart uses the same item as its seed and is not converted.
 - Hoe harvest still keeps one untagged stack to replant.
 
 ## Source map
